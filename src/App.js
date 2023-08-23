@@ -7,8 +7,8 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/*" element={<Login />} />
-      <Route path="/MiniProject_LicensePlate/*" element={<Login />} />
+      {/* <Route path="/*" element={<Login />} /> */}
+      <Route path="/MiniProject_LicensePlate/*" element={<Main />} />
       <Route path="/MiniProject_LicensePlate/join" element={<Join />} />
       <Route path="/MiniProject_LicensePlate/main/*" element={<Main />} />
     </Routes>
