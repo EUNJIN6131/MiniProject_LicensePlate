@@ -42,7 +42,7 @@ export default function Slideshow() {
             <CardMedia
               component="img"
               src={image.src}
-              height="300px" // Set the desired height for all images
+              height="310px" // Set the desired height for all images
               width="300px"  // Set the desired width for all images
             />
           </Card>
