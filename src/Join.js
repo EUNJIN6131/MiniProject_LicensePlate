@@ -41,11 +41,12 @@ export default function Join() {
 
     return (
         <Box sx={{
-            width: '100%', alignItems: "center",
+            width: '100%',
+            height:'100%',
             alignItems: "center",
         }}>
             <Box sx={{
-                bgcolor: '#2e1534', p: 6
+                bgcolor: '#2e1534',  display: 'flex', p: 6
             }}>
             </Box>
 

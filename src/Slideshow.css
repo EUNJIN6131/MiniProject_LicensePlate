@@ -1,0 +1,21 @@
+/* Slideshow.css */
+.slideshow-container {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.slide {
+  min-width: 100%;
+  animation: slide 5s linear infinite; /* Use CSS animation for sliding effect */
+}
+
+
+@keyframes slide {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%); 
+  }
+}

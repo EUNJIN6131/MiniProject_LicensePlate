@@ -1,30 +1,39 @@
-import {
-    Box,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import CustomizedTabs from "./CustomizedTabs.js";
 import Login from "./Login.js";
+import MainSub1 from "./MainSub1.js";
 import { useState } from "react";
 
 export default function Main() {
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLoginTabClick = () => {
-    setIsLoggedIn(true);
-  };
-  const handleOtherTabClick = () => {
-    setIsLoggedIn(false); // 다른 탭 클릭 시 로그인 컴포넌트 숨김
+  const handleTabChange = (tabIndex) => {
+    setSelectedTab(tabIndex);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setSelectedTab(0); // Reset the selected tab to "로그인" after logout
   };
 
-    return (
-        <Box sx={{ width: '100%' }}> {/* 가로폭을 100%로 설정 */}
-        <CustomizedTabs onLoginTabClick={handleLoginTabClick}    onOtherTabClick={handleOtherTabClick} onLogout={handleLogout} />
-      {/* {isLoggedIn && <Login />} */}
-      {isLoggedIn ? <Login onLogout={handleLogout} /> : null}
-        </Box>
-    )
+  const handleLogin = () => {
+    // Perform login logic here
+    // After successful login, set isLoggedIn to true
+    setIsLoggedIn(true);
+    // Also, update the tab to "로그아웃"
+    setSelectedTab(0);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <CustomizedTabs
+        isLoggedIn={isLoggedIn}
+        onTabChange={handleTabChange}
+        onLogout={handleLogout}
+      />
+      {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} />}
+      {selectedTab === 1 && <MainSub1 />}
+    </Box>
+  );
 }

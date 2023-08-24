@@ -55,38 +55,37 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
     },
     '&.Mui-focusVisible': {
       backgroundColor: 'rgba(100, 95, 228, 0.32)',
+      // Media query for screens with a max-width of 768px
     },
   }),
 );
 
 
-export default function CustomizedTabs({onLoginTabClick,onOtherTabClick,onLogout }) {
+export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   const [value, setValue] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    // Call the onTabChange callback to update the selected tab in the parent component
+    onTabChange(newValue);
   };
 
   return (
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ bgcolor: '#2e1534', display: 'flex', p: 3 }}>
-          <StyledTabs
-            value={value}
-            onChange={handleChange}
-            aria-label="styled tabs example"
-          >
-             {isLoggedIn ? (
-          <StyledTab label="로그아웃" onClick={onLogout} />
-        ) : (
-          <StyledTab label="로그인" onClick={onLoginTabClick} />
-        )}
-            <StyledTab label="차량 입출입 현황" onClick={onOtherTabClick} />
-            <StyledTab label="검색" onClick={onOtherTabClick}/>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ bgcolor: '#2e1534', display: 'flex', p: 3 }}>
+        <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
+          {isLoggedIn ? (
+            <StyledTab label="로그아웃" onClick={onLogout} />
+          ) : (
+            <StyledTab label="로그인" onClick={() => onTabChange(0)} />
+          )}
+          
+          {/* <StyledTab label="차량 입출입 현황" onClick={() => onTabChange(1)} disabled={!isLoggedIn} />
+          <StyledTab label="검색" onClick={() => onTabChange(2)} disabled={!isLoggedIn} /> */}
+          <StyledTab label="차량 입출입 현황" onClick={() => onTabChange(1)}  />
+          <StyledTab label="검색" onClick={() => onTabChange(2)} />
           </StyledTabs>
-
-        </Box>
-        {isLoggedIn && value === 0 && <Login />}
       </Box>
-    );
-  }
+    </Box>
+  );
+}
