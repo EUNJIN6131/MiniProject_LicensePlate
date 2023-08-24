@@ -4,24 +4,9 @@ import {
   Tab,
   Tabs,
   Box,
-  Button,
-  Container,
-  CssBaseline,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
 } from "@mui/material";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "./api/api-config";
-import AlertError from "./alert/AlertError";
 import { useState } from "react";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Login from "./Login";
+import { useNavigate } from "react-router-dom";
 
 const StyledTabs = styled((props) => (
   <Tabs
@@ -63,6 +48,7 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 
 export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   const [value, setValue] = useState(0);
+  const navigate = useNavigate(); 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -77,13 +63,19 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
           {isLoggedIn ? (
             <StyledTab label="로그아웃" onClick={onLogout} />
           ) : (
-            <StyledTab label="로그인" onClick={() => onTabChange(0)} />
+            <StyledTab label="로그인" onClick={() => {
+              onTabChange(0);
+              navigate('/MiniProject_LicensePlate/login'); // Append /login to the URL
+            }} />
           )}
           
           {/* <StyledTab label="차량 입출입 현황" onClick={() => onTabChange(1)} disabled={!isLoggedIn} />
           <StyledTab label="검색" onClick={() => onTabChange(2)} disabled={!isLoggedIn} /> */}
-          <StyledTab label="차량 입출입 현황" onClick={() => onTabChange(1)}  />
-          <StyledTab label="검색" onClick={() => onTabChange(2)} />
+          <StyledTab label="차량 입출입 현황" onClick={() => {
+              onTabChange(1);
+              navigate('/MiniProject_LicensePlate/main/state'); // Use navigate to go to the desired route
+            }} />
+          <StyledTab label="검색" onClick={() => {onTabChange(2);  navigate('/MiniProject_LicensePlate/main/search'); }} />
           </StyledTabs>
       </Box>
     </Box>
