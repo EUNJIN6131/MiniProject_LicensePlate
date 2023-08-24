@@ -2,8 +2,6 @@ package plate.back.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,7 +26,7 @@ public class UserEntity {
     @Column(nullable = false, length = 20)
     private String password;
     @Column(nullable = false, length = 10)
-    private String driverName;
+    private String name;
     @Column(nullable = false, length = 20)
     private String licensePlate;
     @Column(nullable = false, length = 10)

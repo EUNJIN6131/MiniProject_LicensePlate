@@ -1,6 +1,5 @@
 package plate.back.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -35,8 +35,20 @@ public class LogEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer logId;
-    @OneToMany(mappedBy = "logId", cascade = CascadeType.REMOVE)
-    List<PredictLogEntity> predList = new ArrayList<>();
+
+    @Column(nullable = false, length = 20)
+    private String licensePlate;
+
+    @Column(nullable = false)
+    private Double accuracy;
+
+    @Column(nullable = false, length = 100)
+    private String ImageDir;
+
     @CreatedDate
     private Date date;
+
+    @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE)
+    List<PredictLogEntity> predList;
+
 }
