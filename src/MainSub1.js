@@ -64,7 +64,7 @@ export default function MainSub1() {
           </Box>
         </Box>
         <Box sx={{
-          height:"560px",
+          height:"573px",
 border: "1px solid rgb(189, 188, 188)",
           display: "flex",
           flexDirection: "column",
