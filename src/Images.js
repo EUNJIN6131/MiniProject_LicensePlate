@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import './Slideshow.css'; // Import a CSS file for styling
+import { Card,  CardMedia } from '@mui/material';
+import './Slideshow.css'; 
 
 const imagesData = [
   {
     id: 1,
-    src: '/car1.jpg', // Update with the correct relative path
+    src: '/car1.jpg',
   },
   {
     id: 2,
-    src: '/car2.jpg', // Update with the correct relative path
+    src: '/car2.jpg', 
   },
-  // Add more image data as needed
+ 
 ];
 
 export default function Slideshow() {
@@ -19,17 +19,14 @@ export default function Slideshow() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Change to the next image
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesData.length);
-    }, 3000); // Change image every 3 seconds (adjust the duration as needed)
-
+    }, 3000); 
     return () => {
-      // Clean up the interval when the component unmounts
       clearInterval(interval);
     };
   }, []);
 
-  const currentImage = imagesData[currentImageIndex];
+  // const currentImage = imagesData[currentImageIndex];
 
   return (
     <div className="slideshow-container">
@@ -42,8 +39,8 @@ export default function Slideshow() {
             <CardMedia
               component="img"
               src={image.src}
-              height="310px" // Set the desired height for all images
-              width="300px"  // Set the desired width for all images
+              height="310px" 
+              width="300px"  
             />
           </Card>
         </div>

@@ -1,4 +1,4 @@
-import { Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AlertError from "./alert/AlertError";
@@ -12,7 +12,7 @@ export default function Join() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget); // Use event.currentTarget directly
+        const data = new FormData(event.currentTarget);
 
         const formData = {
             userId: data.get("id"),
@@ -42,11 +42,11 @@ export default function Join() {
     return (
         <Box sx={{
             width: '100%',
-            height:'100%',
+            height: '100%',
             alignItems: "center",
         }}>
             <Box sx={{
-                bgcolor: '#2e1534',  display: 'flex', p: 6
+                bgcolor: '#2e1534', display: 'flex', p: 6
             }}>
             </Box>
 

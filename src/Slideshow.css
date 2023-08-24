@@ -1,4 +1,3 @@
-/* Slideshow.css */
 .slideshow-container {
   display: flex;
   overflow: hidden;
@@ -7,7 +6,7 @@
 
 .slide {
   min-width: 100%;
-  animation: slide 5s linear infinite; /* Use CSS animation for sliding effect */
+  animation: slide 5s linear infinite;
 }
 
 
@@ -15,7 +14,8 @@
   0% {
     transform: translateX(100%);
   }
+
   100% {
-    transform: translateX(-100%); 
+    transform: translateX(-100%);
   }
 }

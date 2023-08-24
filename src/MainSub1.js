@@ -9,17 +9,17 @@ export default function MainSub1() {
   const [recentNum, setRecentNum] = useState(null);
 
   useEffect(() => {
-    // Make an HTTP request to fetch the most recent num from your server
-    fetch('/api/recentNum') // Replace with your actual API endpoint
+
+    fetch('/api/recentNum')
       .then((response) => response.json())
       .then((data) => {
-        // Update the state with the fetched num
-        setRecentNum(data.recentNum); // Assuming your API response has a property named 'recentNum'
+
+        setRecentNum(data.recentNum);
       })
       .catch((error) => {
         console.error('Error fetching recent num:', error);
       });
-  }, []); // Run this effect only once when the component mounts
+  }, []);
 
   return (
     <Box sx={{ margin: "20px" }}>
@@ -30,7 +30,7 @@ export default function MainSub1() {
           alignItems: "center",
           flexDirection: "row",
           justifyContent: "space-evenly",
-          gap: '20px', // Add this gap to create spacing between image and list boxes
+          gap: '20px',
         }}
       >
         <Box
@@ -55,7 +55,7 @@ export default function MainSub1() {
           <Box
             sx={{
               width: '100%',
-              maxHeight: '200px', // Set a fixed maximum height
+              maxHeight: '200px',
               border: "1px solid rgb(189, 188, 188)",
               paddingBlock: "10px",
             }}
@@ -64,18 +64,18 @@ export default function MainSub1() {
           </Box>
         </Box>
         <Box sx={{
-          height:"573px",
-border: "1px solid rgb(189, 188, 188)",
+          height: "573px",
+          border: "1px solid rgb(189, 188, 188)",
           display: "flex",
           flexDirection: "column",
           width: '100%',
           alignItems: "center",
           justifyContent: "center",
-         
+
         }}>
-         
+
           <Typography variant="h4">차량번호: {recentNum}</Typography>
-      
+
         </Box>
       </Box>
     </Box>

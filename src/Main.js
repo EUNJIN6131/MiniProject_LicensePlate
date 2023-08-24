@@ -14,14 +14,12 @@ export default function Main() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setSelectedTab(0); // Reset the selected tab to "로그인" after logout
+    setSelectedTab(0);
   };
 
   const handleLogin = () => {
-    // Perform login logic here
-    // After successful login, set isLoggedIn to true
+
     setIsLoggedIn(true);
-    // Also, update the tab to "로그아웃"
     setSelectedTab(0);
   };
 

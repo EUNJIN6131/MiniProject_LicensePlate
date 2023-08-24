@@ -9,8 +9,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 const columns = [
-  { id: 'seq', label: 'seq', minWidth: 30  ,align: 'center',},
-  { id: 'carNumber', label: '차량번호', minWidth: 120 , align: 'center',},
+  { id: 'seq', label: 'seq', minWidth: 30, align: 'center', },
+  { id: 'carNumber', label: '차량번호', minWidth: 120, align: 'center', },
   {
     id: 'time',
     label: '시간',
@@ -51,8 +51,8 @@ const columns = [
 
 ];
 
-function createData(seq, carNumber, time, inAndOut,accuracy, img, dist) {
-  return { seq, carNumber, time, inAndOut,accuracy, img,dist};
+function createData(seq, carNumber, time, inAndOut, accuracy, img, dist) {
+  return { seq, carNumber, time, inAndOut, accuracy, img, dist };
 }
 
 const rows = [
