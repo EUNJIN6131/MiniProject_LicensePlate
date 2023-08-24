@@ -9,34 +9,50 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+  { id: 'seq', label: 'seq', minWidth: 30  ,align: 'center',},
+  { id: 'carNumber', label: '차량번호', minWidth: 120 , align: 'center',},
   {
-    id: 'population',
-    label: 'Population',
-    minWidth: 170,
-    align: 'right',
+    id: 'time',
+    label: '시간',
+    minWidth: 250,
+    align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
-    minWidth: 170,
-    align: 'right',
+    id: 'inAndOut',
+    label: '입출차',
+    minWidth: 80,
+    align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'density',
-    label: 'Density',
-    minWidth: 170,
-    align: 'right',
+    id: 'accuracy',
+    label: '인식률',
+    minWidth: 80,
+    align: 'center',
     format: (value) => value.toFixed(2),
   },
+
+  {
+    id: 'img',
+    label: '이미지',
+    minWidth: 80,
+    align: 'center',
+    format: (value) => value.toFixed(2),
+  },
+
+  {
+    id: 'dist',
+    label: '분류',
+    minWidth: 80,
+    align: 'center',
+    format: (value) => value.toFixed(2),
+  },
+
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(seq, carNumber, time, inAndOut,accuracy, img, dist) {
+  return { seq, carNumber, time, inAndOut,accuracy, img,dist};
 }
 
 const rows = [
