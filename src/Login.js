@@ -67,7 +67,7 @@ export default function Login() {
     <Box sx={{ width: '100%' }}>
       <CssBaseline />
       <Box sx={{
-        display: "flex", justifyContent: "center", alignItems: "center",
+        display: "flex", justifyContent: "center", 
         alignItems: "center",
         height: "85vh"
 

@@ -52,7 +52,7 @@ export default function Join() {
 
 
             <Box sx={{
-                display: "flex", justifyContent: "center", alignItems: "center",
+                display: "flex", justifyContent: "center", 
                 alignItems: "center",
                 height: "85vh"
 

@@ -29,7 +29,7 @@ export default function MainSub1() {
           display: "flex",
           alignItems: "center",
           flexDirection: "row",
-          justifyContent: "space-evenly",
+          // justifyContent: "space-evenly",
           gap: '20px',
         }}
       >
@@ -55,7 +55,7 @@ export default function MainSub1() {
           <Box
             sx={{
               width: '100%',
-              maxHeight: '200px',
+              height: '400px', // Set a fixed height for the parent container
               border: "1px solid rgb(189, 188, 188)",
               paddingBlock: "10px",
             }}
@@ -63,12 +63,13 @@ export default function MainSub1() {
             <List />
           </Box>
         </Box>
+
         <Box sx={{
-          height: "573px",
+          height: "772px",
           border: "1px solid rgb(189, 188, 188)",
           display: "flex",
           flexDirection: "column",
-          width: '100%',
+          width: '1500px',
           alignItems: "center",
           justifyContent: "center",
 

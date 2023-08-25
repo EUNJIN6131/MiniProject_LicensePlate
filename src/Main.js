@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import CustomizedTabs from "./CustomizedTabs.js";
 import Login from "./Login.js";
 import MainSub1 from "./MainSub1.js";
+import Search from "./Search.js";
+import Enroll from "./Enroll.js";
 import { useState } from "react";
 
 export default function Main() {
@@ -32,6 +34,8 @@ export default function Main() {
       />
       {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} />}
       {selectedTab === 1 && <MainSub1 />}
+      {selectedTab === 2 && <Search />}
+      {selectedTab === 3 && <Enroll />}
     </Box>
   );
 }

@@ -1,139 +1,77 @@
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
+import { DataGrid } from '@mui/x-data-grid';
+import PaginationButtons from './PaginationButtons'; 
 
 const columns = [
-  { id: 'seq', label: 'seq', minWidth: 30, align: 'center', },
-  { id: 'carNumber', label: '차량번호', minWidth: 120, align: 'center', },
-  {
-    id: 'time',
-    label: '시간',
-    minWidth: 250,
-    align: 'center',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'inAndOut',
-    label: '입출차',
-    minWidth: 80,
-    align: 'center',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'accuracy',
-    label: '인식률',
-    minWidth: 80,
-    align: 'center',
-    format: (value) => value.toFixed(2),
-  },
 
+  { field: 'seq', type: 'checkbox', headerName: 'seq', width: 100  , headerAlign: 'center', align: 'center' },
+  { field: 'carNumber', headerName: '차량번호', width: 180, headerAlign: 'center', align: 'center' },
   {
-    id: 'img',
-    label: '이미지',
-    minWidth: 80,
+    field: 'time',
+    headerName: '시간',
+    width: 250,
+    headerAlign: 'center',
     align: 'center',
-    format: (value) => value.toFixed(2),
   },
-
   {
-    id: 'dist',
-    label: '분류',
-    minWidth: 80,
+    field: 'inAndOut',
+    headerName: '입출차',
+    width: 100,
+    headerAlign: 'center',
     align: 'center',
-    format: (value) => value.toFixed(2),
   },
-
+  {
+    field: 'accuracy',
+    headerName: '인식률',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+    valueFormatter: (params) => (params.value !== null ? params.value.toFixed(2) : ''),
+  },
+  {
+    field: 'img',
+    headerName: '이미지',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'dist',
+    headerName: '분류',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+  },
 ];
 
-function createData(seq, carNumber, time, inAndOut, accuracy, img, dist) {
-  return { seq, carNumber, time, inAndOut, accuracy, img, dist };
-}
+
 
 const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
+  { id: 1, seq: 1, carNumber: 'AB 1234', time: '2023-08-25 10:00:00', inAndOut: '입차', accuracy: 0.95, img: '이미지1', dist: '분류1' },
+  { id: 2, seq: 2, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 3, seq: 3, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 4, seq: 4, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 5, seq: 5, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 6, seq: 6, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 7, seq: 7, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 8, seq: 8, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 9, seq: 9, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 10, seq: 10, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 11, seq: 11, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' }, 
+
+  // 나머지 데이터도 유사하게 추가
 ];
 
 export default function List() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+    <div style={{width: '100%', maxHeight: '100%', height: '100%', overflowY: 'auto' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        checkboxSelection
       />
-    </Paper>
+       <PaginationButtons />
+    </div>
   );
 }

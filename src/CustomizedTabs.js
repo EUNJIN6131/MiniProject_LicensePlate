@@ -74,6 +74,7 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
             navigate('/MiniProject_LicensePlate/main/state'); // Use navigate to go to the desired route
           }} />
           <StyledTab label="검색" onClick={() => { onTabChange(2); navigate('/MiniProject_LicensePlate/main/search'); }} />
+          <StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/MiniProject_LicensePlate/main/enroll'); }} />
         </StyledTabs>
       </Box>
     </Box>
