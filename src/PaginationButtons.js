@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-export default function PaginationButtons() {
+export default function PaginationButtons({ currentPage, onPageChange, pageCount }) {
   return (
     <Stack spacing={2}>
-      <Pagination count={10} showFirstButton showLastButton />
+      <Pagination count={pageCount} page={currentPage} onChange={onPageChange} showFirstButton showLastButton />
     </Stack>
   );
 }

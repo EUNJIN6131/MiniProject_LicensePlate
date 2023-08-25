@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import PaginationButtons from './PaginationButtons'; 
+import PaginationButtons from './PaginationButtons';
 
 const columns = [
 
-  { field: 'seq', type: 'checkbox', headerName: 'seq', width: 100  , headerAlign: 'center', align: 'center' },
+  { field: 'seq', type: 'checkbox', headerName: 'seq', width: 100, headerAlign: 'center', align: 'center' },
   { field: 'carNumber', headerName: '차량번호', width: 180, headerAlign: 'center', align: 'center' },
   {
     field: 'time',
@@ -57,21 +57,48 @@ const rows = [
   { id: 8, seq: 8, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
   { id: 9, seq: 9, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
   { id: 10, seq: 10, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
-  { id: 11, seq: 11, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' }, 
+  { id: 11, seq: 11, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 12, seq: 12, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
+  { id: 13, seq: 13, carNumber: 'CD 5678', time: '2023-08-25 11:00:00', inAndOut: '출차', accuracy: 0.85, img: '이미지2', dist: '분류2' },
 
   // 나머지 데이터도 유사하게 추가
 ];
 
+
+
 export default function List() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 20;
+
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+
+  const rowsToDisplay = rows.slice(startIndex, endIndex);
+
+  const pageCount = Math.ceil(rows.length / rowsPerPage);
+
+  const handlePageChange = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
+
   return (
-    <div style={{width: '100%', maxHeight: '100%', height: '100%', overflowY: 'auto' }}>
+    <div style={{ width: '100%', maxHeight: '100%', height: '100%', overflowY: 'auto' }}>
       <DataGrid
-        rows={rows}
+        rows={rowsToDisplay}
         columns={columns}
-        pageSize={5}
+        pageSize={20}
         checkboxSelection
+        components={{
+          Pagination: (props) => (
+            <PaginationButtons
+              {...props}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              pageCount={pageCount} 
+            />
+          ),
+        }}
       />
-       <PaginationButtons />
     </div>
   );
 }

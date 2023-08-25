@@ -17,7 +17,7 @@ export default function Search() {
         }}
       >
         <Box sx={{
-          width: '30%', // Set this to 70% or any other percentage you desire
+          width: '20%', // Set this to 70% or any other percentage you desire
           height: '700px',
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",
@@ -27,7 +27,7 @@ export default function Search() {
 
         <Box sx={{
           flex: '1',
-          width: '70%', // Set this to 30% or any other percentage you desire
+          width: '80%', // Set this to 30% or any other percentage you desire
           height: '700px',
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",
