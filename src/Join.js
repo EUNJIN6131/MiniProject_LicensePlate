@@ -110,7 +110,9 @@ export default function Join() {
                                 variant="contained"
                                 sx={{
                                     borderRadius: "10px",
-                                    backgroundColor: "#47b8fd",
+                                    backgroundColor: "#2e1534",
+                                    '&:hover': {
+                                        bgcolor: "#635ee7",},
                                     color: "#white",
                                     fontWeight: "bold",
                                     mb: "10px",
@@ -127,7 +129,9 @@ export default function Join() {
                                 onClick={() => navigate("/MiniProject_LicensePlate/*")}
                                 sx={{
                                     borderRadius: "10px",
-                                    backgroundColor: "#47b8fd",
+                                    backgroundColor: "#2e1534",
+                                    '&:hover': {
+                                        bgcolor: "#635ee7",},
                                     color: "#white",
                                     fontWeight: "bold",
                                 }}

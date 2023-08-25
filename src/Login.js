@@ -131,7 +131,8 @@ export default function Login() {
               variant="contained"
               sx={{
                 mb: "10px",
-                mt: "10px", borderRadius: "10px", bgcolor: "#47b8fd", color: "#white", fontWeight: "bold"
+                mt: "10px", borderRadius: "10px", bgcolor: "#2e1534", '&:hover': {
+                  bgcolor: "#635ee7",}, color: "#white", fontWeight: "bold" 
               }}
             >
               로그인
@@ -142,8 +143,10 @@ export default function Login() {
               variant="contained"
               sx={{
                 borderRadius: "10px",
+                '&:hover': {
+                  bgcolor: "#635ee7",},
                 color: "#white",
-                bgcolor: "#47b8fd",
+                bgcolor: "#2e1534",
                 fontWeight: "bold",
               }}
             >
