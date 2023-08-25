@@ -55,7 +55,7 @@ export default function MainSub1() {
           <Box
             sx={{
               width: '100%',
-              height: '400px', // Set a fixed height for the parent container
+              height: '400px',
               border: "1px solid rgb(189, 188, 188)",
               paddingBlock: "10px",
             }}
