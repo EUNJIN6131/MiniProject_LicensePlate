@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FlaskService {
+
     public ResponseEntity<String> callApi(MultipartFile file) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
