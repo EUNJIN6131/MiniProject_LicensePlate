@@ -25,6 +25,7 @@ public class LogController {
     @PostMapping("/main/record") // 3번
     public ResponseEntity<?> recordLog(@RequestPart(value = "file") MultipartFile file) {
         try {
+            System.out.println("FIle : " + file);
             List<LogDto> list = logService.recordLog(file);
             ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(list).build();
             return ResponseEntity.ok().body(response);

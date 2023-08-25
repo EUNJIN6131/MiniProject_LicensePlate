@@ -21,6 +21,6 @@ public class LogDto {
     private Date date;
     private String access;
     private Double accuracy;
-    private Byte[] image;
+    private String image;
     private String state;
 }
