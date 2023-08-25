@@ -17,17 +17,19 @@ export default function Search() {
         }}
       >
         <Box sx={{
-          width: '20%', // Set this to 70% or any other percentage you desire
+          width: '25%', // Set this to 70% or any other percentage you desire
           height: '700px',
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",
         }}>
+            <Box sx={{margin:'20px'}}>
           <Calendar />
+          </Box>
         </Box>
 
         <Box sx={{
           flex: '1',
-          width: '80%', // Set this to 30% or any other percentage you desire
+          width: '75%', // Set this to 30% or any other percentage you desire
           height: '700px',
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",

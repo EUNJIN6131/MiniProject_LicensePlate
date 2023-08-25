@@ -131,7 +131,7 @@ export default function ImageLoader() {
             color="primary"
             size="small"
             sx={{
-              bgcolor: imageUpload.length > 0 ? "transparent" : "#47b8fd",
+              bgcolor: imageUpload.length > 0 ? "transparent" : "gray",
               width: "30px",
               height: 0,
             }}

@@ -5,7 +5,7 @@ import PaginationButtons from './PaginationButtons';
 const columns = [
 
   { field: 'seq', type: 'checkbox', headerName: 'seq', width: 100, headerAlign: 'center', align: 'center' },
-  { field: 'carNumber', headerName: '차량번호', width: 180, headerAlign: 'center', align: 'center' },
+  { field: 'carNumber', headerName: '차량번호', width: 200, headerAlign: 'center', align: 'center' },
   {
     field: 'time',
     headerName: '시간',
