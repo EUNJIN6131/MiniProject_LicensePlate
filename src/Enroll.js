@@ -18,7 +18,7 @@ export default function Enroll() {
     return (
         <Box sx={{ margin: "20px" }}>
             <Box
-                sx={{
+                sx={{height: '100vh',
                     width: '100%',
                     display: "flex",
                     alignItems: "center",
@@ -28,8 +28,8 @@ export default function Enroll() {
             >
                 <Box
                     sx={{
-                        width: '1000px',
-                        height: '700px',
+                        width: '50%',
+                        height: '100vh',
                         border: "1px solid rgb(189, 188, 188)",
                         paddingBlock: "10px",
                         justifyContent: "space-evenly",
@@ -67,8 +67,8 @@ export default function Enroll() {
 
                 <Box
                     sx={{
-                        width: '100%',
-                        height: '700px',
+                        width: '70%',
+                        height: '100vh',
                         border: "1px solid rgb(189, 188, 188)",
                         paddingBlock: "10px",
 

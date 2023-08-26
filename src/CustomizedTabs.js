@@ -44,7 +44,6 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
   }),
 );
 
-
 export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
@@ -55,8 +54,8 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ bgcolor: '#2e1534', display: 'flex', p: 3 }}>
+    <Box sx={{ width: '100%' , }}>
+      <Box sx={{ width: "100%", bgcolor: '#2e1534', display: 'flex',  p:3 , }}>
         <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
           {isLoggedIn ? (
             <StyledTab label="로그아웃" onClick={onLogout} />
@@ -67,8 +66,6 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
             }} />
           )}
 
-          {/* <StyledTab label="차량 입출입 현황" onClick={() => onTabChange(1)} disabled={!isLoggedIn} />
-          <StyledTab label="검색" onClick={() => onTabChange(2)} disabled={!isLoggedIn} /> */}
           <StyledTab label="차량 입출입 현황" onClick={() => {
             onTabChange(1);
             navigate('/MiniProject_LicensePlate/main/state'); // Use navigate to go to the desired route
@@ -77,6 +74,7 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
           <StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/MiniProject_LicensePlate/main/enroll'); }} />
         </StyledTabs>
       </Box>
+          
     </Box>
   );
 }

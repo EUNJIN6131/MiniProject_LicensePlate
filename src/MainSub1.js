@@ -25,11 +25,13 @@ export default function MainSub1() {
     <Box sx={{ margin: "20px" }}>
       <Box
         sx={{
+          height: '100vh',
           width: '100%',
           display: "flex",
           alignItems: "center",
           flexDirection: "row",
-          // justifyContent: "space-evenly",
+          alignItems: "stretch",
+          justifyContent:"space-between",
           gap: '20px',
         }}
       >
@@ -37,17 +39,17 @@ export default function MainSub1() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: '100%',
+            width: '70%',
+            height: '100vh',
             alignItems: "center",
-            justifyContent: "space-evenly"
+            justifyContent:"space-between"
           }}
         >
           <Box
             sx={{
               width: '100%',
+              height: '40vh',
               border: "1px solid rgb(189, 188, 188)",
-              paddingBlock: "10px",
-              marginBottom: "20px"
             }}
           >
             <Images />
@@ -55,9 +57,9 @@ export default function MainSub1() {
           <Box
             sx={{
               width: '100%',
-              height: '400px',
+              height: '55vh',
               border: "1px solid rgb(189, 188, 188)",
-              paddingBlock: "10px",
+
             }}
           >
             <List />
@@ -65,14 +67,10 @@ export default function MainSub1() {
         </Box>
 
         <Box sx={{
-          height: "772px",
+          height: '100vh',
+          width: '30%',
           border: "1px solid rgb(189, 188, 188)",
           display: "flex",
-          flexDirection: "column",
-          width: '1500px',
-          alignItems: "center",
-          justifyContent: "center",
-
         }}>
 
           <Typography variant="h4">차량번호: {recentNum}</Typography>
@@ -80,5 +78,6 @@ export default function MainSub1() {
         </Box>
       </Box>
     </Box>
+
   );
 }

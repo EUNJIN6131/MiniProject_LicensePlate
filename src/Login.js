@@ -64,19 +64,21 @@ export default function Login() {
 
   return (
 
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', }}>
       <CssBaseline />
       <Box sx={{
-        display: "flex", justifyContent: "center", 
+        width: '100%',
+        display: "flex", justifyContent: "center",
         alignItems: "center",
         height: "85vh"
 
       }}>
         <Box
           sx={{
-
-            width: "410px",
-            height: "500px",
+            width: "100%",
+            height: '100%',
+            maxWidth: "410px",
+            maxHeight: "500px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-evenly",
@@ -126,13 +128,15 @@ export default function Login() {
             />
 
             <Button
+
               type="submit"
               fullWidth
               variant="contained"
               sx={{
-                mb: "10px",
+                mb: "10px", width: "100%",
                 mt: "10px", borderRadius: "10px", bgcolor: "#2e1534", '&:hover': {
-                  bgcolor: "#635ee7",}, color: "#white", fontWeight: "bold" 
+                  bgcolor: "#635ee7",
+                }, color: "#white", fontWeight: "bold"
               }}
             >
               로그인
@@ -144,7 +148,8 @@ export default function Login() {
               sx={{
                 borderRadius: "10px",
                 '&:hover': {
-                  bgcolor: "#635ee7",},
+                  bgcolor: "#635ee7",
+                },
                 color: "#white",
                 bgcolor: "#2e1534",
                 fontWeight: "bold",

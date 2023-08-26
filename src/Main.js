@@ -26,7 +26,7 @@ export default function Main() {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%' , height:'100%'}}>
       <CustomizedTabs
         isLoggedIn={isLoggedIn}
         onTabChange={handleTabChange}

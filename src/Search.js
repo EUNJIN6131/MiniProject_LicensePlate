@@ -10,6 +10,7 @@ export default function Search() {
       <Box
         sx={{
           width: '100%',
+          height: '100vh',
           display: "flex",
           alignItems: "center",
           flexDirection: "row",
@@ -17,8 +18,8 @@ export default function Search() {
         }}
       >
         <Box sx={{
-          width: '25%', // Set this to 70% or any other percentage you desire
-          height: '700px',
+          width: '30%', 
+          height: '100vh',
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",
         }}>
@@ -29,8 +30,8 @@ export default function Search() {
 
         <Box sx={{
           flex: '1',
-          width: '75%', // Set this to 30% or any other percentage you desire
-          height: '700px',
+          width: '70%', 
+          height: '100vh',
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",
         }}>
