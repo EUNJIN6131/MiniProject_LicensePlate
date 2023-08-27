@@ -64,7 +64,7 @@ export default function Login() {
 
   return (
 
-    <Box sx={{ width: '100%', }}>
+    <Box sx={{ width: '100%', height:'100vh' ,}}>
       <CssBaseline />
       <Box sx={{
         width: '100%',
@@ -76,7 +76,7 @@ export default function Login() {
         <Box
           sx={{
             width: "100%",
-            height: '100%',
+            height: '60vh',
             maxWidth: "410px",
             maxHeight: "500px",
             display: "flex",

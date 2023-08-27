@@ -67,25 +67,26 @@ export default function Calendar() {
     };
 
     return (
-        <Box sx={{width:'100%'}}>
+
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box sx={{ display: 'flex', gap: '8px', width:'100%',}}>
+            <Box sx={{ gap: '8px', width: '100%', display: "flex", }}>
                 {shortcuts.map((shortcut, index) => (
                     <Button
-                    key={index}
-                    onClick={() => handleShortcutClick(shortcut)}
-                    variant="contained"
-                    sx={{width:'100%',
-                        border:'1px solid black',
-                        backgroundColor: '#DDDDDD',
-                        color: 'black',
-                        '&:hover': {
-                            backgroundColor: '#CCCCCC', 
-                        },
-                    }}
-                >
-                    {shortcut.label}
-                </Button>
+                        key={index}
+                        onClick={() => handleShortcutClick(shortcut)}
+                        variant="contained"
+                        sx={{
+                            width: '100%',
+                            border: '1px solid black',
+                            backgroundColor: '#DDDDDD',
+                            color: 'black',
+                            '&:hover': {
+                                backgroundColor: '#CCCCCC',
+                            },
+                        }}
+                    >
+                        {shortcut.label}
+                    </Button>
                 ))}
             </Box>
             <p>조회날짜: {dateButtonText}</p>
@@ -95,17 +96,19 @@ export default function Calendar() {
                 calendarDate={calendarDate}
                 localeText={{ start: 'start date', end: 'end date' }}
             />
-            <Button onClick={handleQuerySubmit} variant="contained" sx={{ mt:3, width:'100%',
-                        border:'1px solid black',
-                        backgroundColor: '#DDDDDD', 
-                        color: 'black', 
-                        '&:hover': {
-                            backgroundColor: '#CCCCCC', 
-                        },
-                    }}>
+
+            <Button onClick={handleQuerySubmit} variant="contained" sx={{
+                mt: 3, width: '100%',
+                border: '1px solid black',
+                backgroundColor: '#DDDDDD',
+                color: 'black',
+                '&:hover': {
+                    backgroundColor: '#CCCCCC',
+                },
+            }}>
                 조회하기
             </Button>
         </LocalizationProvider>
-        </Box>
+
     );
 }

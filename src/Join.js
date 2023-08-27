@@ -42,7 +42,7 @@ export default function Join() {
     return (
         <Box sx={{
             width: '100%',
-            height: '100%',
+            height: '100vh',
             alignItems: "center",
         }}>
             <Box sx={{
@@ -52,15 +52,17 @@ export default function Join() {
 
 
             <Box sx={{
-                display: "flex", justifyContent: "center", 
+                display: "flex", justifyContent: "center",
                 alignItems: "center",
                 height: "85vh"
 
             }}>
                 <Box
                     sx={{
-                        width: "410px",
-                        height: "500px",
+                        width: "100%",
+                        height: '60vh',
+                        maxWidth: "410px",
+                        maxHeight: "500px",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-evenly",
@@ -112,7 +114,8 @@ export default function Join() {
                                     borderRadius: "10px",
                                     backgroundColor: "#2e1534",
                                     '&:hover': {
-                                        bgcolor: "#635ee7",},
+                                        bgcolor: "#635ee7",
+                                    },
                                     color: "#white",
                                     fontWeight: "bold",
                                     mb: "10px",
@@ -131,7 +134,8 @@ export default function Join() {
                                     borderRadius: "10px",
                                     backgroundColor: "#2e1534",
                                     '&:hover': {
-                                        bgcolor: "#635ee7",},
+                                        bgcolor: "#635ee7",
+                                    },
                                     color: "#white",
                                     fontWeight: "bold",
                                 }}

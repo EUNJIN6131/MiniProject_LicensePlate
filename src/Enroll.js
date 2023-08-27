@@ -59,7 +59,9 @@ export default function Enroll() {
                             onChange={handleCarNumberChange}
                             sx={{ width: 300, mb: 2 }}
                         />
-                        <Button sx={{ mb: 2, bgcolor: "#CCCCCC", color:'black', border:'1px solid black' }} variant="contained" color="primary" onClick={handleRegister}>
+                        <Button sx={{ mb: 2, bgcolor: "#CCCCCC", '&:hover': {
+                  bgcolor: "#635ee7",
+                }, color:'black', border:'1px solid black' }} variant="contained" color="primary" onClick={handleRegister}>
                             등록
                         </Button>
                     </Box>

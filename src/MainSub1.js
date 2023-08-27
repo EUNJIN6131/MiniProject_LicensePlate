@@ -42,7 +42,8 @@ export default function MainSub1() {
             width: '70%',
             height: '100vh',
             alignItems: "center",
-            justifyContent:"space-between"
+            justifyContent:"space-between",
+            
           }}
         >
           <Box
@@ -59,7 +60,6 @@ export default function MainSub1() {
               width: '100%',
               height: '55vh',
               border: "1px solid rgb(189, 188, 188)",
-
             }}
           >
             <List />
