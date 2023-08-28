@@ -1,49 +1,84 @@
-from flask import Flask, render_template, request, jsonify
+# from flask import Flask, render_template, request, jsonify
+# from PIL import Image
+# import numpy as np
+# import h5py
+# import tensorflow as tf
+# from tensorflow.keras.optimizers.schedules import ExponentialDecay
+# from tensorflow.keras.optimizers import Adam
+
+# # Flask 애플리케이션 생성
+# app = Flask(__name__)
+
+# @app.route('/main/record', methods=['GET', 'POST'])
+# def upload_predict():
+#     if request.method == 'POST':
+#         try:
+#             prediction_results = [["0833", 60.0], ["0821", 30.0], ["0107", 10.0]]
+#             return jsonify(prediction_results)
+#         except Exception as e:
+#             return str(e), 500  
+
+# if __name__ == '__main__':
+   
+#     app.run(host="localhost")
+
+
+# """
+# Simple app to upload an image via a web form 
+# and view the inference results on the image in the browser.
+# """
+import argparse
+import io
+import os
 from PIL import Image
-import numpy as np
-import h5py
-import tensorflow as tf
-from tensorflow.keras.optimizers.schedules import ExponentialDecay
-from tensorflow.keras.optimizers import Adam
+import datetime
 
-# Flask 애플리케이션 생성
-app = Flask(__name__)
+import torch
+from flask import Flask, render_template, request, redirect, jsonify
 
-# 모델 로드 및 클래스 이름 설정
-# 이 부분은 모델 로드와 클래스 이름 설정하는 부분으로 대체되어야 합니다.
-class_names = ['CassFresh', 'budweiser', 'filite', 'hineken', 'jinro']  # 예시 클래스 이름
+#app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
-@app.route('/main/record', methods=['GET', 'POST'])
-def upload_predict():
-    if request.method == 'POST':
-        try:
+DATETIME_FORMAT = "%Y-%m-%d_%H-%M-%S-%f"
 
-            # 업로드한 이미지 처리
-            # image_file = request.files['file']
-            # if image_file:
-            #     img = Image.open(image_file)
-            #     img = img.resize((150,150))
-            #     x = np.array(img)
-            #     x = np.expand_dims(x, axis=0)
-            #     x = x / 255.0
+@app.route("/main/record", methods=["GET", "POST"])
+def predict():
+    if request.method == "POST":
+        if "file" not in request.files:
+            return redirect(request.url)
+        file = request.files["file"]
+        if not file:
+            return
 
-            #     # 모델로 예측 수행
-            #     predictions = model.predict(x)[0]
-            #     top_class_indices = np.argsort(predictions)[::-1][:3]
-                
-            #     for class_index in top_class_indices:
-            #         class_name = class_names[class_index]
-            #         confidence = predictions[class_index] * 100
-            #         prediction_results.append((class_name, confidence))
+        img_bytes = file.read()
+        img = Image.open(io.BytesIO(img_bytes))
+        results = model([img])
 
-            prediction_results = [{"text":"1234", "accuracy":60.0}, {"text":"1234123", "accuracy":30.0}, {"text":"1234152", "accuracy":10.0}]
-            return jsonify(prediction_results)
-        except Exception as e:
-            return str(e), 500  # Return an error response
+        results.render()  # updates results.imgs with boxes and labels
+        target_class_index = 1
+        confidence_threshold = 0.6  # 신뢰도
+        for detection in results.pred[0]:
+            x_min, y_min, x_max, y_max, confidense, class_num = detection
+            if (detection is not None
+                and confidense >= confidence_threshold 
+                and class_num == target_class_index):
+                x_min = int(x_min)
+                y_min = int(y_min)
+                x_max = int(x_max)
+                y_max = int(y_max)
+                img_with_box = img.crop((x_min, y_min, x_max, y_max))
+                now_time = datetime.datetime.now().strftime(DATETIME_FORMAT)
+                img_savename = f"./{now_time}.jpg"
+                img_with_box.save(img_savename)
+                prediction_results = [["0008", 60.0], ["0821", 30.0], ["0107", 10.0]]
+                return jsonify(prediction_results)
+        return "No object detected."
 
-if __name__ == '__main__':
-    # 모델 로드 및 초기화
-    # model = tf.keras.models.load_model('./complete_model.h5')  # 모델 로드 및 초기화 부분
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Flask app exposing yolov5 models")
+    parser.add_argument("--port", default=5000, type=int, help="port number")
+    args = parser.parse_args()
 
-    # Flask 애플리케이션 실행
-    app.run(host="localhost")
+    model = torch.hub.load('ultralytics/yolov5','custom', path='./best.pt')  # force_reload = recache latest code
+    model.eval()
+    app.run(host="localhost")  # debug=True causes Restarting with stat

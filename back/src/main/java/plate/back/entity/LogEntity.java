@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,12 +45,24 @@ public class LogEntity {
     private Double accuracy;
 
     @Column(nullable = false)
-    private String ImageDir;
+    private String originalImage;
+
+    @Column(nullable = false)
+    private String predictedImage;
+
+    @Column(nullable = false)
+    private boolean isPresent;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isUpdated;
 
     @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm:ss", timezone = "UTC")
     private Date date;
 
     @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE)
     List<PredictLogEntity> predList;
 
+    @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE)
+    List<HistoryEntity> updateList;
 }

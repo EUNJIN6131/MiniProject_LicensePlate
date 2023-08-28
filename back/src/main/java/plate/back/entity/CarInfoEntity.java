@@ -25,10 +25,10 @@ import lombok.ToString;
 @Table(name = "car_info")
 public class CarInfoEntity {
     @Id
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String licensePlate;
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String color;
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String plateType;
 }

@@ -33,12 +33,6 @@ public class PredictLogEntity {
     private LogEntity logEntity;
 
     @Column(nullable = false, length = 20)
-    private String predictedColor;
-
-    @Column(nullable = false, length = 20)
-    private String predictedType;
-
-    @Column(nullable = false, length = 20)
     private String predictedText;
 
     @Column(nullable = false)

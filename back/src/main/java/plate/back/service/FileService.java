@@ -20,7 +20,8 @@ public class FileService {
     private final AmazonS3 amazonS3;
 
     public String uploadFile(MultipartFile file) throws IOException {
-        String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+        String directory = "original/";
+        String fileName = directory + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getInputStream().available());

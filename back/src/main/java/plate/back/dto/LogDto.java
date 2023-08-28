@@ -19,8 +19,9 @@ public class LogDto {
     private Integer logId;
     private String licensePlate;
     private Date date;
-    private String access;
-    private Double accuracy;
-    private String image;
-    private String state;
+    private String accuracy;
+    private String originalImage;
+    private String predictedImage;
+    private Boolean isPresent;
+    private Boolean isUpdated;
 }
