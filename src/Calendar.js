@@ -68,7 +68,7 @@ export default function Calendar() {
 
     return (
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs} >
             <Box sx={{ gap: '8px', width: '100%', display: "flex", }}>
                 {shortcuts.map((shortcut, index) => (
                     <Button
@@ -109,6 +109,5 @@ export default function Calendar() {
                 조회하기
             </Button>
         </LocalizationProvider>
-
     );
 }

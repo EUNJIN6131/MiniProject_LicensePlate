@@ -45,7 +45,7 @@ export default function Login() {
 
     console.log("id:", formData.userId);
     console.log("Password:", formData.password);
-    const url = API_BASE_URL + "/users/login";
+    const url = API_BASE_URL + "/users/signin";
     console.log(url);
     try {
       const res = await axios.post(url, formData);
@@ -53,7 +53,7 @@ export default function Login() {
         const accessToken = res.headers["authorization"];
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
-        navigate("/MiniProject_LicensePlate/main");
+        navigate("main/record");
       }
     } catch (error) {
       setOpen(true);
@@ -64,7 +64,7 @@ export default function Login() {
 
   return (
 
-    <Box sx={{ width: '100%', height:'100vh' ,}}>
+    <Box sx={{ width: '100%', }}>
       <CssBaseline />
       <Box sx={{
         width: '100%',
@@ -142,7 +142,7 @@ export default function Login() {
               로그인
             </Button>
             <Button
-              onClick={() => navigate("/MiniProject_LicensePlate/join")}
+              onClick={() => navigate("/users/signup")}
               fullWidth
               variant="contained"
               sx={{

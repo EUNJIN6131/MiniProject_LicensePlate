@@ -16,7 +16,7 @@ export default function AlertError(props) {
           </IconButton>
         }
         severity="error"
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, position: 'relative', zIndex: 1}}
       >
         {props.text}
       </Alert>

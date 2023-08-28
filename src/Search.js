@@ -3,21 +3,30 @@ import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import List from "./List";
 import Calendar from "./Calendar";
 import { useState, useEffect } from 'react';
-
+import {call} from './api/ApiService';
 
 export default function Search() {
-
+  const [isAdmin, setIsAdmin] = useState(false);
   const [licensePlate, setLicensePlate] = useState("");
+  const [rows, setRows] = useState([]);
 
   const handleLicensePlateChange = (event) => {
     setLicensePlate(event.target.value);
   };
 
   const handleSearchClick = () => {
-    // 여기에서 차량번호판 조회 로직을 추가하세요.
-    // licensePlate 상태 변수에 입력된 차량번호를 사용할 수 있습니다.
+    console.log("fdsfsdf"); // Log before making the API call
+    
+    call(`/main/search/plate/0008`, "GET", null)
+      .then((data) => {
+        console.log('API call successful. Received data:', data); // Log the received data
+        data["id"] = 1
+        setRows([data]);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
-
 
   const [category, setCategory] = useState('');
   const [subCategory, setSubCategory] = useState('');
@@ -30,8 +39,12 @@ export default function Search() {
   const handleSubCategoryChange = (event) => {
     setSubCategory(event.target.value);
   };
+  
 
-
+  // const rows = [
+  //   { id: 1, seq: 1, carNumber: 'AB 1234', inAndOut: '입차', accuracy: 0.95, img: '이미지1', dist: '분류1', time: '2023-08-25 10:00:00' },
+  // ];
+  
 
   return (
     <Box sx={{ margin: "20px" }}>
@@ -69,7 +82,7 @@ export default function Search() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSearchClick}
+                  onClick={() => handleSearchClick()}
                   sx={{
                     width: '100%',
                     border: '1px solid black',
@@ -84,40 +97,6 @@ export default function Search() {
                 </Button>
               </Box>
             </Box>
-
-            {/* <Box sx={{ marginTop: '60px' }}>
-              <Select
-                value={category}
-                onChange={handleCategoryChange}
-                label="Category"
-                fullWidth
-              >
-                <MenuItem value="dog">Dog</MenuItem>
-                <MenuItem value="cat">Cat</MenuItem>
-              </Select>
-            </Box>
-
-            
-            <Box sx={{ marginTop: '20px' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSearchClick}
-                sx={{
-                  width: '100%',
-                  border: '1px solid black',
-                  backgroundColor: '#DDDDDD',
-                  color: 'black',
-                  '&:hover': {
-                      backgroundColor: '#CCCCCC',
-                  },
-              }}
-              >
-                조회하기
-              </Button>
-            </Box> */}
-
-
           </Box>
         </Box>
 
@@ -128,7 +107,7 @@ export default function Search() {
           border: "1px solid rgb(189, 188, 188)",
           paddingBlock: "10px",
         }}>
-          <List />
+           <List isAdmin={isAdmin} rows={rows}/>
         </Box>
       </Box>
     </Box>

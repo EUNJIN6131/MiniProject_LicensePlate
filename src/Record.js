@@ -4,7 +4,7 @@ import Images from "./Images";
 import List from "./List";
 import { useState, useEffect } from 'react';
 
-export default function MainSub1() {
+export default function Record() {
 
   const [recentNum, setRecentNum] = useState(null);
 
@@ -39,7 +39,7 @@ export default function MainSub1() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: '70%',
+            width: '65%',
             height: '100vh',
             alignItems: "center",
             justifyContent:"space-between",
@@ -68,7 +68,7 @@ export default function MainSub1() {
 
         <Box sx={{
           height: '100vh',
-          width: '30%',
+          width: '35%',
           border: "1px solid rgb(189, 188, 188)",
           display: "flex",
         }}>

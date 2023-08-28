@@ -18,6 +18,7 @@ const StyledTabs = styled((props) => (
     display: 'flex',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+    width: '100%',
   },
   '& .MuiTabs-indicatorSpan': {
     maxWidth: 40,
@@ -62,16 +63,16 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
           ) : (
             <StyledTab label="로그인" onClick={() => {
               onTabChange(0);
-              navigate('/MiniProject_LicensePlate/login'); // Append /login to the URL
+              navigate('/users/signin'); // Append /login to the URL
             }} />
           )}
 
           <StyledTab label="차량 입출입 현황" onClick={() => {
             onTabChange(1);
-            navigate('/MiniProject_LicensePlate/main/state'); // Use navigate to go to the desired route
+            navigate('/main/record'); // Use navigate to go to the desired route
           }} />
-          <StyledTab label="검색" onClick={() => { onTabChange(2); navigate('/MiniProject_LicensePlate/main/search'); }} />
-          <StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/MiniProject_LicensePlate/main/enroll'); }} />
+          <StyledTab label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} />
+          <StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} />
         </StyledTabs>
       </Box>
           

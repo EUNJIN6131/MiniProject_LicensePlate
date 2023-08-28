@@ -2,8 +2,9 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AlertError from "./alert/AlertError";
-import AlertSuccess from "./alert/AlertSuccess";
+import AlertSuccess from "./alert/AlertSuccess.js";
 import { API_BASE_URL } from "./api/api-config";
+
 export default function Join() {
 
     const [open, setOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function Join() {
         const data = new FormData(event.currentTarget);
 
         const formData = {
+            username: data.get("username"),
             userId: data.get("id"),
             password: data.get("password"),
         };
@@ -22,7 +24,7 @@ export default function Join() {
         console.log("id:", formData.userId);
         console.log("Password:", formData.password);
 
-        const url = API_BASE_URL + "/users/join";
+        const url = API_BASE_URL + "/users/signup";
 
         fetch(url, {
             method: "post",
@@ -86,7 +88,18 @@ export default function Join() {
                         onSubmit={handleSubmit}
                     >
 
+                        <TextField
+                            required
+                            fullWidth
+                            name="username"
+                            label="이름을 입력하세요."
+                            type="username"
+                            id="username"
+                            autoComplete="new-username"
+                        />
+                        <Box sx={{ marginBottom: "10px" }} />
                         <TextField required fullWidth id="id" label="아이디를 입력하세요." name="id" autoComplete="id" />
+                        <Box sx={{ marginBottom: "10px" }} />
                         <TextField
                             required
                             fullWidth
@@ -96,6 +109,7 @@ export default function Join() {
                             id="password"
                             autoComplete="new-password"
                         />
+                        <Box sx={{ marginBottom: "10px" }} />
                         <Box>
                             <AlertError open={open} setOpen={setOpen} text={"이미 존재하는 아이디입니다."} />
                             {open1 && (
@@ -129,7 +143,7 @@ export default function Join() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                onClick={() => navigate("/MiniProject_LicensePlate/*")}
+                                onClick={() => navigate("/*")}
                                 sx={{
                                     borderRadius: "10px",
                                     backgroundColor: "#2e1534",
