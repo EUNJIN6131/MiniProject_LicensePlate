@@ -15,13 +15,14 @@ export default function Search() {
   };
 
   const handleSearchClick = () => {
-    console.log("fdsfsdf"); // Log before making the API call
-    
+    console.log("Button clicked"); // Log before making the API call
+
     call(`/main/search/plate/0008`, "GET", null)
       .then((data) => {
-        console.log('API call successful. Received data:', data); // Log the received data
-        data["id"] = 1
-        setRows([data]);
+        console.log('data', data.data[0]); // Log the received data
+        let respData = data.data[0]
+        data.data[0]["id"] = 1
+        setRows([respData]);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

@@ -62,9 +62,9 @@ const columns = [
 // ];
 
 export default function List({ isAdmin ,rows}) {
-  // useEffect(() => {
-  //   console.log("rows", rows);
-  // }, [rows]);
+  useEffect(() => {
+    console.log("rows", rows);
+  }, [rows]);
   
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 20;
