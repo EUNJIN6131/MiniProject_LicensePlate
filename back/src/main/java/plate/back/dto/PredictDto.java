@@ -12,8 +12,13 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 public class PredictDto {
+    private Integer logId;
     private String predictedText;
     private double accuracy;
-    private String predictedImage;
     private boolean isPresent;
+
+    public PredictDto(String predictedText, double accuracy) {
+        this.predictedText = predictedText;
+        this.accuracy = accuracy;
+    }
 }

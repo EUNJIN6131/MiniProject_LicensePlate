@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,10 +17,12 @@ import plate.back.dto.HistoryDto;
 import plate.back.dto.LogDto;
 import plate.back.dto.PredictDto;
 import plate.back.entity.HistoryEntity;
+import plate.back.entity.ImageEntity;
 import plate.back.entity.LogEntity;
 import plate.back.entity.PredictLogEntity;
 import plate.back.persistence.CarInfoRepository;
 import plate.back.persistence.HistoryRepository;
+import plate.back.persistence.ImageRepository;
 import plate.back.persistence.LogRepository;
 import plate.back.persistence.PredictLogRepository;
 
@@ -31,6 +33,9 @@ public class LogService {
 
     @Autowired
     LogRepository logRepo;
+
+    @Autowired
+    ImageRepository imgRepo;
 
     @Autowired
     PredictLogRepository predRepo;
@@ -45,23 +50,23 @@ public class LogService {
     FlaskService flaskService;
 
     public List<LogDto> recordLog(MultipartFile file) throws IOException {
-        // file 업로드(Aws S3)
-        String originalUrl = fileService.uploadFile(file);
+        // 원본 file 업로드(Aws S3)
+        String originalUrl = fileService.uploadFile(file, "origin/vehicle/");
 
         // flask api 호출
-        ResponseEntity<Object[][]> response = flaskService.callApi(file);
-        System.out.println("Response : " + response);
+        LinkedHashMap<String, Object> response = (LinkedHashMap<String, Object>) flaskService.callApi(file).getBody();
+        System.out.println("Response : " + response.entrySet());
 
-        Object[][] predictValue = response.getBody();
+        ArrayList<ArrayList<Object>> predictValue = (ArrayList<ArrayList<Object>>) response.get("predictedResults");
         ArrayList<PredictDto> predList = new ArrayList<>();
-        for (Object[] obj : predictValue) {
-            predList.add(new PredictDto(String.valueOf(obj[0]), (double) obj[1], "predictedImage", false));
+        for (ArrayList<Object> obj : predictValue) {
+            predList.add(new PredictDto(String.valueOf(obj.get(0)), (double) obj.get(1)));
         }
 
         boolean flag = false;
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
-            if (carRepo.findById(dto.getPredictedText()).isPresent()) {
+            if (carRepo.findById(String.valueOf(dto.getPredictedText())).isPresent()) {
                 dto.setPresent(true);
                 flag = true;
             }
@@ -71,7 +76,7 @@ public class LogService {
         int idx = 0;
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
-            if (dto.isPresent() && maxVal < dto.getAccuracy()) {
+            if (dto.isPresent() && maxVal < (double) dto.getAccuracy()) {
                 maxVal = dto.getAccuracy();
                 idx = i;
             }
@@ -79,29 +84,32 @@ public class LogService {
 
         // Log 엔티티 저장
         LogEntity savedLog;
+        String predictedImage = String.valueOf(response.get("predictedImage"));
+
         if (flag) {
             savedLog = logRepo.save(LogEntity.builder()
-                    .originalImage(originalUrl)
-                    .predictedImage("predictedUrl")
                     .licensePlate(predList.get(idx).getPredictedText())
                     .accuracy(maxVal)
-                    .date(new Date())
-                    .isPresent(true).build());
+                    .state("수정 불필요")
+                    .date(new Date()).build());
         } else {
             savedLog = logRepo.save(LogEntity.builder()
-                    .originalImage(originalUrl)
-                    .predictedImage("predictedUrl")
                     .licensePlate("-")
                     .accuracy(0.0)
-                    .isPresent(false).build());
+                    .state("수정 필요")
+                    .date(new Date()).build());
         }
+        // Image 엔티티 저장
+        imgRepo.save(ImageEntity.builder()
+                .logEntity(savedLog)
+                .vehicleImageUrl(predictedImage)
+                .plateImageUrl(predictedImage).build());
 
         // PredictLog 엔티티 저장
         for (int i = 0; i < predList.size(); i++) {
-            LogEntity log = savedLog;
             PredictDto dto = predList.get(i);
-            predRepo.save(PredictLogEntity.builder()
-                    .logEntity(log)
+            PredictLogEntity predEntity = predRepo.save(PredictLogEntity.builder()
+                    .logEntity(savedLog)
                     .isPresent(dto.isPresent())
                     .accuracy(dto.getAccuracy())
                     .predictedText(dto.getPredictedText()).build());
@@ -161,8 +169,6 @@ public class LogService {
     }
 
     public List<Boolean> updateLog(LogDto dto) {
-        System.out.println("ID : " + dto.getLogId());
-        System.out.println("dto : " + dto);
         Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
         if (!optionalLog.isPresent()) {
             throw new EntityNotFoundException("LogId not present in the database");

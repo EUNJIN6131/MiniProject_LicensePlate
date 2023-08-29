@@ -27,8 +27,4 @@ public class CarInfoEntity {
     @Id
     @Column(nullable = false, length = 20)
     private String licensePlate;
-    @Column(length = 20)
-    private String color;
-    @Column(length = 20)
-    private String plateType;
 }

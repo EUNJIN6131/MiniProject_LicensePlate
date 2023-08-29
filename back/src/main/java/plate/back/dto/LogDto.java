@@ -18,10 +18,9 @@ import lombok.ToString;
 public class LogDto {
     private Integer logId;
     private String licensePlate;
-    private Date date;
     private String accuracy;
-    private String originalImage;
-    private String predictedImage;
-    private Boolean isPresent;
-    private Boolean isUpdated;
+    private String vehicleImage;
+    private String plateImage;
+    private String state;
+    private Date date;
 }

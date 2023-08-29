@@ -17,11 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FlaskService {
 
-    public ResponseEntity<Object[][]> callApi(MultipartFile file) throws IOException {
+    public ResponseEntity<Object> callApi(MultipartFile file) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        // Create an HttpEntity with the file as part of the request
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new ByteArrayResource(file.getBytes()) {
             @Override
@@ -32,12 +31,14 @@ public class FlaskService {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
+        System.out.println("Flask Connection Starts");
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Object[][]> response = restTemplate.exchange(
+        ResponseEntity<Object> response = restTemplate.exchange(
                 "http://localhost:5000/main/record",
                 HttpMethod.POST,
                 requestEntity,
-                Object[][].class);
+                Object.class);
+        System.out.println("Response : " + response);
         System.out.println("Flask Connection Success");
         return response;
     }

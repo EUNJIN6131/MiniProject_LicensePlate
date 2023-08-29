@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.amazonaws.services.ec2.model.Image;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
@@ -30,7 +31,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+// @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "log")
 public class LogEntity {
@@ -44,20 +45,11 @@ public class LogEntity {
     @Column(nullable = false)
     private Double accuracy;
 
-    @Column(nullable = false)
-    private String originalImage;
-
-    @Column(nullable = false)
-    private String predictedImage;
-
-    @Column(nullable = false)
-    private boolean isPresent;
-
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean isUpdated;
+    @Column(nullable = false, length = 20)
+    private String state;
 
     @CreatedDate
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Date date;
 
     @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE)
@@ -65,4 +57,7 @@ public class LogEntity {
 
     @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE)
     List<HistoryEntity> updateList;
+
+    @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE)
+    List<Image> image;
 }

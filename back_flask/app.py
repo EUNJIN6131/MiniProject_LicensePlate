@@ -8,28 +8,28 @@ from flask import Flask, render_template, request, redirect, jsonify
 import boto3
 from botocore.exceptions import NoCredentialsError
 from dotenv import load_dotenv
-import os
+import random
 
 load_dotenv()  # Load variables from .env file
 
 aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-def upload_to_s3(data, bucket_name, folder_name, object_name=None):
+def upload_to_s3_and_get_url(data, bucket_name, folder_name, object_name=None):
     if object_name is None:
         object_name = f"{datetime.datetime.now().strftime(DATETIME_FORMAT)}.jpg"
     
-    s3 = boto3.client('s3', aws_access_key_id = aws_access_key, aws_secret_access_key = aws_secret_key)
+    s3 = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
     try:
         s3.upload_fileobj(data, bucket_name, f'{folder_name}/{object_name}')
-        return True
+        img_url = f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{folder_name}/{object_name}"
+        return True, img_url
     except NoCredentialsError:
-        return False    
+        return False, None     
 
-#app = Flask(__name__)
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
 
-DATETIME_FORMAT = "%Y-%m-%d_%H-%M-%S-%f"
+DATETIME_FORMAT = "%Y-%m-%d_%H:%M:%S"
 
 @app.route("/main/record", methods=["GET", "POST"])
 def predict():
@@ -55,10 +55,14 @@ def predict():
                 img_byte_array = io.BytesIO()
                 img_with_box.save(img_byte_array, format='JPEG')
                 
-                if upload_to_s3(img_byte_array, 'licenseplate-iru', 'predicted'):
-                    # If successful, return a response
-                    prediction_results = [["0008", 60.0], ["0821", 30.0], ["0107", 10.0]]
-                    return jsonify(prediction_results)
+                success, img_url = upload_to_s3_and_get_url(img_byte_array, 'licenseplate-iru', 'predicted1')
+                if success:
+                    # Return the URL in the response
+                    response_data = {
+                        "predictedResults": [[random.randint(1000, 10000) , round(random.random()*100, 1)], [random.randint(1000, 10000) , round(random.random()*100, 1)], [random.randint(1000, 10000) , round(random.random()*100, 1)]],
+                        "predictedImage": img_url,
+                    }
+                    return jsonify(response_data), 200
                 else:
                     return "Failed to upload image to S3.", 500
 
