@@ -3,14 +3,15 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 
-export default function PaginationButtons({ currentPage, onPageChange, pageCount,isAdmin  }) {
+export default function PaginationButtons({ currentPage, onPageChange, pageCount,isAdmin ,onEditClick,onDeleteClick  }) {
   return (
     <Stack spacing={2} direction="row" alignItems="center" >
         <div  style={{ marginRight: '10px' }}>
-        {isAdmin && (
+        {/* {isAdmin && ( */}
+{(
           <>
-            <button style={{ marginRight: '10px' }}>수정</button>
-            <button>삭제</button>
+            <button style={{ marginRight: '10px' }} onClick={onEditClick}>수정</button>
+            <button onClick={onDeleteClick}>삭제</button>
           </>
         )}
       </div>

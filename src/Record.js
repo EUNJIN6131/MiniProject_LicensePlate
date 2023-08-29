@@ -3,23 +3,26 @@ import { Box, Typography } from "@mui/material";
 import Images from "./Images";
 import List from "./List";
 import { useState, useEffect } from 'react';
+import axios from "axios";
+import { call } from "./api/ApiService";
 
 export default function Record() {
 
   const [recentNum, setRecentNum] = useState(null);
 
-  useEffect(() => {
+  // const [records, setRecords] = useState([]); // State to store the list of records
 
-    fetch('/api/recentNum')
-      .then((response) => response.json())
-      .then((data) => {
-
-        setRecentNum(data.recentNum);
-      })
-      .catch((error) => {
-        console.error('Error fetching recent num:', error);
-      });
-  }, []);
+  // useEffect(() => {
+  
+  //   axios.post('/main/record') 
+  //     .then((response) => {
+  //       setRecords(response.data.records);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching records:', error);
+  //     });
+      
+  // }, []);
 
   return (
     <Box sx={{ margin: "20px" }}>
@@ -62,6 +65,7 @@ export default function Record() {
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
+            {/* <List rows={records} /> */}
             <List />
           </Box>
         </Box>
