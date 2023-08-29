@@ -55,13 +55,13 @@ public class LogService {
         Object[][] predictValue = response.getBody();
         ArrayList<PredictDto> predList = new ArrayList<>();
         for (Object[] obj : predictValue) {
-            predList.add(new PredictDto(String.valueOf(obj[0]), (double) obj[1], false, "predictedImage"));
+            predList.add(new PredictDto(String.valueOf(obj[0]), (double) obj[1], "predictedImage", false));
         }
 
         boolean flag = false;
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
-            if (carRepo.findById(dto.getText()).isPresent()) {
+            if (carRepo.findById(dto.getPredictedText()).isPresent()) {
                 dto.setPresent(true);
                 flag = true;
             }
@@ -83,7 +83,7 @@ public class LogService {
             savedLog = logRepo.save(LogEntity.builder()
                     .originalImage(originalUrl)
                     .predictedImage("predictedUrl")
-                    .licensePlate(predList.get(idx).getText())
+                    .licensePlate(predList.get(idx).getPredictedText())
                     .accuracy(maxVal)
                     .date(new Date())
                     .isPresent(true).build());
@@ -104,7 +104,7 @@ public class LogService {
                     .logEntity(log)
                     .isPresent(dto.isPresent())
                     .accuracy(dto.getAccuracy())
-                    .predictedText(dto.getText()).build());
+                    .predictedText(dto.getPredictedText()).build());
         }
 
         // logDto 구성
@@ -150,7 +150,8 @@ public class LogService {
         for (HistoryEntity entity : entities) {
             list.add(HistoryDto.builder()
                     .logId(entity.getLogEntity().getLogId())
-                    .work(entity.getWork())
+                    .userId(entity.getUserId())
+                    .workType(entity.getWorkType())
                     .currentText(entity.getCurrentText())
                     .previousText(entity.getPreviousText())
                     .date(entity.getDate())

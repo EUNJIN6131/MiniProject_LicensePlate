@@ -39,8 +39,11 @@ public class HistoryEntity {
     @JoinColumn(name = "logId", referencedColumnName = "logId", nullable = false)
     private LogEntity logEntity;
 
+    @Column(nullable = false, length = 20)
+    private String userId;
+
     @Column(nullable = false, length = 10)
-    private String work;
+    private String workType;
 
     @Column(nullable = false, length = 4)
     private String previousText;

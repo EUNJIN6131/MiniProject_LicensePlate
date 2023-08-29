@@ -1,0 +1,25 @@
+# Ignore compiled files and directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore local development files
+db.sqlite3
+
+# Ignore environment variable files
+.env
+
+# Ignore logs and other generated files
+*.log
+*.log.*
+*.swp
+*.swo
+.DS_Store
+.idea/
+.vscode/
+__MACOSX/
+
+# Ignore virtual environments
+venv/
+env/

@@ -17,7 +17,8 @@ import lombok.ToString;
 @Builder
 public class HistoryDto {
     private Integer logId;
-    private String work;
+    private String userId;
+    private String workType;
     private String previousText;
     private String currentText;
     private Date date;

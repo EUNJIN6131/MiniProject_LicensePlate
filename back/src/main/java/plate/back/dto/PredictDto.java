@@ -12,8 +12,8 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 public class PredictDto {
-    private String text;
+    private String predictedText;
     private double accuracy;
-    private boolean isPresent;
     private String predictedImage;
+    private boolean isPresent;
 }
