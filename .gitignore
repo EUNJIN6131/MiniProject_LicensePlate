@@ -9,7 +9,9 @@ db.sqlite3
 
 # Ignore environment variable files
 .env
-.properties
+
+# Ignore application properties file
+application.properties
 
 # Ignore logs and other generated files
 *.log
