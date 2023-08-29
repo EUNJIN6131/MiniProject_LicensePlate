@@ -1,32 +1,3 @@
-# Ignore compiled files and directories
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Ignore local development files
-db.sqlite3
-
-# Ignore environment variable files
-.env
-
-# Ignore application properties file
-application.properties
-
-# Ignore logs and other generated files
-*.log
-*.log.*
-*.swp
-*.swo
-.DS_Store
-.idea/
-.vscode/
-__MACOSX/
-
-# Ignore virtual environments
-venv/
-env/
-
 HELP.md
 .gradle
 build/
@@ -61,3 +32,9 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+# Ignore application properties file
+application.properties
