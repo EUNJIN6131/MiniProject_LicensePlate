@@ -73,9 +73,10 @@
 | 3 | POST | /main/record | MultipartFile file | LogDto | 로그 기록 |
 
 ## 8. DB 설계(ERD)
-![image](https://file.notion.so/f/s/e271867a-0cd4-49ef-be39-63172df6294c/ERD.drawio.png?id=61525a4a-4485-4740-a298-4363ba287a90&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693324800000&signature=4J4ElumGHr7EwvYpICvitrmIB4XqsBi34XuyeayQ8a8&downloadName=ERD.drawio.png)
+![image](https://file.notion.so/f/s/e0c2380c-75e7-4ea4-992b-2a10c85f7a23/ERD.drawio_(1).png?id=1e925039-42ae-4ebf-84d2-ae7d2b89299a&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693476000000&signature=krDG1mNjG4KE4REU5aq2D7jL7_qhOW5AnwyNNYMptqw&downloadName=ERD.drawio+%281%29.png)
 
 ## 9. UML(Class Diagram)
-![image](https://file.notion.so/f/s/43427bf7-09e1-4d3f-b619-cda48425081a/UML.drawio.png?id=e973859d-96bf-4923-940f-9ea25125f100&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693324800000&signature=jpO8mIdR9OoJ9W8IJIwM6Lumy7_ygjSoBLvHTa-t67g&downloadName=UML.drawio.png)
+![image](https://file.notion.so/f/s/934a8130-bfba-4acd-ad45-926917d05faa/UML.drawio.png?id=35566836-d4b0-4919-9b7f-9d7b4d563dec&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693476000000&signature=UQR7ejYnlyCB4cK0ffNv6qmFwWGtFub5iwKJyteBOQo&downloadName=UML.drawio.png)
+
 ## 10. 개발 일지 
 <a href="https://shrub-snap-550.notion.site/CRUD-566be659b7bf4693a6515f408cf2f1d9?pvs=4">개발 일지 보러 가기  <img width="23" src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"> </a>****
