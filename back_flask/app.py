@@ -1,8 +1,8 @@
 import argparse
 import io
 import os
+import uuid
 from PIL import Image
-import datetime
 import torch
 from flask import Flask, render_template, request, redirect, jsonify
 import boto3
@@ -15,17 +15,17 @@ load_dotenv()  # Load variables from .env file
 aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-def upload_to_s3_and_get_url(data, bucket_name, folder_name, object_name=None):
-    if object_name is None:
-        object_name = f"{datetime.datetime.now().strftime(DATETIME_FORMAT)}.jpg"
+def upload_to_s3_and_get_url(data, bucket_name, folder_name, file_name=None):
+    if file_name is None:
+        file_name = str(uuid.uuid4()) + ".jpg"
     
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
     try:
-        s3.upload_fileobj(data, bucket_name, f'{folder_name}/{object_name}')
-        img_url = f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{folder_name}/{object_name}"
-        return True, img_url
+        s3.upload_fileobj(data, bucket_name, f'{folder_name}/{file_name}')
+        img_url = f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{folder_name}/{file_name}"
+        return True, img_url, file_name
     except NoCredentialsError:
-        return False, None     
+        return False, None, None     
 
 app = Flask(__name__)
 
@@ -55,12 +55,13 @@ def predict():
                 img_byte_array = io.BytesIO()
                 img_with_box.save(img_byte_array, format='JPEG')
                 
-                success, img_url = upload_to_s3_and_get_url(img_byte_array, 'licenseplate-iru', 'predicted1')
+                success, img_url, img_title = upload_to_s3_and_get_url(img_byte_array, 'licenseplate-iru', 'total/plate')
                 if success:
                     # Return the URL in the response
                     response_data = {
                         "predictedResults": [[random.randint(1000, 10000) , round(random.random()*100, 1)], [random.randint(1000, 10000) , round(random.random()*100, 1)], [random.randint(1000, 10000) , round(random.random()*100, 1)]],
-                        "predictedImage": img_url,
+                        "plateImgUrl": img_url,
+                        "plateImgTitle": img_title,
                     }
                     return jsonify(response_data), 200
                 else:

@@ -1,6 +1,11 @@
 package plate.back.entity;
 
+import java.util.Date;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,4 +32,8 @@ public class CarInfoEntity {
     @Id
     @Column(nullable = false, length = 20)
     private String licensePlate;
+
+    @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private Date date;
 }

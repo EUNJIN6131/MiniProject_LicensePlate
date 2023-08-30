@@ -7,10 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import plate.back.entity.ImageEntity;
-import plate.back.entity.LogEntity;
 
 public interface ImageRepository extends JpaRepository<ImageEntity, Integer> {
 
-    @Query("SELECT log FROM LogEntity log WHERE log.licensePlate = :plate")
-    ArrayList<LogEntity> findByPlate(@Param("plate") String plate);
+    @Query("select img from ImageEntity img where img.logEntity.logId in (select log.logId from LogEntity log where log.logId = :num)")
+    public ArrayList<ImageEntity> findByLogId(@Param("num") Integer num);
 }

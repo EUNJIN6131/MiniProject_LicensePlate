@@ -13,8 +13,6 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,21 +23,26 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Builder
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "update_log")
+@Table(name = "history")
 public class HistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "logId", referencedColumnName = "logId", nullable = false)
-    private LogEntity logEntity;
+    private Integer logId;
+
+    // @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
+    // @JoinColumn(name = "log_id")
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    // // @JoinColumn(name = "logId", referencedColumnName = "logId", nullable =
+    // false)
+    // private LogEntity logEntity;
 
     @Column(nullable = false, length = 20)
     private String userId;

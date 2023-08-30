@@ -1,5 +1,9 @@
 package plate.back.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,8 +21,8 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Builder
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -28,8 +32,9 @@ public class PredictLogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "logId", referencedColumnName = "logId", nullable = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "log_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private LogEntity logEntity;
 
     @Column(nullable = false, length = 20)

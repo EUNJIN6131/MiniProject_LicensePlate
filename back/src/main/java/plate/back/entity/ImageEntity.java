@@ -1,5 +1,9 @@
 package plate.back.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,24 +21,28 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Builder
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "predict_log")
+@Table(name = "image")
 public class ImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "logId", referencedColumnName = "logId", nullable = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "log_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private LogEntity logEntity;
 
-    @Column(nullable = false)
-    private String vehicleImageUrl;
+    @Column(nullable = false, length = 10)
+    private String imageType;
 
     @Column(nullable = false)
-    private String plateImageUrl;
+    private String imageTitle;
+
+    @Column(nullable = false)
+    private String imageUrl;
 }
