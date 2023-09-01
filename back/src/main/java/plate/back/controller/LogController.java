@@ -83,11 +83,11 @@ public class LogController {
     }
 
     // 7. 로그 수정(admin)
-    @PutMapping("/main/update")
-    public ResponseEntity<?> updateLog(@RequestBody LogDto dto) {
+    @PutMapping("/main/update/{userId}")
+    public ResponseEntity<?> updateLog(@RequestBody LogDto dto, @PathVariable String userId) {
         try {
-            List<Boolean> isUpdated = logService.updateLog(dto);
-            ResponseDto<Boolean> response = ResponseDto.<Boolean>builder().data(isUpdated).build();
+            List<LogDto> isUpdated = logService.updateLog(dto);
+            ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(isUpdated).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();
@@ -97,10 +97,10 @@ public class LogController {
     }
 
     // 8. 로그 삭제(admin)
-    @DeleteMapping("/main/delete")
-    public ResponseEntity<?> deleteLog(@RequestBody ArrayList<LogDto> list) {
+    @DeleteMapping("/main/delete/{userId}")
+    public ResponseEntity<?> deleteLog(@RequestBody ArrayList<LogDto> list, @PathVariable String userId) {
         try {
-            List<Boolean> isDeleted = logService.deleteLog(list);
+            List<Boolean> isDeleted = logService.deleteLog(list, userId);
             ResponseDto<Boolean> response = ResponseDto.<Boolean>builder().data(isDeleted).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {

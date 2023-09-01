@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -95,7 +96,7 @@ public class LogService {
 
         // Image 엔티티 저장
         // 원본 file 업로드(Aws S3)
-        String[] vehicleImgArr = fileService.uploadFile(file, "total/vehicle/");
+        String[] vehicleImgArr = fileService.uploadFile(file, 0);
         String vehicleImgUrl = vehicleImgArr[0];
         String vehicleImgTitle = vehicleImgArr[1];
         String plateImgUrl = String.valueOf(response.get("plateImgUrl"));
@@ -136,14 +137,14 @@ public class LogService {
         return list;
     }
 
-    // LogEntity, ImageEntity -> LogDto
+    // LogEntity & ImageEntity -> LogDto
     private List<LogDto> createLogDto(List<LogEntity> logEntities) {
         List<LogDto> list = new ArrayList<>();
         for (LogEntity logEntity : logEntities) {
             List<ImageEntity> imgEntities = imgRepo.findByLogId(logEntity.getLogId());
-            String vehicleImg = imgEntities.get(0).getImageType() == "vehicle" ? imgEntities.get(0).getImageUrl()
+            String vehicleImg = imgEntities.get(0).getImageType().equals("vehicle") ? imgEntities.get(0).getImageUrl()
                     : imgEntities.get(1).getImageUrl();
-            String plateImg = imgEntities.get(0).getImageType() == "plate" ? imgEntities.get(0).getImageUrl()
+            String plateImg = imgEntities.get(0).getImageType().equals("plate") ? imgEntities.get(0).getImageUrl()
                     : imgEntities.get(1).getImageUrl();
 
             list.add(LogDto.builder()
@@ -161,14 +162,17 @@ public class LogService {
 
     public List<LogDto> searchDate(String start, String end) throws ParseException {
 
+        // String -> Date 변환
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = dateFormat.parse(start);
         Date endDate = dateFormat.parse(end);
         System.out.printf("%s ~ %s", startDate, endDate);
 
+        // 로그 조회
         List<LogEntity> logEntities = logRepo.findByDate(startDate, endDate);
         System.out.println("logEntities : " + logEntities);
 
+        // LogEntity -> LogDto 변환
         List<LogDto> list = createLogDto(logEntities);
 
         return list;
@@ -176,7 +180,10 @@ public class LogService {
 
     public List<LogDto> searchPlate(String plate) {
 
+        // 로그 조회
         List<LogEntity> logEntities = logRepo.findByPlate(plate);
+
+        // LogEntity -> LogDto 변환
         List<LogDto> list = createLogDto(logEntities);
 
         return list;
@@ -198,7 +205,7 @@ public class LogService {
         return list;
     }
 
-    public List<Boolean> updateLog(LogDto dto) {
+    public List<LogDto> updateLog(LogDto dto) throws IOException {
         Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
         if (!optionalLog.isPresent()) {
             throw new EntityNotFoundException("LogId not present in the database");
@@ -206,6 +213,7 @@ public class LogService {
 
         LogEntity entity = optionalLog.get();
 
+        // history 기록
         histRepo.save(HistoryEntity.builder()
                 .logId(dto.getLogId())
                 .previousText(entity.getLicensePlate())
@@ -213,26 +221,53 @@ public class LogService {
                 .workType("update")
                 .userId("admin").build());
 
+        // 수정된 log 기록
         entity.setLicensePlate(dto.getLicensePlate());
         entity.setState("수정 완료");
 
         logRepo.save(entity);
 
-        return new ArrayList<Boolean>(Arrays.asList(true));
+        dto.setState("수정 완료");
+        List<LogDto> list = Arrays.asList(dto);
+        // AWS S3 파일 이동
+        List<ImageEntity> imgEntities = imgRepo.findByLogId(entity.getLogId());
+        String vehicleImgTitle = imgEntities.get(0).getImageTitle();
+        String plateImgTitle = imgEntities.get(1).getImageTitle();
+
+        try {
+            Map<String, String> urlMap = fileService.moveFile(vehicleImgTitle, plateImgTitle);
+            ImageEntity vehicleEntity = imgEntities.get(0);
+            ImageEntity plateEntity = imgEntities.get(1);
+
+            // image_url 수정
+            vehicleEntity.setImageUrl(urlMap.get("vehicle"));
+            imgRepo.save(vehicleEntity);
+            plateEntity.setImageUrl(urlMap.get("plate"));
+            imgRepo.save(plateEntity);
+
+            // AWS S3 파일 삭제
+            fileService.deleteFile(vehicleImgTitle, plateImgTitle);
+        } catch (Exception e) {
+            return list;
+        }
+        return list;
+
     }
 
-    public List<Boolean> deleteLog(ArrayList<LogDto> list) {
+    public List<Boolean> deleteLog(ArrayList<LogDto> list, String userId) {
         try {
             for (LogDto dto : list) {
+                // log 삭제
                 System.out.println("LogId : " + dto.getLogId());
                 logRepo.deleteById(dto.getLogId());
 
+                // history 기록
                 histRepo.save(HistoryEntity.builder()
                         .logId(dto.getLogId())
                         .previousText("delete")
                         .currentText("delete")
                         .workType("delete")
-                        .userId("admin").build());
+                        .userId(userId).build());
             }
             return new ArrayList<Boolean>(Arrays.asList(true));
         } catch (Exception e) {

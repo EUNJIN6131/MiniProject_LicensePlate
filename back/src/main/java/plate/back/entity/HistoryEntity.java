@@ -50,10 +50,10 @@ public class HistoryEntity {
     @Column(nullable = false, length = 10)
     private String workType;
 
-    @Column(nullable = false, length = 4)
+    @Column(nullable = false, length = 10)
     private String previousText;
 
-    @Column(nullable = false, length = 4)
+    @Column(nullable = false, length = 10)
     private String currentText;
 
     @CreatedDate
