@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRowModel } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
 import axios from "axios";
@@ -56,7 +56,7 @@ export default function List({ rows, setRows, updateRows }) {
   useEffect(() => {
     // rows 상태가 변경될 때마다 재랜더링
   }, [rows]);
-  
+
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
 
@@ -70,71 +70,54 @@ export default function List({ rows, setRows, updateRows }) {
 
   const handleLicensePlateEdit = (event) => {
     setUserEditedLicensePlate(event.target.value);
-    console.log('Edited License Plate:', event.target.value); // Add this line to check the input
+    console.log("Edited License Plate:", event.target.value); // Add this line to check the input
   };
 
   const handleEditClick = () => {
-    console.log('Edit button clicked');
-    
+    console.log("Edit button clicked");
+
     const selectedSeqValues = rowSelectionModel.map((rowId) => ({
       logId: rowsToDisplay[rowId - 1].logId,
       licensePlate: rowsToDisplay[rowId - 1].licensePlate,
     }));
 
-
-    
     if (selectedSeqValues.length === 0) {
-      console.error('No rows selected for editing.');
+      console.error("No rows selected for editing.");
       return;
     }
-    
-    console.log("Selected Rows:", selectedSeqValues);
+
+    console.log("Selected Rows:", selectedSeqValues[0]);
     // 수정한 licensePlate 값을 출력합니다.
 
-  
-  
-    const updatedRows = rows.map((row) => {
-      if (selectedSeqValues.includes(row.logId)) {
-        return {
-          ...row,
-          LicensePlate: userEditedLicensePlate, // Apply the edited value
-        };
-      }
-      return row;
-    });
-  
     const userId = "IruIruIru"; // Set userId arbitrarily for testing
-  
+
     // Prepare the data to be used for the PUT request
-    const requestData = {
-      data: updatedRows, // Send the updated rows
+    const jsonData = {
+      logId: selectedSeqValues[0].logId,
+      licensePlate: selectedSeqValues[0].licensePlate,
     };
-  
+    console.log("jsonData", jsonData);
     axios
-      .put(`${API_BASE_URL}/main/update/${userId}`, requestData, {
+      .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
         console.log("수정 성공.", response.data);
-  
-        // Update the 'rows' state with the modified data
-        setRows(updatedRows);
       })
       .catch((error) => {
         console.error("수정 중 오류 발생", error);
       });
   };
 
-
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
-  
+
     // "logId" 속성을 가진 객체 배열 생성
     const jsonData = selectedSeqValues.map((logId) => ({ logId }));
     // const userId = "admin";
-    
+    console.log("jsonData", jsonData);
     axios
       .delete(`${API_BASE_URL}/main/delete/${"IruIruIru"}`, {
         data: jsonData,
@@ -144,17 +127,22 @@ export default function List({ rows, setRows, updateRows }) {
       })
       .then((response) => {
         console.log("삭제 성공.", response.data);
-  
+
         const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
-  
+
         // 필터링된 행으로 'rows' 상태를 업데이트합니다.
         setRows(updatedRows); // 이 부분이 올바르게 작동하는지 확인하세요.
       })
       .catch((error) => {
         console.error("삭제 중 오류 발생", error);
       });
-  }
-  
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
   return (
     rows && (
       <div style={{ width: "100%", maxHeight: "100%", height: "100%", overflowY: "auto" }}>
@@ -167,6 +155,8 @@ export default function List({ rows, setRows, updateRows }) {
             setRowSelectionModel(newRowSelectionModel);
           }}
           rowSelectionModel={rowSelectionModel}
+          disableRowSelectionOnClick
+          processRowUpdate={processRowUpdate}
           components={{
             Pagination: (props) => (
               <PaginationButtons
