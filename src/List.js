@@ -73,22 +73,31 @@ export default function List({ rows, setRows, updateRows }) {
     console.log('Edited License Plate:', event.target.value); // Add this line to check the input
   };
 
-  
-
   const handleEditClick = () => {
     console.log('Edit button clicked');
-    const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
+    
+    const selectedSeqValues = rowSelectionModel.map((rowId) => ({
+      logId: rowsToDisplay[rowId - 1].logId,
+      licensePlate: rowsToDisplay[rowId - 1].licensePlate,
+    }));
+
+
     
     if (selectedSeqValues.length === 0) {
       console.error('No rows selected for editing.');
       return;
     }
+    
+    console.log("Selected Rows:", selectedSeqValues);
+    // 수정한 licensePlate 값을 출력합니다.
+
+  
   
     const updatedRows = rows.map((row) => {
       if (selectedSeqValues.includes(row.logId)) {
         return {
           ...row,
-          licensePlate: userEditedLicensePlate, // Apply the edited value
+          LicensePlate: userEditedLicensePlate, // Apply the edited value
         };
       }
       return row;
@@ -117,7 +126,6 @@ export default function List({ rows, setRows, updateRows }) {
         console.error("수정 중 오류 발생", error);
       });
   };
-  
 
 
   const handleDeleteClick = () => {
