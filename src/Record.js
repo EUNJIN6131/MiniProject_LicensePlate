@@ -65,7 +65,7 @@ export default function Record() {
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            {/* <List rows={records} /> */}
+            {/* <List rows={records} />/// */}
             <List />
           </Box>
         </Box>

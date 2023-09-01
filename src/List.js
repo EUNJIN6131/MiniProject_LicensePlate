@@ -1,82 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import PaginationButtons from './PaginationButtons';
+import React, { useState, useEffect } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
 import axios from "axios";
-import { call } from "./api/ApiService";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import { Box, Button, TextField, Select, MenuItem, Snackbar } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { Box, Button, TextField, Snackbar } from "@mui/material";
 
 const columns = [
-
-  { field: 'logId', type: 'checkbox', headerName: 'seq', width: 100, headerAlign: 'center', align: 'center' },
-  { field: 'licensePlate', headerName: '차량번호', width: 200, headerAlign: 'center', align: 'center', editable: true },
+  { field: "logId", type: "checkbox", headerName: "seq", width: 100, headerAlign: "center", align: "center" },
+  { field: "licensePlate", headerName: "차량번호", width: 200, headerAlign: "center", align: "center", editable: true },
   {
-    field: 'date',
-    headerName: '시간',
+    field: "accuracy",
+    headerName: "인식률",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "vehicleImage",
+    headerName: "차량 이미지",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "plateImage",
+    headerName: "번호판 이미지",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "state",
+    headerName: "상태",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "date",
+    headerName: "시간",
     width: 250,
-    headerAlign: 'center',
-    align: 'center',
+    headerAlign: "center",
+    align: "center",
   },
-
-  {
-    field: 'accuracy',
-    headerName: '인식률',
-    width: 150,
-    headerAlign: 'center',
-    align: 'center',
-    // valueFormatter: (params) => (params.value !== null ? params.value.toFixed(2) : ''),
-  },
-  {
-    field: 'originalImage',
-    headerName: '이미지',
-    width: 150,
-    headerAlign: 'center',
-    align: 'center',
-  },
-  {
-    field: 'predictedImage',
-    headerName: '이미지',
-    width: 150,
-    headerAlign: 'center',
-    align: 'center',
-  },
-  {
-    field: 'isPresent',
-    headerName: '차량 기등록',
-    width: 150,
-    headerAlign: 'center',
-    align: 'center',
-  },
-  {
-    field: 'isUpdated',
-    headerName: '수정',
-    width: 100,
-    headerAlign: 'center',
-    align: 'center',
-  },
-
 ];
 
-// const rows = [
-//   { id: 1, seq: 1, carNumber: 'AB 1234', accuracy: 0.95, img: '이미지1',  registration: '차량 기등록', edit: '분류1', time: '2023-08-25 10:00:00' },
-// ];
-
-export default function List({ isAdmin, rows = [] }) {
-  useEffect(() => {
-    console.log("rows", rows);
-  }, [rows]);
-
+export default function List({ rows, setRows, updateRows }) {
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 20;
+  const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 추가
 
+  useEffect(() => {
+    // rows 상태가 변경될 때마다 재랜더링
+  }, [rows]);
+  
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
 
   const rowsToDisplay = Array.isArray(rows) ? rows.slice(startIndex, endIndex) : [];
-
-
 
   const pageCount = Math.ceil(rows.length / rowsPerPage);
 
@@ -84,142 +68,112 @@ export default function List({ isAdmin, rows = [] }) {
     setCurrentPage(newPage);
   };
 
-
-  const [selectedRows, setSelectedRows] = useState([]);
-
-  const [editPopup, setEditPopup] = React.useState(false);
-  const [deletePopup, setDeletePopup] = React.useState(false);
-  const [editingLicense, setEditingLicense] = useState({ logId: null, value: '' });
-
-
-  const handleCloseEditPopup = () => {
-    setEditPopup(false);
+  const handleLicensePlateEdit = (event) => {
+    setUserEditedLicensePlate(event.target.value);
+    console.log('Edited License Plate:', event.target.value); // Add this line to check the input
   };
 
-  const handleCloseDeletePopup = () => {
-    setDeletePopup(false);
-  };
+  
 
-
-
-  const handleRowSelectionChange = (newSelection) => {
-    setSelectedRows(newSelection.selectionModel);
-  };
-
-
-const [licensePlate, setLicensePlate] = useState('');
-const [submittedPlate, setsubmittedPlate] = useState('');
-const [userEditedLicensePlate, setUserEditedLicensePlate] = useState('');
-
-console.log('selectedRows:', selectedRows);
-
-
-
-const handleEditClick = () => {
-  // Validate user input (license plate)
-  if (!userEditedLicensePlate.trim()) {
-    console.error('Invalid user input for license plate.');
-    // You can show an error message to the user here if needed.
-    return;
-  }
-
-  // Extract data to modify (license plate fields only)
-  const updatedData = rows.map((row) => {
-    if (selectedRows.includes(row.logId)) {
-      return {
-        ...row,
-        licensePlate: userEditedLicensePlate, // Replaced with user input value
-      };
+  const handleEditClick = () => {
+    console.log('Edit button clicked');
+    const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
+    
+    if (selectedSeqValues.length === 0) {
+      console.error('No rows selected for editing.');
+      return;
     }
-    return row;
-  });
-
-  console.log('updatedData:', updatedData);
-
-  // Manually set userId to 'admin' for testing
-  const jsonData = {
-    userId: 'admin',
-    data: updatedData,
-  };
-
-  axios
-    .put(`${API_BASE_URL}/main/update`, jsonData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((response) => {
-      console.log('Modification successful', response.data);
-      // Success processing
-    })
-    .catch((error) => {
-      console.error('Error editing', error);
-      // Handle the error response from the server
-      if (error.response && error.response.data) {
-        console.error('Server error details:', error.response.data);
-        // You can show an error message to the user here if needed.
+  
+    const updatedRows = rows.map((row) => {
+      if (selectedSeqValues.includes(row.logId)) {
+        return {
+          ...row,
+          licensePlate: userEditedLicensePlate, // Apply the edited value
+        };
       }
+      return row;
     });
-};
-
-const handleDeleteClick = () => {
-  // Extract selected log IDs
-  const logIds = selectedRows.map((row) => row.logId);
-
-  // Manually set userId to 'admin' for testing
-  const jsonData = {
-    userId: 'admin',
-    logIds: logIds,
+  
+    const userId = "IruIruIru"; // Set userId arbitrarily for testing
+  
+    // Prepare the data to be used for the PUT request
+    const requestData = {
+      data: updatedRows, // Send the updated rows
+    };
+  
+    axios
+      .put(`${API_BASE_URL}/main/update/${userId}`, requestData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("수정 성공.", response.data);
+  
+        // Update the 'rows' state with the modified data
+        setRows(updatedRows);
+      })
+      .catch((error) => {
+        console.error("수정 중 오류 발생", error);
+      });
   };
+  
 
-  axios
-    .delete(`${API_BASE_URL}/main/delete`, {
-      data: jsonData,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((response) => {
-      console.log('Delete successful.', response.data);
-      // Process deletion success
-    })
-    .catch((error) => {
-      console.error('An error occurred while deleting', error);
-      // error handling
-    });
-};
 
+  const handleDeleteClick = () => {
+    const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
+  
+    // "logId" 속성을 가진 객체 배열 생성
+    const jsonData = selectedSeqValues.map((logId) => ({ logId }));
+    // const userId = "admin";
+    
+    axios
+      .delete(`${API_BASE_URL}/main/delete/${"IruIruIru"}`, {
+        data: jsonData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("삭제 성공.", response.data);
+  
+        const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
+  
+        // 필터링된 행으로 'rows' 상태를 업데이트합니다.
+        setRows(updatedRows); // 이 부분이 올바르게 작동하는지 확인하세요.
+      })
+      .catch((error) => {
+        console.error("삭제 중 오류 발생", error);
+      });
+  }
+  
   return (
-    rows &&
-    <div style={{ width: '100%', maxHeight: '100%', height: '100%', overflowY: 'auto' }}>
-
-<DataGrid
-  rows={rowsToDisplay}
-  columns={columns}
-  pageSize={20}
-  checkboxSelection={true}
-  onSelectionModelChange={handleRowSelectionChange}
-  onEditCellChange={(params) => {
-    const { id, field, value } = params;
-    console.log('Edit cell change - ID:', id, 'Field:', field, 'Value:', value);
-
-    // Update the userEditedLicensePlate state with the edited value
-    setUserEditedLicensePlate(value);
-  }}
-  components={{
-    Pagination: (props) => (
-      <PaginationButtons
-        {...props}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-        pageCount={pageCount}
-        isAdmin={isAdmin}
-        onEditClick={handleEditClick}
-        onDeleteClick={handleDeleteClick}
-      />
-    ),
-  }}
-/>
-    </div>
+    rows && (
+      <div style={{ width: "100%", maxHeight: "100%", height: "100%", overflowY: "auto" }}>
+        <DataGrid
+          rows={rowsToDisplay}
+          columns={columns}
+          pageSize={20}
+          checkboxSelection={true}
+          onRowSelectionModelChange={(newRowSelectionModel) => {
+            setRowSelectionModel(newRowSelectionModel);
+          }}
+          rowSelectionModel={rowSelectionModel}
+          components={{
+            Pagination: (props) => (
+              <PaginationButtons
+                {...props}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                pageCount={pageCount}
+                onDeleteClick={handleDeleteClick}
+                onEditClick={handleEditClick}
+              />
+            ),
+          }}
+          key={(row) => row.logId}
+        />
+      </div>
+    )
   );
 }

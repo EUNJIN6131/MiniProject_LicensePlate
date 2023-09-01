@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { call } from './api/ApiService';
 import axios from 'axios';
 import { format, parseISO, parse } from 'date-fns';
+import { API_BASE_URL } from "./api/api-config";
 
 export default function Search() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -75,32 +76,47 @@ export default function Search() {
       });
   };
 
-  const handleQuerySubmit = (startDate, endDate) => {
-    // Ensure that both start and end dates are selected
-    if (!startDate || !endDate) {
-        // Handle error, show a message to the user, etc.
-        return;
-    }
-
+  const onQuerySubmit = async (startDate, endDate) => {
+    console.log("Received startDate:", startDate);
+    console.log("Received endDate:", endDate);
+  
+    // Convert dayjs objects to JavaScript Date objects
+    const jsStartDate = startDate.toDate();
+    const jsEndDate = endDate.toDate();
+  
     // Format the dates using date-fns
-    const formattedStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss');
-    const formattedEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss');
-
-    // Make an API call to your backend using Axios
-    axios
-        .get(`/main/search/date?startDate=${formattedStartDate}&endDate=${formattedEndDate}`)
-        .then((response) => {
-            // Assuming your backend returns data as an array of records
-            const records = response.data;
-
-            // Update the state variable with the retrieved records
-            setRows(records);
-        })
-        .catch((error) => {
-            // Handle API error, show an error message, etc.
-            console.error("Error fetching data:", error);
+    const formattedStartDate = format(jsStartDate, 'yyyy-MM-dd');
+    const formattedEndDate = format(jsEndDate, 'yyyy-MM-dd');
+  
+    console.log("Formatted startDate:", formattedStartDate);
+    console.log("Formatted endDate:", formattedEndDate);
+  
+    call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
+    .then((data) => {
+      console.log('data', data); 
+      const responseData = data.data; 
+  
+      
+      if (Array.isArray(responseData)) {
+        const updatedRows = responseData.map((record, index) => {
+         
+          const formattedDate = format(parseISO(record.date), 'yyyy-MM-dd HH:mm:ss');
+          return { ...record, id: index + 1, date: formattedDate };
         });
-};
+  
+        
+        setRows(updatedRows);
+      } else {
+        
+        console.error("데이터가 배열이 아닙니다:", responseData.data);
+       
+      }
+    })
+    .catch((error) => {
+      console.error("데이터 가져오기 오류:", error);
+    });
+    
+  };
   
 
 
@@ -125,6 +141,20 @@ export default function Search() {
     setNoRecordsPopup(false);
   };
 
+  const updateRows = (newRows) => {
+    setRows(newRows);
+  };
+
+  const onDateChange = (newStartDate, newEndDate) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    // 여기서 onQuerySubmit을 호출하여 데이터를 가져옵니다.
+    onQuerySubmit(newStartDate, newEndDate);
+  };
+
+
+
+
   return (
     <Box sx={{ margin: "20px" }}>
       <Box
@@ -146,11 +176,14 @@ export default function Search() {
           <Box sx={{ margin: '20px', }}>
 
             <Calendar  
-              startDate={startDate}
-              endDate={endDate}
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
-              onQuerySubmit={handleQuerySubmit} />
+               startDate={startDate}
+               endDate={endDate}
+               setStartDate={setStartDate}
+               setEndDate={setEndDate}
+               onQuerySubmit={onQuerySubmit}
+               setRows={setRows} 
+               onDateChange={onDateChange} 
+             />
 
 
             <Box sx={{ width: '100%', marginTop: '70px', display: 'flex', gap: '15px' }}>
@@ -205,7 +238,7 @@ export default function Search() {
           paddingBlock: "10px",
         }}>
           {/* <List isAdmin={isAdmin} rows={rows} /> */}
-          <List  rows={rows} />
+          <List  setRows={setRows} rows={rows} />
         </Box>
       </Box>
     </Box>
