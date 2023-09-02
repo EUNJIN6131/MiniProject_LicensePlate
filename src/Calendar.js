@@ -5,9 +5,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { Box, Button } from "@mui/material";
-import dayjs from 'dayjs'; // Corrected import
+import dayjs from 'dayjs'; 
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import axios from 'axios'; // Corrected import
+import axios from 'axios'; 
 import { API_BASE_URL } from "./api/api-config";
 
 dayjs.extend(advancedFormat);
@@ -17,7 +17,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
     const [dateButtonText, setDateButtonText] = React.useState('');
 
     const handleShortcutClick = (shortcut) => {
-        const today = dayjs(); // Use dayjs for date manipulation
+        const today = dayjs(); 
         const { getValue, label } = shortcut;
 
         const [newStartDate, newEndDate] = getValue();
@@ -31,14 +31,14 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '오늘',
             getValue: () => {
-                const today = dayjs(); // Use dayjs for date manipulation
+                const today = dayjs(); 
                 return [today.startOf('day'), today.endOf('day')];
             },
         },
         {
             label: '1주',
             getValue: () => {
-                const today = dayjs(); // Use dayjs for date manipulation
+                const today = dayjs(); 
                 const oneWeekAgo = today.subtract(1, 'week');
                 return [oneWeekAgo, today];
             },
@@ -46,7 +46,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '2주',
             getValue: () => {
-                const today = dayjs(); // Use dayjs for date manipulation
+                const today = dayjs(); 
                 const twoWeeksAgo = today.subtract(2, 'week');
                 return [twoWeeksAgo, today];
             },
@@ -54,7 +54,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '1개월',
             getValue: () => {
-                const today = dayjs(); // Use dayjs for date manipulation
+                const today = dayjs();
                 const oneMonthAgo = today.subtract(1, 'month');
                 return [oneMonthAgo, today];
             },
@@ -62,7 +62,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '6개월',
             getValue: () => {
-                const today = dayjs(); // Use dayjs for date manipulation
+                const today = dayjs(); 
                 const sixMonthsAgo = today.subtract(6, 'month');
                 return [sixMonthsAgo, today];
             },
@@ -70,12 +70,10 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
     ];
 
     const handleQueryButtonClick = () => {
-        // Ensure that both start and end dates are selected
+       
         if (!startDate || !endDate) {
-            // Handle error, show a message to the user, etc.
             return;
         }
-        // Call the onQuerySubmit function with JavaScript Date objects
         onQuerySubmit(startDate, endDate);
     };
 
