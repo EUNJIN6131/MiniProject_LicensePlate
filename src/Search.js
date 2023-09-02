@@ -1,68 +1,42 @@
 import * as React from "react";
-import { Box, Button, TextField, Select, MenuItem, Snackbar } from "@mui/material";
+import { Box, Button, TextField, Snackbar } from "@mui/material";
 import List from "./List";
 import Calendar from "./Calendar";
 import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
-import axios from "axios";
 import { format, parseISO, parse } from "date-fns";
 import { API_BASE_URL } from "./api/api-config";
+import axios from "axios";
 
 export default function Search() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [licensePlate, setLicensePlate] = useState("");
-  const [rows, setRows] = useState([]);
-  const [noRecordsPopup, setNoRecordsPopup] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);  // 관리자 여부
+  const [licensePlate, setLicensePlate] = useState(""); //차량번호 입력 저장
+  const [rows, setRows] = useState([]); // 레코드(행) 목록
+  const [noRecordsPopup, setNoRecordsPopup] = useState(false);  // 검색결과 유무 팝업상태
 
-  const handleLicensePlateChange = (event) => {
-    setLicensePlate(event.target.value);
-  };
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [dateRange, setDateRange] = React.useState([null, null]);
 
-  //   useEffect(() => {
-  //     fetchInitialList(); // Fetch initial list when the component mounts
-  //   }, []);
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [isEnterPressed, setIsEnterPressed] = useState(false);
 
-  //   const fetchInitialList = (date) => {
-  //     // Fetch and set the initial list
-  //     // For example, fetch the list of all records here
-  //     // Replace this with your actual API call to fetch the initial list
-  //     call(`/main/search/date/${start}&${end}`, "GET", null)
-  //     .then((data) => {
-  //       console.log('data', data.data); // Log the received data
-  //       const responseData = data.data;
 
-  //       if (responseData.length > 0) {
-  //         const updatedRows = responseData.map((record, index) => {
-  //           // Adding an ID to each record to make them unique
-  //           return { ...record, id: index + 1 };
-  //         });
-
-  //         setRows(updatedRows);
-  //       } else {
-  //         setNoRecordsPopup(true);
-  //         setRows([]);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // };
-
+  // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
     console.log("Button clicked");
 
     call(`/main/search/plate/${licensePlate}`, "GET", null)
       .then((data) => {
-        console.log("data", data.data); // Log the received data
+        console.log("data", data.data);
         const responseData = data.data;
 
         if (responseData.length > 0) {
           const updatedRows = responseData.map((record, index) => {
-            // Adding an ID to each record to make them unique
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };
           });
-
           setRows(updatedRows);
         } else {
           setNoRecordsPopup(true);
@@ -74,15 +48,14 @@ export default function Search() {
       });
   };
 
+  // 4.날짜별 로그 조회
   const onQuerySubmit = async (startDate, endDate) => {
     console.log("Received startDate:", startDate);
     console.log("Received endDate:", endDate);
 
-    // Convert dayjs objects to JavaScript Date objects
     const jsStartDate = startDate.toDate();
     const jsEndDate = endDate.toDate();
 
-    // Format the dates using date-fns
     const formattedStartDate = format(jsStartDate, "yyyy-MM-dd");
     const formattedEndDate = format(jsEndDate, "yyyy-MM-dd");
 
@@ -110,17 +83,13 @@ export default function Search() {
       });
   };
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [isEnterPressed, setIsEnterPressed] = useState(false);
-  const [dateRange, setDateRange] = React.useState([null, null]);
+  const handleLicensePlateChange = (event) => {
+    setLicensePlate(event.target.value);
+  };
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
-    setSubCategory(""); // Reset sub-category when category changes
+    setSubCategory("");
   };
 
   const handleSubCategoryChange = (event) => {
@@ -138,7 +107,7 @@ export default function Search() {
   const onDateChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
-    // 여기서 onQuerySubmit을 호출하여 데이터를 가져옵니다.
+    // onQuerySubmit을 호출하여 데이터를 가져옵니다.
     onQuerySubmit(newStartDate, newEndDate);
   };
 

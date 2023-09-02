@@ -73,6 +73,7 @@ export default function List({ rows, setRows, updateRows }) {
     console.log("Edited License Plate:", event.target.value); // Add this line to check the input
   };
 
+  // 7.로그 수정(admin)
   const handleEditClick = () => {
     console.log("Edit button clicked");
 
@@ -111,6 +112,7 @@ export default function List({ rows, setRows, updateRows }) {
       });
   };
 
+  // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
 

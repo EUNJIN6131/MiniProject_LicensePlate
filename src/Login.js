@@ -31,6 +31,7 @@ export default function Login() {
     event.preventDefault();
   };
 
+  // 2.로그인
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.target);

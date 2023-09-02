@@ -11,6 +11,7 @@ export default function Join() {
     const [open1, setOpen1] = useState(false);
     const navigate = useNavigate();
 
+    // 1.회원가입
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
