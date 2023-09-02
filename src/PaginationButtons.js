@@ -3,7 +3,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 
-export default function PaginationButtons({ currentPage, onPageChange, pageCount,isAdmin ,onEditClick,onDeleteClick  }) {
+export default function PaginationButtons({ currentPage, onPageChange, pageCount, isAdmin, onEditClick, onDeleteClick  }) {
   return (
     <Stack spacing={2} direction="row" alignItems="center" >
         <div  style={{ marginRight: '10px' }}>

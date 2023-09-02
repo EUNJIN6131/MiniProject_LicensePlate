@@ -16,11 +16,12 @@ export default function Join() {
         const data = new FormData(event.currentTarget);
 
         const formData = {
-            username: data.get("username"),
+            name: data.get("username"),
             userId: data.get("id"),
             password: data.get("password"),
         };
 
+        console.log("username:", formData.name);
         console.log("id:", formData.userId);
         console.log("Password:", formData.password);
 
