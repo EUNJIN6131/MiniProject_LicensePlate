@@ -5,22 +5,20 @@ import Calendar from "./Calendar";
 import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, parse } from "date-fns";
-import { API_BASE_URL } from "./api/api-config";
-import axios from "axios";
 
 export default function Search() {
-  const [isAdmin, setIsAdmin] = useState(false);  // 관리자 여부
-  const [licensePlate, setLicensePlate] = useState(""); //차량번호 입력 저장
-  const [rows, setRows] = useState([]); // 레코드(행) 목록
-  const [noRecordsPopup, setNoRecordsPopup] = useState(false);  // 검색결과 유무 팝업상태
+  const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
+  const [licensePlate, setLicensePlate] = useState("");             // 차량번호 입력 저장
+  const [rows, setRows] = useState([]);                             // 레코드(행) 목록
+  const [noRecordsPopup, setNoRecordsPopup] = useState(false);      // 검색결과 유무 팝업상태
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [dateRange, setDateRange] = React.useState([null, null]);
+  const [startDate, setStartDate] = useState(null);                 // 시작날짜
+  const [endDate, setEndDate] = useState(null);                     // 종료날짜
+  const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
 
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [isEnterPressed, setIsEnterPressed] = useState(false);
+  // const [dateRange, setDateRange] = React.useState([null, null]);
+  // const [category, setCategory] = useState("");
+  // const [subCategory, setSubCategory] = useState("");
 
 
   // 3.차량 번호별 로그 조회
@@ -35,7 +33,7 @@ export default function Search() {
         if (responseData.length > 0) {
           const updatedRows = responseData.map((record, index) => {
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
-            return { ...record, id: index + 1, date: formattedDate };
+            return { ...record, id: index + 1, date: formattedDate };           // 새 객체 생성, ... <- 확산 연산자
           });
           setRows(updatedRows);
         } else {
@@ -70,9 +68,8 @@ export default function Search() {
         if (Array.isArray(responseData)) {
           const updatedRows = responseData.map((record, index) => {
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
-            return { ...record, id: index + 1, date: formattedDate };
+            return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
           });
-
           setRows(updatedRows);
         } else {
           console.error("데이터가 배열이 아닙니다:", responseData.data);
@@ -87,29 +84,28 @@ export default function Search() {
     setLicensePlate(event.target.value);
   };
 
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-    setSubCategory("");
-  };
-
-  const handleSubCategoryChange = (event) => {
-    setSubCategory(event.target.value);
-  };
-
   const handleCloseNoRecordsPopup = () => {
     setNoRecordsPopup(false);
   };
-
-  const updateRows = (newRows) => {
-    setRows(newRows);
-  };
-
+  
   const onDateChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
-    // onQuerySubmit을 호출하여 데이터를 가져옵니다.
     onQuerySubmit(newStartDate, newEndDate);
   };
+  
+  // const updateRows = (newRows) => {
+  //   setRows(newRows);
+  // };
+  // 
+  // const handleCategoryChange = (event) => {
+  //   setCategory(event.target.value);
+  //   setSubCategory("");
+  // };
+
+  // const handleSubCategoryChange = (event) => {
+  //   setSubCategory(event.target.value);
+  // };
 
   return (
     <Box sx={{ margin: "20px" }}>
