@@ -12,7 +12,7 @@ import { API_BASE_URL } from "./api/api-config";
 
 dayjs.extend(advancedFormat);
 
-export default function Calendar({ startDate, endDate, setStartDate, setEndDate, setRows, onDateChange,onQuerySubmit  }) {
+export default function Calendar({ startDate, endDate, setStartDate, setEndDate, setRows, onDateChange, onQuerySubmit }) {
     const [calendarDate, setCalendarDate] = React.useState(new Date());
     const [dateButtonText, setDateButtonText] = React.useState('');
 
@@ -72,63 +72,63 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
     const handleQueryButtonClick = () => {
         // Ensure that both start and end dates are selected
         if (!startDate || !endDate) {
-          // Handle error, show a message to the user, etc.
-          return;
+            // Handle error, show a message to the user, etc.
+            return;
         }
         // Call the onQuerySubmit function with JavaScript Date objects
         onQuerySubmit(startDate, endDate);
-      };
+    };
 
 
-return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Box sx={{ gap: '8px', width: '100%', display: "flex" }}>
-            {shortcuts.map((shortcut, index) => (
-                <Button
-                    key={index}
-                    onClick={() => handleShortcutClick(shortcut)}
-                    variant="contained"
-                    sx={{
-                        width: '100%',
-                        border: '1px solid black',
-                        backgroundColor: '#DDDDDD',
-                        color: 'black',
-                        '&:hover': {
-                            backgroundColor: '#CCCCCC',
-                        },
-                    }}
-                >
-                    {shortcut.label}
-                </Button>
-            ))}
-        </Box>
-        <p>조회날짜: {dateButtonText}</p>
-        <DateRangePicker
-            value={[startDate, endDate]}
-            onChange={(newValue) => {
-                setStartDate(newValue[0]);
-                setEndDate(newValue[1]);
-                onDateChange(newValue[0], newValue[1]);
-            }}
-            calendarDate={calendarDate}
-            localeText={{ start: 'start date', end: 'end date' }}
-        />
-        <Button
-            onClick={handleQueryButtonClick}
-            variant="contained"
-            sx={{
-                mt: 3,
-                width: '100%',
-                border: '1px solid black',
-                backgroundColor: '#DDDDDD',
-                color: 'black',
-                '&:hover': {
-                    backgroundColor: '#CCCCCC',
-                },
-            }}
-        >
-            조회하기
-        </Button>
-    </LocalizationProvider>
-);
+    return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ gap: '8px', width: '100%', display: "flex" }}>
+                {shortcuts.map((shortcut, index) => (
+                    <Button
+                        key={index}
+                        onClick={() => handleShortcutClick(shortcut)}
+                        variant="contained"
+                        sx={{
+                            width: '100%',
+                            border: '1px solid black',
+                            backgroundColor: '#DDDDDD',
+                            color: 'black',
+                            '&:hover': {
+                                backgroundColor: '#CCCCCC',
+                            },
+                        }}
+                    >
+                        {shortcut.label}
+                    </Button>
+                ))}
+            </Box>
+            <p>조회날짜: {dateButtonText}</p>
+            <DateRangePicker
+                value={[startDate, endDate]}
+                onChange={(newValue) => {
+                    setStartDate(newValue[0]);
+                    setEndDate(newValue[1]);
+                    onDateChange(newValue[0], newValue[1]);
+                }}
+                calendarDate={calendarDate}
+                localeText={{ start: 'start date', end: 'end date' }}
+            />
+            <Button
+                onClick={handleQueryButtonClick}
+                variant="contained"
+                sx={{
+                    mt: 3,
+                    width: '100%',
+                    border: '1px solid black',
+                    backgroundColor: '#DDDDDD',
+                    color: 'black',
+                    '&:hover': {
+                        backgroundColor: '#CCCCCC',
+                    },
+                }}
+            >
+                조회하기
+            </Button>
+        </LocalizationProvider>
+    );
 }

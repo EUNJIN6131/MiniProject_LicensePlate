@@ -3,9 +3,9 @@ import { DataGrid, GridRowModel } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
 import axios from "axios";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import { Box, Button, TextField, Snackbar } from "@mui/material";
+// import Pagination from "@mui/material/Pagination";
+// import Stack from "@mui/material/Stack";
+// import { Box, Button, TextField, Snackbar } from "@mui/material";
 
 const columns = [
   { field: "logId", type: "checkbox", headerName: "seq", width: 100, headerAlign: "center", align: "center" },
@@ -47,21 +47,21 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, updateRows }) {
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 20;
-  const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 추가
+export default function List({ rows, setRows }) {
 
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
+  const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
+  const rowsPerPage = 20;                                                   // 페이지 당 20rows
+  const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
+
+  // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
-    // rows 상태가 변경될 때마다 재랜더링
   }, [rows]);
 
+  // Pagination 함수
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-
   const rowsToDisplay = Array.isArray(rows) ? rows.slice(startIndex, endIndex) : [];
-
   const pageCount = Math.ceil(rows.length / rowsPerPage);
 
   const handlePageChange = (event, newPage) => {
@@ -70,7 +70,13 @@ export default function List({ rows, setRows, updateRows }) {
 
   const handleLicensePlateEdit = (event) => {
     setUserEditedLicensePlate(event.target.value);
-    console.log("Edited License Plate:", event.target.value); // Add this line to check the input
+    console.log("Edited License Plate:", event.target.value);
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };                           // ...newRow 새로운 복제본 객체 생성
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));    //이전 행과 새로운 행 식별 후 업데이트 else 기존 행 유지
+    return updatedRow;
   };
 
   // 7.로그 수정(admin)
@@ -88,16 +94,16 @@ export default function List({ rows, setRows, updateRows }) {
     }
 
     console.log("Selected Rows:", selectedSeqValues[0]);
-    // 수정한 licensePlate 값을 출력합니다.
+    // 수정한 licensePlate 값 출력
 
-    const userId = "IruIruIru"; // Set userId arbitrarily for testing
+    const userId = "IruIruIru";
 
-    // Prepare the data to be used for the PUT request
     const jsonData = {
       logId: selectedSeqValues[0].logId,
       licensePlate: selectedSeqValues[0].licensePlate,
     };
     console.log("jsonData", jsonData);
+
     axios
       .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
         headers: {
@@ -111,6 +117,29 @@ export default function List({ rows, setRows, updateRows }) {
         console.error("수정 중 오류 발생", error);
       });
   };
+
+  // 복수 행 수정가능한지 확인. 9/4
+  // selectedSeqValues.forEach((rowData) => {     
+  //   const jsonData = {
+  //     logId: rowData.logId,
+  //     licensePlate: rowData.licensePlate,
+  //   };
+  //   console.log("jsonData", jsonData);
+
+  //   axios
+  //     .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log("수정 성공.", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("수정 중 오류 발생", error);
+  //     });
+  // });
+  // }); 
 
   // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
@@ -140,11 +169,6 @@ export default function List({ rows, setRows, updateRows }) {
       });
   };
 
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
   return (
     rows && (
       <div style={{ width: "100%", maxHeight: "100%", height: "100%", overflowY: "auto" }}>
@@ -171,7 +195,7 @@ export default function List({ rows, setRows, updateRows }) {
               />
             ),
           }}
-          key={(row) => row.logId}
+          key={(row) => row.logId}        // 행의 logId 수정, 삭제 추적 후 렌더링
         />
       </div>
     )
