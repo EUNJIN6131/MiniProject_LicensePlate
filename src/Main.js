@@ -20,13 +20,12 @@ export default function Main() {
   };
 
   const handleLogin = () => {
-
     setIsLoggedIn(true);
     setSelectedTab(0);
   };
 
   return (
-    <Box sx={{ width: '100%' , height:'100vh'}}>
+    <Box sx={{ width: '100%', height: '100vh' }}>
       <CustomizedTabs
         isLoggedIn={isLoggedIn}
         onTabChange={handleTabChange}

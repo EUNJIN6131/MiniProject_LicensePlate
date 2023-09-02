@@ -52,8 +52,6 @@ export default function Join() {
                 bgcolor: '#2e1534', display: 'flex', p: 6
             }}>
             </Box>
-
-
             <Box sx={{
                 display: "flex", justifyContent: "center",
                 alignItems: "center",
@@ -119,8 +117,6 @@ export default function Join() {
 
                                 </Box>
                             )}
-
-
                             <Button
                                 type="submit"
                                 fullWidth
@@ -139,7 +135,6 @@ export default function Join() {
                             >
                                 회원가입
                             </Button>
-
                             <Button
                                 type="submit"
                                 fullWidth

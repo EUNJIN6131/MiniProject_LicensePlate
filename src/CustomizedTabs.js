@@ -48,34 +48,33 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
     onTabChange(newValue);
   };
 
+
   return (
-    <Box sx={{ width: '100%' , }}>
-      <Box sx={{ width: "100%", bgcolor: '#2e1534', display: 'flex',  p:3 , }}>
+    <Box sx={{ width: '100%', }}>
+      <Box sx={{ width: "100%", bgcolor: '#2e1534', display: 'flex', p: 3, }}>
         <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
           {isLoggedIn ? (
             <StyledTab label="로그아웃" onClick={onLogout} />
           ) : (
             <StyledTab label="로그인" onClick={() => {
               onTabChange(0);
-              navigate('/users/signin'); // Append /login to the URL
+              navigate('/users/signin');
             }} />
           )}
 
           <StyledTab label="차량 입출입 현황" onClick={() => {
             onTabChange(1);
-            navigate('/main/record'); // Use navigate to go to the desired route
+            navigate('/main/record');
           }} />
           <StyledTab label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} />
           <StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} />
         </StyledTabs>
       </Box>
-          
     </Box>
   );
 }
