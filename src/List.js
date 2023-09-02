@@ -161,8 +161,8 @@ export default function List({ rows, setRows }) {
 
         const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
 
-        // 필터링된 행으로 'rows' 상태를 업데이트합니다.
-        setRows(updatedRows); // 이 부분이 올바르게 작동하는지 확인하세요.
+        // 필터링된 행으로 'rows' 상태를 업데이트
+        setRows(updatedRows); 
       })
       .catch((error) => {
         console.error("삭제 중 오류 발생", error);
@@ -195,7 +195,8 @@ export default function List({ rows, setRows }) {
               />
             ),
           }}
-          key={(row) => row.logId}        // 행의 logId 수정, 삭제 추적 후 렌더링
+          // 행의 logId 수정, 삭제 추적 후 렌더링
+          key={(row) => row.logId}
         />
       </div>
     )
