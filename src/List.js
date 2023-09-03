@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridRowModel } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
 import axios from "axios";
@@ -47,9 +47,9 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, fetchEditHistory, setIsModificationLogVisible }) {
+export default function List({ rows, setRows, fetchEditHistory, setIsModificationLogVisible, rowSelectionModel, setRowSelectionModel}) {
 
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
+  // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
   const rowsPerPage = 20;                                                   // 페이지 당 20rows
   const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
@@ -185,9 +185,6 @@ export default function List({ rows, setRows, fetchEditHistory, setIsModificatio
 
         // 필터링된 행으로 'rows' 상태를 업데이트
         setRows(updatedRows);
-        // 수정 로그 초기화
-        setEditedLogs([]);
-        setEditedLogIndex([]);
       })
       .catch((error) => {
         console.error("삭제 중 오류 발생", error);

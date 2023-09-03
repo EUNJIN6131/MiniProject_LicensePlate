@@ -6,6 +6,8 @@ import EditLog from "./EditLog";
 import { useState, } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
+import axios from "axios";
+import { API_BASE_URL } from "./api/api-config";
 
 export default function Search() {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
@@ -17,6 +19,7 @@ export default function Search() {
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
 
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [isModificationLogVisible, setIsModificationLogVisible] = useState(false);
   const [licensePlateBeforeModification, setLicensePlateBeforeModification] = useState("");
   const [licensePlateAfterModification, setLicensePlateAfterModification] = useState("");
@@ -112,130 +115,132 @@ export default function Search() {
           console.error("Error fetching edit history:", error);
         });
     };
+  }
 
-    const handleLicensePlateChange = (event) => {
-      setLicensePlate(event.target.value);
-    };
+  const handleLicensePlateChange = (event) => {
+    setLicensePlate(event.target.value);
+  };
 
-    const handleCloseNoRecordsPopup = () => {
-      setNoRecordsPopup(false);
-    };
+  const handleCloseNoRecordsPopup = () => {
+    setNoRecordsPopup(false);
+  };
 
-    const onDateChange = (newStartDate, newEndDate) => {
-      setStartDate(newStartDate);
-      setEndDate(newEndDate);
-      onQuerySubmit(newStartDate, newEndDate);
-    };
+  const onDateChange = (newStartDate, newEndDate) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    onQuerySubmit(newStartDate, newEndDate);
+  };
 
-    return (
-      <Box sx={{ margin: "20px" }}>
+  return (
+    <Box sx={{ margin: "20px" }}>
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: "20px",
+        }}
+      >
         <Box
           sx={{
-            width: "100%",
+            width: "30%",
             height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "row",
-            gap: "20px",
+            border: "1px solid rgb(189, 188, 188)",
+            paddingBlock: "10px",
           }}
         >
-          <Box
-            sx={{
-              width: "30%",
-              height: "100vh",
-              border: "1px solid rgb(189, 188, 188)",
-              paddingBlock: "10px",
-            }}
-          >
-            <Box sx={{ margin: "20px" }}>
-              <Calendar
-                startDate={startDate}
-                endDate={endDate}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-                onQuerySubmit={onQuerySubmit}
-                setRows={setRows}
-                onDateChange={onDateChange}
-              />
+          <Box sx={{ margin: "20px" }}>
+            <Calendar
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              onQuerySubmit={onQuerySubmit}
+              setRows={setRows}
+              onDateChange={onDateChange}
+            />
 
-              <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px", }}>
-                <Box sx={{ width: "70%" }}>
-                  <TextField
-                    label="차량번호 조회"
-                    variant="outlined"
-                    fullWidth
-                    value={licensePlate}
-                    onChange={handleLicensePlateChange}
-                    onKeyPress={(event) => {
-                      if (event.key === "Enter") {
-                        setIsEnterPressed(true);
-                        handleSearchClick(licensePlate);
-                      }
-                    }}
-                  />
-                </Box>
-                <Box sx={{ width: "30%", marginTop: "10px" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleSearchClick(licensePlate)}
-                    sx={{
-                      width: "100%",
-                      border: "1px solid black",
-                      backgroundColor: isEnterPressed ? "#CCCCCC" : "#DDDDDD",
-                      color: "black",
-                      "&:hover": {
-                        backgroundColor: "#CCCCCC",
-                      },
-                    }}
-                  >
-                    조회하기
-                  </Button>
-                </Box>
+            <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px", }}>
+              <Box sx={{ width: "70%" }}>
+                <TextField
+                  label="차량번호 조회"
+                  variant="outlined"
+                  fullWidth
+                  value={licensePlate}
+                  onChange={handleLicensePlateChange}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      setIsEnterPressed(true);
+                      handleSearchClick(licensePlate);
+                    }
+                  }}
+                />
               </Box>
-              <Snackbar
-                open={noRecordsPopup}
-                autoHideDuration={1000}
-                onClose={handleCloseNoRecordsPopup}
-                message="조회된 차량이 없습니다."
-                sx={{ marginBottom: "360px" }}
-              />
-              {isModificationLogVisible && (
-                <Box
+              <Box sx={{ width: "30%", marginTop: "10px" }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleSearchClick(licensePlate)}
                   sx={{
-                    display: "flex",
-                    height: "50vh",
-                    marginTop: "70px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    border: "1px solid rgb(189, 188, 188)",
+                    width: "100%",
+                    border: "1px solid black",
+                    backgroundColor: isEnterPressed ? "#CCCCCC" : "#DDDDDD",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#CCCCCC",
+                    },
                   }}
                 >
-                  <EditLog
-                    isModificationLogVisible={isModificationLogVisible}
-                    licensePlateBeforeModification={licensePlateBeforeModification}
-                    licensePlateAfterModification={licensePlateAfterModification}
-                    modificationDateTime={modificationDateTime}
-                  />
-                </Box>
-              )}
+                  조회하기
+                </Button>
+              </Box>
             </Box>
-          </Box>
-          <Box
-            sx={{
-              flex: "1",
-              width: "70%",
-              height: "100vh",
-              border: "1px solid rgb(189, 188, 188)",
-              paddingBlock: "10px",
-            }}
-          >
-            {/* <List isAdmin={isAdmin} rows={rows} /> */}
-            <List setRows={setRows} rows={rows}
-              fetchEditHistory={fetchEditHistory} setIsModificationLogVisible={setIsModificationLogVisible} />
+            <Snackbar
+              open={noRecordsPopup}
+              autoHideDuration={1000}
+              onClose={handleCloseNoRecordsPopup}
+              message="조회된 차량이 없습니다."
+              sx={{ marginBottom: "360px" }}
+            />
+            {isModificationLogVisible && (
+              <Box
+                sx={{
+                  display: "flex",
+                  height: "50vh",
+                  marginTop: "70px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  border: "1px solid rgb(189, 188, 188)",
+                }}
+              >
+                <EditLog
+                  isModificationLogVisible={isModificationLogVisible}
+                  licensePlateBeforeModification={licensePlateBeforeModification}
+                  licensePlateAfterModification={licensePlateAfterModification}
+                  modificationDateTime={modificationDateTime}
+                />
+              </Box>
+            )}
           </Box>
         </Box>
+        <Box
+          sx={{
+            flex: "1",
+            width: "70%",
+            height: "100vh",
+            border: "1px solid rgb(189, 188, 188)",
+            paddingBlock: "10px",
+          }}
+        >
+          {/* <List isAdmin={isAdmin} rows={rows} /> */}
+          <List setRows={setRows} rows={rows}
+            fetchEditHistory={fetchEditHistory} setIsModificationLogVisible={setIsModificationLogVisible}
+            rowSelectionModel={rowSelectionModel} setRowSelectionModel={setRowSelectionModel}
+          />
+        </Box>
       </Box>
-    );
-  }
+    </Box>
+  );
 }
