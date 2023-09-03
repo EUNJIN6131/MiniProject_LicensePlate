@@ -3,9 +3,9 @@ import { Box, Button, TextField, Snackbar } from "@mui/material";
 import List from "./List";
 import Calendar from "./Calendar";
 import EditLog from "./EditLog";
-import { useState, useEffect } from "react";
+import { useState, } from "react";
 import { call } from "./api/ApiService";
-import { format, parseISO, parse } from "date-fns";
+import { format, parseISO, } from "date-fns";
 
 export default function Search() {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
@@ -17,17 +17,10 @@ export default function Search() {
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
 
-  // EditLog 컴포넌트에 전달할 수정 로그 정보 상태
-  const [editLogInfo, setEditLogInfo] = useState({
-    isModificationLogVisible: false,
-    licensePlateBeforeModification: "",
-    licensePlateAfterModification: "",
-    modificationDateTime: "",
-  });
-
-  // const [dateRange, setDateRange] = React.useState([null, null]);
-  // const [category, setCategory] = useState("");
-  // const [subCategory, setSubCategory] = useState("");
+  const [isModificationLogVisible, setIsModificationLogVisible] = useState(false);
+  const [licensePlateBeforeModification, setLicensePlateBeforeModification] = useState("");
+  const [licensePlateAfterModification, setLicensePlateAfterModification] = useState("");
+  const [modificationDateTime, setModificationDateTime] = useState("");
 
 
   // 3.차량 번호별 로그 조회
@@ -91,161 +84,158 @@ export default function Search() {
 
   //6.수정/삭제 기록 조회
   const fetchEditHistory = () => {
-    axios
-      .get(`${API_BASE_URL}/main/history/`) // logId를 사용하여 서버에서 수정 로그 정보 가져오기
-      .then((response) => {
-        const editHistory = response.data;
-        if (editHistory.state) {
-          // 수정 로그 정보를 상태로 설정
-          setEditLogInfo({
-            isModificationLogVisible: true,
-            licensePlateBeforeModification: editHistory.licensePlateBeforeModification,
-            licensePlateAfterModification: editHistory.licensePlateAfterModification,
-            modificationDateTime: editHistory.modificationDateTime,
-          });
-        } else {
-          // 수정 로그 정보 없음
-          setEditLogInfo({
-            isModificationLogVisible: false,
-            licensePlateBeforeModification: "",
-            licensePlateAfterModification: "",
-            modificationDateTime: "",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching edit history:", error);
-      });
-  };
 
-  const handleLicensePlateChange = (event) => {
-    setLicensePlate(event.target.value);
-  };
+    if (rowSelectionModel.length > 0) {
+      const selectedRow = rows[rowSelectionModel[0] - 1]; // Get the first selected row
+      const logId = selectedRow.logId;
 
-  const handleCloseNoRecordsPopup = () => {
-    setNoRecordsPopup(false);
-  };
+      axios
+        .get(`${API_BASE_URL}/main/history/${logId}`) // logId를 사용하여 서버에서 수정 로그 정보 가져오기
+        .then((data) => {
+          const editHistory = data.data;
+          if (selectedRow.state) {
+            // 수정 로그 정보를 상태로 설정
+            setIsModificationLogVisible(true);
+            setLicensePlateBeforeModification(editHistory.previousText);
+            setLicensePlateAfterModification(editHistory.currentText);
+            setModificationDateTime(editHistory.date);
 
-  const onDateChange = (newStartDate, newEndDate) => {
-    setStartDate(newStartDate);
-    setEndDate(newEndDate);
-    onQuerySubmit(newStartDate, newEndDate);
-  };
+          } else {
+            // 수정 로그 정보 없음
+            setIsModificationLogVisible(false);
+            setLicensePlateBeforeModification("");
+            setLicensePlateAfterModification("");
+            setModificationDateTime("");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching edit history:", error);
+        });
+    };
 
-  // const updateRows = (newRows) => {
-  //   setRows(newRows);
-  // };
-  // 
-  // const handleCategoryChange = (event) => {
-  //   setCategory(event.target.value);
-  //   setSubCategory("");
-  // };
+    const handleLicensePlateChange = (event) => {
+      setLicensePlate(event.target.value);
+    };
 
-  // const handleSubCategoryChange = (event) => {
-  //   setSubCategory(event.target.value);
-  // };
+    const handleCloseNoRecordsPopup = () => {
+      setNoRecordsPopup(false);
+    };
 
-  return (
-    <Box sx={{ margin: "20px" }}>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "row",
-          gap: "20px",
-        }}
-      >
+    const onDateChange = (newStartDate, newEndDate) => {
+      setStartDate(newStartDate);
+      setEndDate(newEndDate);
+      onQuerySubmit(newStartDate, newEndDate);
+    };
+
+    return (
+      <Box sx={{ margin: "20px" }}>
         <Box
           sx={{
-            width: "30%",
+            width: "100%",
             height: "100vh",
-            border: "1px solid rgb(189, 188, 188)",
-            paddingBlock: "10px",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            gap: "20px",
           }}
         >
-          <Box sx={{ margin: "20px" }}>
-            <Calendar
-              startDate={startDate}
-              endDate={endDate}
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
-              onQuerySubmit={onQuerySubmit}
-              setRows={setRows}
-              onDateChange={onDateChange}
-            />
+          <Box
+            sx={{
+              width: "30%",
+              height: "100vh",
+              border: "1px solid rgb(189, 188, 188)",
+              paddingBlock: "10px",
+            }}
+          >
+            <Box sx={{ margin: "20px" }}>
+              <Calendar
+                startDate={startDate}
+                endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                onQuerySubmit={onQuerySubmit}
+                setRows={setRows}
+                onDateChange={onDateChange}
+              />
 
-            <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px", }}>
-              <Box sx={{ width: "70%" }}>
-                <TextField
-                  label="차량번호 조회"
-                  variant="outlined"
-                  fullWidth
-                  value={licensePlate}
-                  onChange={handleLicensePlateChange}
-                  onKeyPress={(event) => {
-                    if (event.key === "Enter") {
-                      setIsEnterPressed(true);
-                      handleSearchClick(licensePlate);
-                    }
-                  }}
-                />
+              <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px", }}>
+                <Box sx={{ width: "70%" }}>
+                  <TextField
+                    label="차량번호 조회"
+                    variant="outlined"
+                    fullWidth
+                    value={licensePlate}
+                    onChange={handleLicensePlateChange}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        setIsEnterPressed(true);
+                        handleSearchClick(licensePlate);
+                      }
+                    }}
+                  />
+                </Box>
+                <Box sx={{ width: "30%", marginTop: "10px" }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleSearchClick(licensePlate)}
+                    sx={{
+                      width: "100%",
+                      border: "1px solid black",
+                      backgroundColor: isEnterPressed ? "#CCCCCC" : "#DDDDDD",
+                      color: "black",
+                      "&:hover": {
+                        backgroundColor: "#CCCCCC",
+                      },
+                    }}
+                  >
+                    조회하기
+                  </Button>
+                </Box>
               </Box>
-              <Box sx={{ width: "30%", marginTop: "10px" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleSearchClick(licensePlate)}
+              <Snackbar
+                open={noRecordsPopup}
+                autoHideDuration={1000}
+                onClose={handleCloseNoRecordsPopup}
+                message="조회된 차량이 없습니다."
+                sx={{ marginBottom: "360px" }}
+              />
+              {isModificationLogVisible && (
+                <Box
                   sx={{
-                    width: "100%",
-                    border: "1px solid black",
-                    backgroundColor: isEnterPressed ? "#CCCCCC" : "#DDDDDD",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "#CCCCCC",
-                    },
+                    display: "flex",
+                    height: "50vh",
+                    marginTop: "70px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid rgb(189, 188, 188)",
                   }}
                 >
-                  조회하기
-                </Button>
-              </Box>
-            </Box>
-            <Snackbar
-              open={noRecordsPopup}
-              autoHideDuration={1000}
-              onClose={handleCloseNoRecordsPopup}
-              message="조회된 차량이 없습니다."
-              sx={{ marginBottom: "360px" }}
-            />
-            <Box
-              sx={{
-                display: "flex",
-                height: "50vh",
-                marginTop: "70px",
-                justifyContent: "center",
-                alignItems: "center",
-                border: "1px solid rgb(189, 188, 188)",
-              }}
-            >
-              <EditLog  {...editLogInfo}/>
+                  <EditLog
+                    isModificationLogVisible={isModificationLogVisible}
+                    licensePlateBeforeModification={licensePlateBeforeModification}
+                    licensePlateAfterModification={licensePlateAfterModification}
+                    modificationDateTime={modificationDateTime}
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
-        </Box>
-        <Box
-          sx={{
-            flex: "1",
-            width: "70%",
-            height: "100vh",
-            border: "1px solid rgb(189, 188, 188)",
-            paddingBlock: "10px",
-          }}
-        >
-          {/* <List isAdmin={isAdmin} rows={rows} /> */}
-          <List setRows={setRows} rows={rows} 
-  fetchEditHistory={fetchEditHistory} setIsModificationLogVisible={setIsModificationLogVisible}/>
+          <Box
+            sx={{
+              flex: "1",
+              width: "70%",
+              height: "100vh",
+              border: "1px solid rgb(189, 188, 188)",
+              paddingBlock: "10px",
+            }}
+          >
+            {/* <List isAdmin={isAdmin} rows={rows} /> */}
+            <List setRows={setRows} rows={rows}
+              fetchEditHistory={fetchEditHistory} setIsModificationLogVisible={setIsModificationLogVisible} />
+          </Box>
         </Box>
       </Box>
-    </Box>
-  );
+    );
+  }
 }

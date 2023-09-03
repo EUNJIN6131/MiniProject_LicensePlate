@@ -7,13 +7,13 @@ export default function EditLog({ isModificationLogVisible,
     modificationDateTime, }) {
     return (
         <>
-            {isModificationLogVisible && (
+            {/* {isModificationLogVisible && ( */}
                 <Box>
                     <p>수정 전 : {licensePlateBeforeModification}</p>
                     <p>수정 후 : {licensePlateAfterModification}</p>
                     <p>수정 일시 : {modificationDateTime}</p>
                 </Box>
-            )}
+            {/* )} */}
         </>
     );
 }
