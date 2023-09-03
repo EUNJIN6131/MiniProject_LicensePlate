@@ -2,6 +2,7 @@ import * as React from "react";
 import { Box, Button, TextField, Snackbar } from "@mui/material";
 import List from "./List";
 import Calendar from "./Calendar";
+import EditLog from "./EditLog";
 import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, parse } from "date-fns";
@@ -87,13 +88,13 @@ export default function Search() {
   const handleCloseNoRecordsPopup = () => {
     setNoRecordsPopup(false);
   };
-  
+
   const onDateChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
     onQuerySubmit(newStartDate, newEndDate);
   };
-  
+
   // const updateRows = (newRows) => {
   //   setRows(newRows);
   // };
@@ -138,7 +139,7 @@ export default function Search() {
               onDateChange={onDateChange}
             />
 
-            <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px" }}>
+            <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px", }}>
               <Box sx={{ width: "70%" }}>
                 <TextField
                   label="차량번호 조회"
@@ -180,6 +181,18 @@ export default function Search() {
               message="조회된 차량이 없습니다."
               sx={{ marginBottom: "360px" }}
             />
+            <Box
+              sx={{
+                display: "flex",
+                height: "50vh",
+                marginTop:"70px",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid rgb(189, 188, 188)",
+              }}
+            >
+              <EditLog />
+            </Box>
           </Box>
         </Box>
         <Box
