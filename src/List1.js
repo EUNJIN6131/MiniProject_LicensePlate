@@ -47,7 +47,7 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows }) {
+export default function List({ rows, setRows, fetchEditHistory, setIsModificationLogVisible }) {
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
@@ -82,7 +82,7 @@ export default function List({ rows, setRows }) {
   // const handleRowSelection = (newRowSelectionModel) => {
   //   setRowSelectionModel(newRowSelectionModel);
   // }
-
+  
   const handleRowSelection = (newRowSelectionModel) => {
     setRowSelectionModel(newRowSelectionModel);
 
@@ -91,10 +91,8 @@ export default function List({ rows, setRows }) {
       const selectedRow = rows[selectedRowIndex];
 
       if (selectedRow.state === true) {
-        setLicensePlateBeforeModification(selectedRow.licensePlate);
-        setLicensePlateAfterModification(""); 
-        setModificationDateTime(new Date().toLocaleString());
-        setIsModificationLogVisible(true);
+        // 수정 로그 정보 가져오기
+        fetchEditHistory(selectedRow.logId);
       } else {
         setIsModificationLogVisible(false);
       }
@@ -103,7 +101,6 @@ export default function List({ rows, setRows }) {
     }
   };
 
-  
   // 7.로그 수정(admin)
   const handleEditClick = () => {
     console.log("Edit button clicked");

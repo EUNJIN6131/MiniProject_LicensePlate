@@ -17,10 +17,13 @@ export default function Search() {
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
 
-  const [isModificationLogVisible, setIsModificationLogVisible] = useState(false);
-  const [licensePlateBeforeModification, setLicensePlateBeforeModification] = useState("");
-  const [licensePlateAfterModification, setLicensePlateAfterModification] = useState("");
-  const [modificationDateTime, setModificationDateTime] = useState("");
+  // EditLog 컴포넌트에 전달할 수정 로그 정보 상태
+  const [editLogInfo, setEditLogInfo] = useState({
+    isModificationLogVisible: false,
+    licensePlateBeforeModification: "",
+    licensePlateAfterModification: "",
+    modificationDateTime: "",
+  });
 
   // const [dateRange, setDateRange] = React.useState([null, null]);
   // const [category, setCategory] = useState("");
@@ -83,6 +86,35 @@ export default function Search() {
       })
       .catch((error) => {
         console.error("데이터 가져오기 오류:", error);
+      });
+  };
+
+  //6.수정/삭제 기록 조회
+  const fetchEditHistory = () => {
+    axios
+      .get(`${API_BASE_URL}/main/history/`) // logId를 사용하여 서버에서 수정 로그 정보 가져오기
+      .then((response) => {
+        const editHistory = response.data;
+        if (editHistory.state) {
+          // 수정 로그 정보를 상태로 설정
+          setEditLogInfo({
+            isModificationLogVisible: true,
+            licensePlateBeforeModification: editHistory.licensePlateBeforeModification,
+            licensePlateAfterModification: editHistory.licensePlateAfterModification,
+            modificationDateTime: editHistory.modificationDateTime,
+          });
+        } else {
+          // 수정 로그 정보 없음
+          setEditLogInfo({
+            isModificationLogVisible: false,
+            licensePlateBeforeModification: "",
+            licensePlateAfterModification: "",
+            modificationDateTime: "",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching edit history:", error);
       });
   };
 
@@ -196,11 +228,7 @@ export default function Search() {
                 border: "1px solid rgb(189, 188, 188)",
               }}
             >
-              <EditLog
-                isModificationLogVisible={isModificationLogVisible}
-                licensePlateBeforeModification={licensePlateBeforeModification}
-                licensePlateAfterModification={licensePlateAfterModification}
-                modificationDateTime={modificationDateTime} />
+              <EditLog  {...editLogInfo}/>
             </Box>
           </Box>
         </Box>
@@ -214,11 +242,8 @@ export default function Search() {
           }}
         >
           {/* <List isAdmin={isAdmin} rows={rows} /> */}
-          <List setRows={setRows} rows={rows}
-            isModificationLogVisible={isModificationLogVisible}
-            licensePlateBeforeModification={licensePlateBeforeModification}
-            licensePlateAfterModification={licensePlateAfterModification}
-            modificationDateTime={modificationDateTime} />
+          <List setRows={setRows} rows={rows} 
+  fetchEditHistory={fetchEditHistory} setIsModificationLogVisible={setIsModificationLogVisible}/>
         </Box>
       </Box>
     </Box>
