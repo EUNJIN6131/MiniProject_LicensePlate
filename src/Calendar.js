@@ -1,5 +1,3 @@
-// Calendar.js
-
 import * as React from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
@@ -7,8 +5,6 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { Box, Button } from "@mui/material";
 import dayjs from 'dayjs'; 
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import axios from 'axios'; 
-import { API_BASE_URL } from "./api/api-config";
 
 dayjs.extend(advancedFormat);
 
@@ -109,7 +105,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
                     onDateChange(newValue[0], newValue[1]);
                 }}
                 calendarDate={calendarDate}
-                localeText={{ start: 'start date', end: 'end date' }}
+                localeText={{ start: '시작 날짜', end: '종료 날짜' }}
             />
             <Button
                 onClick={handleQueryButtonClick}
