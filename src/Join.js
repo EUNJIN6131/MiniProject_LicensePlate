@@ -115,7 +115,6 @@ export default function Join() {
                             {open1 && (
                                 <Box>
                                     <AlertSuccess open={open1} setOpen={setOpen1} text={"회원가입이 완료되었습니다."} />
-
                                 </Box>
                             )}
                             <Button

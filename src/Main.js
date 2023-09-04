@@ -21,7 +21,7 @@ export default function Main() {
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    setSelectedTab(0);
+    setSelectedTab(1);
   };
 
   return (
@@ -33,7 +33,7 @@ export default function Main() {
       />
       {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} />}
       {selectedTab === 1 && <Record />}
-      {selectedTab === 2 && <Search />}
+      {selectedTab === 2 && <Search selectedTab={selectedTab}/>}
       {selectedTab === 3 && <Enroll />}
     </Box>
   );

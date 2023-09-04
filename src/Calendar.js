@@ -3,7 +3,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { Box, Button } from "@mui/material";
-import dayjs from 'dayjs'; 
+import dayjs from 'dayjs';
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
 dayjs.extend(advancedFormat);
@@ -13,7 +13,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
     const [dateButtonText, setDateButtonText] = React.useState('');
 
     const handleShortcutClick = (shortcut) => {
-        const today = dayjs(); 
+        const today = dayjs();
         const { getValue, label } = shortcut;
 
         const [newStartDate, newEndDate] = getValue();
@@ -27,14 +27,14 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '오늘',
             getValue: () => {
-                const today = dayjs(); 
+                const today = dayjs();
                 return [today.startOf('day'), today.endOf('day')];
             },
         },
         {
             label: '1주',
             getValue: () => {
-                const today = dayjs(); 
+                const today = dayjs();
                 const oneWeekAgo = today.subtract(1, 'week');
                 return [oneWeekAgo, today];
             },
@@ -42,7 +42,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '2주',
             getValue: () => {
-                const today = dayjs(); 
+                const today = dayjs();
                 const twoWeeksAgo = today.subtract(2, 'week');
                 return [twoWeeksAgo, today];
             },
@@ -58,7 +58,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         {
             label: '6개월',
             getValue: () => {
-                const today = dayjs(); 
+                const today = dayjs();
                 const sixMonthsAgo = today.subtract(6, 'month');
                 return [sixMonthsAgo, today];
             },
@@ -66,7 +66,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
     ];
 
     const handleQueryButtonClick = () => {
-       
+
         if (!startDate || !endDate) {
             return;
         }

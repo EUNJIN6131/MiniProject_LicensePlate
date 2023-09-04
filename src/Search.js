@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
 
-export default function Search() {
+export default function Search(selectedTab) {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
   const [licensePlate, setLicensePlate] = useState("");             // 차량번호 입력 저장
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록
@@ -17,6 +17,7 @@ export default function Search() {
   const [startDate, setStartDate] = useState(null);                 // 시작날짜
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
+  const [calendarLoaded, setCalendarLoaded] = useState(false);
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [historyRows, setHistoryRows] = useState([]);
@@ -25,6 +26,14 @@ export default function Search() {
     fetchEditHistory()
   }, []);
 
+  useEffect(() => {
+    if (selectedTab === 2) {
+      const today = new Date();
+      setStartDate(today);
+      setEndDate(today);
+      onQuerySubmit(today, today);
+    }
+  }, [selectedTab]);
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
