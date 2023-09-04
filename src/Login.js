@@ -17,10 +17,9 @@ import AlertError from "./alert/AlertError";
 import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useNavigation } from '@react-navigation/native'; 
 
 
-export default function Login() {
+export default function Login({onTabChange}) {
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -53,8 +52,9 @@ export default function Login() {
         const accessToken = res.headers["authorization"];
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
-        console.log("로그인성공")
-        navigation.navigate("main/record");
+        // console.log("로그인성공")
+        // onTabChange(1);
+        // navigate("/main/record");
       }
     } catch (error) {
       setOpen(true);
@@ -129,6 +129,7 @@ export default function Login() {
             />
 
             <Button
+              onClick={() => navigate("/main/record")}
               type="submit"
               fullWidth
               variant="contained"

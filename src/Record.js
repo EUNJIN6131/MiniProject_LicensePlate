@@ -10,40 +10,38 @@ export default function Record() {
   const [imageUpload, setImageUpload] = useState([]);
   const [recentNum, setRecentNum] = useState(null);
 
+  // useEffect(() => {
+  //   showRecord()
+  // }, []);
+
   // 3.차량 출입 로그 기록
-  const showRecord = async () => {
-    console.log("enter the car")
+  const showRecord = async (imageSrc) => {
+    console.log("Enter the car");
+    
+    // 이미지 경로를 FormData에 추가
     const formData = new FormData();
-
-    console.log("imageUpload content:", imageUpload);
-
-    for (let i = 0; i < imageUpload.length; i++) {
-
-      const file = imageUpload[i];
-      formData.append("file", file);
-
-      console.log("File appended:", formData.get("file")); // Step 2
-      
-      call(`/main/record`, "POST", formData)
-        .then((response) => {
-          const data = response.data;
-          console.log("data", data);
-        })
-        .catch((error) => {
-          console.error("이미지 가져오기 오류:", error);
-        });
-    } 
+    formData.append("file", imageSrc);
+  
+    console.log("File appended:", formData.get("file"));
+  
+    try {
+      const response = await call(`/main/record`, "POST", formData);
+      const data = response.data;
+      console.log("Data", data);
+    } catch (error) {
+      console.error("Error sending image:", error);
+    }
   };
-
-        // const responseData = data.data;
-        // if (Array.isArray(responseData)) {
-        //   const updatedRows = responseData.map((img, index) => {
-        //     return { ...img, id: index + 1,};         // 새 객체 생성, ... <- 확산 연산자
-        //   });
-        //   setImageUpload(updatedRows);
-        // } else {
-        //   console.error("이미지가 없습니다:", responseData.data);
-        // }
+  
+  // const responseData = data.data;
+  // if (Array.isArray(responseData)) {
+  //   const updatedRows = responseData.map((img, index) => {
+  //     return { ...img, id: index + 1,};         // 새 객체 생성, ... <- 확산 연산자
+  //   });
+  //   setImageUpload(updatedRows);
+  // } else {
+  //   console.error("이미지가 없습니다:", responseData.data);
+  // }
   // };
 
   return (
@@ -78,7 +76,7 @@ export default function Record() {
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            <Images setImageUpload={setImageUpload} showRecord={showRecord} />
+            <Images  setImageUpload={setImageUpload} showRecord={showRecord} />
           </Box>
           <Box
             sx={{
