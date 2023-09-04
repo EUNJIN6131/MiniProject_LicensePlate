@@ -7,6 +7,7 @@ import AlertNothing from "./alert/AlertNothing";
 import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
+import dayjs from 'dayjs';
 
 export default function Search({selectedTab}) {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
@@ -28,7 +29,7 @@ export default function Search({selectedTab}) {
 
   useEffect(() => {
     if (selectedTab === 2) {
-      const today = new Date();
+      const today = dayjs();
       setStartDate(today);
       setEndDate(today);
       onQuerySubmit(today, today);
