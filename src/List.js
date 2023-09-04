@@ -102,11 +102,13 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
     const userId = "IruIruIru";
 
-    const jsonData = {
-      logId: selectedSeqValues[0].logId,
-      licensePlate: selectedSeqValues[0].licensePlate,
-    };
-    console.log("jsonData", jsonData);
+    // const jsonData = {
+    //   logId: selectedSeqValues[0].logId,
+    //   licensePlate: selectedSeqValues[0].licensePlate,
+    // };
+    // console.log("jsonData", jsonData);
+
+    const jsonData = selectedSeqValues.map((item) => ({logId:item.logId, licensePlate:item.licensePlate}));
 
     axios
       .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
@@ -120,8 +122,31 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       .catch((error) => {
         console.error("수정 중 오류 발생", error);
       });
-  };
 
+    // selectedSeqValues.forEach((rowData) => {
+    //   const jsonData = {
+    //     logId: rowData.logId,
+    //     licensePlate: rowData.licensePlate,
+    //   };
+    //   console.log("jsonData", jsonData);
+
+    //   axios
+    //     .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     })
+    //     .then((response) => {
+    //       console.log("수정 성공.", response.data);
+    //     })
+    //     .catch((error) => {
+    //       console.error("수정 중 오류 발생", error);
+    //     });
+    // });
+  }
+
+
+  
   // 복수 행 수정가능한지 확인. 9/4
   // selectedSeqValues.forEach((rowData) => {     
   //   const jsonData = {

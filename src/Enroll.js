@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import ImageLoader from './ImageLoader';
 
 export default function Enroll() {
-    const [carNumber, setCarNumber] = useState(""); // Vehicle license plate input status
+    const [carNumber, setCarNumber] = useState(""); 
 
     const handleCarNumberChange = (event) => {
         setCarNumber(event.target.value);

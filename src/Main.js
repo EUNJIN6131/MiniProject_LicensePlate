@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function Main() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+ 
   const handleTabChange = (tabIndex) => {
     setSelectedTab(tabIndex);
   };

@@ -1,30 +1,30 @@
 import * as React from "react";
-import { Box, Button, TextField, Snackbar } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import List from "./List";
 import Calendar from "./Calendar";
 import EditLog from "./EditLog";
+import AlertNothing from "./alert/AlertNothing";
 import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
-import axios from "axios";
-import { API_BASE_URL } from "./api/api-config";
 
 export default function Search() {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
   const [licensePlate, setLicensePlate] = useState("");             // 차량번호 입력 저장
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록
-  const [noRecordsPopup, setNoRecordsPopup] = useState(false);      // 검색결과 유무 팝업상태
+  const [open, setOpen] = useState(false);                          // 검색결과 유무 팝업상태
 
   const [startDate, setStartDate] = useState(null);                 // 시작날짜
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [historyRows, setHistoryRows] = useState([]);    
+  const [historyRows, setHistoryRows] = useState([]);
 
-  const [licensePlateBeforeModification, setLicensePlateBeforeModification] = useState("");
-  const [licensePlateAfterModification, setLicensePlateAfterModification] = useState("");
-  // const [modificationDateTime, setModificationDateTime] = useState("");
+  useEffect(() => {
+    fetchEditHistory()
+  }, []);
+
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
@@ -42,7 +42,7 @@ export default function Search() {
           });
           setRows(updatedRows);
         } else {
-          setNoRecordsPopup(true);
+          setOpen(true);
           setRows([]);
         }
       })
@@ -65,8 +65,6 @@ export default function Search() {
     console.log("Formatted startDate:", formattedStartDate);
     console.log("Formatted endDate:", formattedEndDate);
 
-
-
     call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
       .then((data) => {
         console.log("data", data);
@@ -77,18 +75,16 @@ export default function Search() {
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
           });
-          setHistoryRows(updatedRows);
+          setRows(updatedRows);
         } else {
           console.error("데이터가 배열이 아닙니다:", responseData.data);
+          setOpen(true);
         }
       })
       .catch((error) => {
         console.error("데이터 가져오기 오류:", error);
       });
   };
-
-  useEffect(() => {fetchEditHistory()
-  }, []);
 
   //6.수정/삭제 기록 조회
   const fetchEditHistory = () => {
@@ -99,12 +95,18 @@ export default function Search() {
         console.log("data", data.data);
         const responseData = data.data;
 
-        if (responseData.length > 0) {
-          setHistoryRows(responseData)
+        if (Array.isArray(responseData)) {
+          const updatedRows = responseData.map((record, index) => {
+            const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+            return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
+          });
+          setHistoryRows(updatedRows)
+        } else {
+          console.error("데이터가 배열이 아닙니다:", responseData.data);
         }
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("데이터 가져오기 오류:", error);
       });
   };
 
@@ -113,7 +115,7 @@ export default function Search() {
   };
 
   const handleCloseNoRecordsPopup = () => {
-    setNoRecordsPopup(false);
+    setOpen(false);
   };
 
   const onDateChange = (newStartDate, newEndDate) => {
@@ -153,7 +155,7 @@ export default function Search() {
               onDateChange={onDateChange}
             />
 
-            <Box sx={{ width: "100%", marginTop: "70px", display: "flex", gap: "15px", }}>
+            <Box sx={{ width: "100%", marginTop: "55px", display: "flex", gap: "15px", justifyContent: "center", alignItems: "center" }}>
               <Box sx={{ width: "70%" }}>
                 <TextField
                   label="차량번호 조회"
@@ -188,29 +190,38 @@ export default function Search() {
                 </Button>
               </Box>
             </Box>
-            <Snackbar
-              open={noRecordsPopup}
-              autoHideDuration={1000}
-              onClose={handleCloseNoRecordsPopup}
-              message="조회된 차량이 없습니다."
-              sx={{ marginBottom: "360px" }}
-            />
+            <AlertNothing severity="error" open={open}
+              setOpen={setOpen}
+              text={"조회된 차량이 없습니다."} />
             <Box
               sx={{
+                width: "100%",
                 display: "flex",
-                height: "50vh",
-                marginTop: "70px",
-                justifyContent: "center",
-                alignItems: "center",
-                border: "1px solid rgb(189, 188, 188)",
+                marginTop: "35px",
+                flexDirection: "column"
+                // border: "1px solid rgb(189, 188, 188)",
               }}
             >
-              <EditLog
-                historyRows = {historyRows}
-                licensePlateBeforeModification={licensePlateBeforeModification}
-                licensePlateAfterModification={licensePlateAfterModification}
-                // modificationDateTime={modificationDateTime}
-              />
+              <Typography variant="수정/삭제 조회" sx={{ marginBottom: "10px", textAlign: "left" }}>
+                수정/삭제 조회
+              </Typography>
+
+              <Box sx={{
+                width: "100%",
+                display: "flex",
+                border: "1px solid rgb(189, 188, 188)",
+              }}>
+                <EditLog
+                  sx={{
+                    width: "100%",
+                    height: "50vh",
+                    display: "flex",
+                    border: "1px solid rgb(189, 188, 188)",
+                    alignItems: "center",
+                  }}
+                  historyRows={historyRows}
+                />
+              </Box>
             </Box>
           </Box>
         </Box>
