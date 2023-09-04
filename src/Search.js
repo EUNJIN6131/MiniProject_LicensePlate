@@ -18,6 +18,7 @@ export default function Search({selectedTab}) {
   const [startDate, setStartDate] = useState(null);                 // 시작날짜
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
+  const [resetDateRange, setResetDateRange] = useState(true);
   const [calendarLoaded, setCalendarLoaded] = useState(false);
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
@@ -27,14 +28,29 @@ export default function Search({selectedTab}) {
     fetchEditHistory()
   }, []);
 
+  // useEffect(() => {
+  //   if (selectedTab === 2) {
+  //     const today = dayjs();
+  //     setStartDate(today);
+  //     setEndDate(today);
+  //     onQuerySubmit(today, today);
+  //   }
+  // }, [selectedTab]);
+
   useEffect(() => {
     if (selectedTab === 2) {
+      console.log("selectedTab 검색 탭 클릭", selectedTab)
       const today = dayjs();
-      setStartDate(today);
-      setEndDate(today);
+      if (resetDateRange) {
+        setStartDate(startDate);
+        setEndDate(endDate);
+      }
       onQuerySubmit(today, today);
+      setResetDateRange(false); 
+    } else {
+      setResetDateRange(true); 
     }
-  }, [selectedTab]);
+  }, [selectedTab, setStartDate, setEndDate, setResetDateRange]);
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
