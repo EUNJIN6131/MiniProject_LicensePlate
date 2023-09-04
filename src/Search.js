@@ -39,18 +39,18 @@ export default function Search({selectedTab}) {
 
   useEffect(() => {
     if (selectedTab === 2) {
-      console.log("selectedTab 검색 탭 클릭", selectedTab)
       const today = dayjs();
       if (resetDateRange) {
+        // Reset to today's date
         setStartDate(today);
         setEndDate(today);
       }
-      onQuerySubmit(today, today);
-      setResetDateRange(false); 
+      onQuerySubmit(startDate, endDate);
+      setResetDateRange(false); // Toggle the reset flag
     } else {
-      setResetDateRange(true); 
+      setResetDateRange(true); // Reset the flag when switching to other tabs
     }
-  }, [selectedTab, setResetDateRange]);
+  }, [selectedTab, startDate, endDate, resetDateRange]);
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
