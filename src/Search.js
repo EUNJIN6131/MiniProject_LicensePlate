@@ -45,12 +45,12 @@ export default function Search({selectedTab}) {
         setStartDate(today);
         setEndDate(today);
       }
-      onQuerySubmit(startDate, endDate);
+      onQuerySubmit(today, today);
       setResetDateRange(false); 
     } else {
       setResetDateRange(true);
     }
-  }, [selectedTab, startDate, endDate, resetDateRange]);
+  }, [selectedTab, resetDateRange]);
 
 
   // 3.차량 번호별 로그 조회
