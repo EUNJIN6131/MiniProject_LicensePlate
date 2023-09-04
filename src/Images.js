@@ -35,6 +35,7 @@ export default function Images({ showRecord }) {
       // 이미지 Ref에 접근하여 src 속성 얻기
       const src = imageRef.current ? imageRef.current.src : '';
       showRecord(src);
+      console.log("imageRef", imageRef)
     }
   }, [currentImageIndex, showRecord]);
 
