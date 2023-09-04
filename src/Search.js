@@ -3,7 +3,7 @@ import { Box, Button, TextField, Snackbar } from "@mui/material";
 import List from "./List";
 import Calendar from "./Calendar";
 import EditLog from "./EditLog";
-import { useState, } from "react";
+import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
 import axios from "axios";
@@ -20,11 +20,11 @@ export default function Search() {
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [isModificationLogVisible, setIsModificationLogVisible] = useState(false);
+  const [historyRows, setHistoryRows] = useState([]);    
+
   const [licensePlateBeforeModification, setLicensePlateBeforeModification] = useState("");
   const [licensePlateAfterModification, setLicensePlateAfterModification] = useState("");
-  const [modificationDateTime, setModificationDateTime] = useState("");
-
+  // const [modificationDateTime, setModificationDateTime] = useState("");
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
@@ -65,6 +65,8 @@ export default function Search() {
     console.log("Formatted startDate:", formattedStartDate);
     console.log("Formatted endDate:", formattedEndDate);
 
+
+
     call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
       .then((data) => {
         console.log("data", data);
@@ -75,7 +77,7 @@ export default function Search() {
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
           });
-          setRows(updatedRows);
+          setHistoryRows(updatedRows);
         } else {
           console.error("데이터가 배열이 아닙니다:", responseData.data);
         }
@@ -85,37 +87,26 @@ export default function Search() {
       });
   };
 
+  useEffect(() => {fetchEditHistory()
+  }, []);
+
   //6.수정/삭제 기록 조회
   const fetchEditHistory = () => {
+    console.log("Button clicked");
 
-    if (rowSelectionModel.length > 0) {
-      const selectedRow = rows[rowSelectionModel[0] - 1]; // Get the first selected row
-      const logId = selectedRow.logId;
+    call(`/main/history`, "GET", null)
+      .then((data) => {
+        console.log("data", data.data);
+        const responseData = data.data;
 
-      axios
-        .get(`${API_BASE_URL}/main/history/${logId}`) // logId를 사용하여 서버에서 수정 로그 정보 가져오기
-        .then((data) => {
-          const editHistory = data.data;
-          if (selectedRow.state) {
-            // 수정 로그 정보를 상태로 설정
-            setIsModificationLogVisible(true);
-            setLicensePlateBeforeModification(editHistory.previousText);
-            setLicensePlateAfterModification(editHistory.currentText);
-            setModificationDateTime(editHistory.date);
-
-          } else {
-            // 수정 로그 정보 없음
-            setIsModificationLogVisible(false);
-            setLicensePlateBeforeModification("");
-            setLicensePlateAfterModification("");
-            setModificationDateTime("");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching edit history:", error);
-        });
-    };
-  }
+        if (responseData.length > 0) {
+          setHistoryRows(responseData)
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
 
   const handleLicensePlateChange = (event) => {
     setLicensePlate(event.target.value);
@@ -204,25 +195,23 @@ export default function Search() {
               message="조회된 차량이 없습니다."
               sx={{ marginBottom: "360px" }}
             />
-            {isModificationLogVisible && (
-              <Box
-                sx={{
-                  display: "flex",
-                  height: "50vh",
-                  marginTop: "70px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  border: "1px solid rgb(189, 188, 188)",
-                }}
-              >
-                <EditLog
-                  isModificationLogVisible={isModificationLogVisible}
-                  licensePlateBeforeModification={licensePlateBeforeModification}
-                  licensePlateAfterModification={licensePlateAfterModification}
-                  modificationDateTime={modificationDateTime}
-                />
-              </Box>
-            )}
+            <Box
+              sx={{
+                display: "flex",
+                height: "50vh",
+                marginTop: "70px",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid rgb(189, 188, 188)",
+              }}
+            >
+              <EditLog
+                historyRows = {historyRows}
+                licensePlateBeforeModification={licensePlateBeforeModification}
+                licensePlateAfterModification={licensePlateAfterModification}
+                // modificationDateTime={modificationDateTime}
+              />
+            </Box>
           </Box>
         </Box>
         <Box
@@ -236,7 +225,6 @@ export default function Search() {
         >
           {/* <List isAdmin={isAdmin} rows={rows} /> */}
           <List setRows={setRows} rows={rows}
-            fetchEditHistory={fetchEditHistory} setIsModificationLogVisible={setIsModificationLogVisible}
             rowSelectionModel={rowSelectionModel} setRowSelectionModel={setRowSelectionModel}
           />
         </Box>

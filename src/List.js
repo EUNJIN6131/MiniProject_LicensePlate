@@ -47,7 +47,7 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, fetchEditHistory, setIsModificationLogVisible, rowSelectionModel, setRowSelectionModel}) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
@@ -79,27 +79,9 @@ export default function List({ rows, setRows, fetchEditHistory, setIsModificatio
     return updatedRow;
   };
 
-  // const handleRowSelection = (newRowSelectionModel) => {
-  //   setRowSelectionModel(newRowSelectionModel);
-  // }
-  
   const handleRowSelection = (newRowSelectionModel) => {
     setRowSelectionModel(newRowSelectionModel);
-
-    if (newRowSelectionModel.length === 1) {
-      const selectedRowIndex = newRowSelectionModel[0] - 1;
-      const selectedRow = rows[selectedRowIndex];
-
-      if (selectedRow.state === true) {
-        // 수정 로그 정보 가져오기
-        fetchEditHistory(selectedRow.logId);
-      } else {
-        setIsModificationLogVisible(false);
-      }
-    } else {
-      setIsModificationLogVisible(false);
-    }
-  };
+  }
 
   // 7.로그 수정(admin)
   const handleEditClick = () => {
