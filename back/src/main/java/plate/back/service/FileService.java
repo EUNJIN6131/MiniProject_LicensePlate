@@ -70,7 +70,9 @@ public class FileService {
         List<KeyVersion> keysToDelete = new ArrayList<>();
 
         keysToDelete.add(new KeyVersion(directories[0] + vehicleImgTitle));
+        keysToDelete.add(new KeyVersion(directories[2] + vehicleImgTitle));
         keysToDelete.add(new KeyVersion(directories[1] + plateImgTitle));
+        keysToDelete.add(new KeyVersion(directories[3] + plateImgTitle));
 
         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket)
                 .withKeys(keysToDelete);

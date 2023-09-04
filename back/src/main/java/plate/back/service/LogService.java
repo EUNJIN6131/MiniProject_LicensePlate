@@ -46,7 +46,7 @@ public class LogService {
 
     private final FlaskService flaskService;
 
-    public List<LogDto> recordLog(MultipartFile file) throws IOException {
+    public LogDto recordLog(MultipartFile file) throws IOException {
 
         // flask api 호출
         LinkedHashMap<String, Object> response = (LinkedHashMap<String, Object>) flaskService.callApi(file).getBody();
@@ -125,7 +125,7 @@ public class LogService {
         }
 
         // logDto 구성
-        List<LogDto> list = new ArrayList<>(Arrays.asList(LogDto.builder()
+        LogDto dto = LogDto.builder()
                 .logId(savedLog.getLogId())
                 .vehicleImage(vehicleImg.getImageUrl())
                 .plateImage(plateImg.getImageUrl())
@@ -133,8 +133,8 @@ public class LogService {
                 .date(savedLog.getDate())
                 .licensePlate(savedLog.getLicensePlate())
                 .accuracy(savedLog.getAccuracy() == 0.0 ? "-" : String.valueOf(savedLog.getAccuracy()))
-                .build()));
-        return list;
+                .build();
+        return dto;
     }
 
     // LogEntity & ImageEntity -> LogDto
@@ -194,6 +194,7 @@ public class LogService {
         List<HistoryDto> list = new ArrayList<>();
         for (HistoryEntity entity : entities) {
             list.add(HistoryDto.builder()
+                    .id(entity.getId())
                     .logId(entity.getLogId())
                     .userId(entity.getUserId())
                     .workType(entity.getWorkType())
@@ -205,61 +206,71 @@ public class LogService {
         return list;
     }
 
-    public List<LogDto> updateLog(LogDto dto) throws IOException {
-        Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
-        if (!optionalLog.isPresent()) {
-            throw new EntityNotFoundException("LogId not present in the database");
+    public Boolean updateLog(ArrayList<LogDto> list, String userId) throws IOException {
+        for (LogDto dto : list) {
+            Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
+            if (!optionalLog.isPresent()) {
+                throw new EntityNotFoundException("LogId not present in the database");
+            }
+
+            LogEntity entity = optionalLog.get();
+
+            // history 기록
+            histRepo.save(HistoryEntity.builder()
+                    .logId(dto.getLogId())
+                    .previousText(entity.getLicensePlate())
+                    .currentText(dto.getLicensePlate())
+                    .workType("update")
+                    .userId("admin").build());
+
+            // 수정된 log 기록
+            entity.setLicensePlate(dto.getLicensePlate());
+            entity.setState("수정 완료");
+
+            logRepo.save(entity);
+
+            dto.setState("수정 완료");
+            // AWS S3 파일 이동
+            List<ImageEntity> imgEntities = imgRepo.findByLogId(entity.getLogId());
+            String vehicleImgTitle = imgEntities.get(0).getImageTitle();
+            String plateImgTitle = imgEntities.get(1).getImageTitle();
+
+            try {
+                Map<String, String> urlMap = fileService.moveFile(vehicleImgTitle, plateImgTitle);
+                ImageEntity vehicleEntity = imgEntities.get(0);
+                ImageEntity plateEntity = imgEntities.get(1);
+
+                // image_url 수정
+                vehicleEntity.setImageUrl(urlMap.get("vehicle"));
+                imgRepo.save(vehicleEntity);
+                plateEntity.setImageUrl(urlMap.get("plate"));
+                imgRepo.save(plateEntity);
+
+                // AWS S3 파일 삭제
+                fileService.deleteFile(vehicleImgTitle, plateImgTitle);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
         }
-
-        LogEntity entity = optionalLog.get();
-
-        // history 기록
-        histRepo.save(HistoryEntity.builder()
-                .logId(dto.getLogId())
-                .previousText(entity.getLicensePlate())
-                .currentText(dto.getLicensePlate())
-                .workType("update")
-                .userId("admin").build());
-
-        // 수정된 log 기록
-        entity.setLicensePlate(dto.getLicensePlate());
-        entity.setState("수정 완료");
-
-        logRepo.save(entity);
-
-        dto.setState("수정 완료");
-        List<LogDto> list = Arrays.asList(dto);
-        // AWS S3 파일 이동
-        List<ImageEntity> imgEntities = imgRepo.findByLogId(entity.getLogId());
-        String vehicleImgTitle = imgEntities.get(0).getImageTitle();
-        String plateImgTitle = imgEntities.get(1).getImageTitle();
-
-        try {
-            Map<String, String> urlMap = fileService.moveFile(vehicleImgTitle, plateImgTitle);
-            ImageEntity vehicleEntity = imgEntities.get(0);
-            ImageEntity plateEntity = imgEntities.get(1);
-
-            // image_url 수정
-            vehicleEntity.setImageUrl(urlMap.get("vehicle"));
-            imgRepo.save(vehicleEntity);
-            plateEntity.setImageUrl(urlMap.get("plate"));
-            imgRepo.save(plateEntity);
-
-            // AWS S3 파일 삭제
-            fileService.deleteFile(vehicleImgTitle, plateImgTitle);
-        } catch (Exception e) {
-            return list;
-        }
-        return list;
-
+        return true;
     }
 
-    public List<Boolean> deleteLog(ArrayList<LogDto> list, String userId) {
+    public Boolean deleteLog(ArrayList<LogDto> list, String userId) {
         try {
             for (LogDto dto : list) {
+                int logId = dto.getLogId();
+                System.out.println("logId : " + logId);
+
+                // AWS S3 파일 삭제
+                List<ImageEntity> imgEntity = imgRepo.findByLogId(logId);
+                System.out.println("imgEntity : " + imgEntity.toString());
+                String vehicleImgTitle = imgEntity.get(0).getImageTitle();
+                String plateImgTitle = imgEntity.get(1).getImageTitle();
+                fileService.deleteFile(vehicleImgTitle, plateImgTitle);
+
                 // log 삭제
-                System.out.println("LogId : " + dto.getLogId());
-                logRepo.deleteById(dto.getLogId());
+                logRepo.deleteById(logId);
 
                 // history 기록
                 histRepo.save(HistoryEntity.builder()
@@ -269,10 +280,10 @@ public class LogService {
                         .workType("delete")
                         .userId(userId).build());
             }
-            return new ArrayList<Boolean>(Arrays.asList(true));
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<Boolean>(Arrays.asList(false));
+            return false;
         }
     }
 }

@@ -30,8 +30,8 @@ public class LogController {
     @PostMapping("/main/record")
     public ResponseEntity<?> recordLog(@RequestPart(value = "file") MultipartFile file) {
         try {
-            List<LogDto> list = logService.recordLog(file);
-            ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(list).build();
+            LogDto dto = logService.recordLog(file);
+            ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(dto).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();
@@ -45,7 +45,7 @@ public class LogController {
     public ResponseEntity<?> searchDate(@PathVariable String start, @PathVariable String end) {
         try {
             List<LogDto> list = logService.searchDate(start, end);
-            ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(list).build();
+            ResponseDto<List<LogDto>> response = ResponseDto.<List<LogDto>>builder().data(list).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();
@@ -59,7 +59,7 @@ public class LogController {
     public ResponseEntity<?> searchPlate(@PathVariable String plate) {
         try {
             List<LogDto> list = logService.searchPlate(plate);
-            ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(list).build();
+            ResponseDto<List<LogDto>> response = ResponseDto.<List<LogDto>>builder().data(list).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();
@@ -73,7 +73,7 @@ public class LogController {
     public ResponseEntity<?> getHistory() {
         try {
             List<HistoryDto> list = logService.getHistory();
-            ResponseDto<HistoryDto> response = ResponseDto.<HistoryDto>builder().data(list).build();
+            ResponseDto<List<HistoryDto>> response = ResponseDto.<List<HistoryDto>>builder().data(list).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();
@@ -84,10 +84,10 @@ public class LogController {
 
     // 7. 로그 수정(admin)
     @PutMapping("/main/update/{userId}")
-    public ResponseEntity<?> updateLog(@RequestBody LogDto dto, @PathVariable String userId) {
+    public ResponseEntity<?> updateLog(@RequestBody ArrayList<LogDto> list, @PathVariable String userId) {
         try {
-            List<LogDto> isUpdated = logService.updateLog(dto);
-            ResponseDto<LogDto> response = ResponseDto.<LogDto>builder().data(isUpdated).build();
+            Boolean isUpdated = logService.updateLog(list, userId);
+            ResponseDto<Boolean> response = ResponseDto.<Boolean>builder().data(isUpdated).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();
@@ -100,7 +100,7 @@ public class LogController {
     @DeleteMapping("/main/delete/{userId}")
     public ResponseEntity<?> deleteLog(@RequestBody ArrayList<LogDto> list, @PathVariable String userId) {
         try {
-            List<Boolean> isDeleted = logService.deleteLog(list, userId);
+            Boolean isDeleted = logService.deleteLog(list, userId);
             ResponseDto<Boolean> response = ResponseDto.<Boolean>builder().data(isDeleted).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {

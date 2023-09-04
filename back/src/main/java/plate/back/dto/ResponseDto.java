@@ -16,6 +16,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 public class ResponseDto<T> {
-    private List<T> data;
+    private T data;
     private String error;
 }

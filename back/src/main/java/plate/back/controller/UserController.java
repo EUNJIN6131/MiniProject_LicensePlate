@@ -1,62 +1,69 @@
 package plate.back.controller;
 
-import java.util.Arrays;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import plate.back.dto.ResponseDto;
-import plate.back.dto.UserDto;
-import plate.back.security.TokenProvider;
+import lombok.extern.slf4j.Slf4j;
+import plate.back.dto.Response;
+import plate.back.dto.user.UserRequestDto;
+import plate.back.lib.Helper;
 import plate.back.service.UserService;
 
+@Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/user")
 @RestController
 public class UserController {
 
     private final UserService userService;
+    private final Response response;
 
-    private final TokenProvider tokenProvider;
-
-    @PostMapping("/user/signup")
-    public ResponseEntity<?> signUp(@RequestBody UserDto dto) {
-        try {
-            boolean success = userService.signUp(dto);
-            System.out.println("success : " + success);
-            if (success) {
-                ResponseDto<String> response = ResponseDto.<String>builder()
-                        .data(Arrays.asList("회원가입 성공")).build();
-                return ResponseEntity.status(HttpStatus.OK).body(response);
-            } else {
-                ResponseDto<String> response = ResponseDto.<String>builder()
-                        .data(Arrays.asList("아이디 중복")).build();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-            }
-        } catch (Exception e) {
-            String error = e.getMessage();
-            ResponseDto<String> response = ResponseDto.<String>builder().error(error).build();
-            return ResponseEntity.badRequest().body(response);
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody UserRequestDto.SignUp signUp, Errors errors) {
+        // validation check
+        if (errors.hasErrors()) {
+            return response.invalidFields(Helper.refineErrors(errors));
         }
+        return userService.signUp(signUp);
     }
 
-    @PostMapping("/user/signin")
-    public ResponseEntity<?> signIn(@RequestBody UserDto userDto) {
-
-        if (userService.signIn(userDto)) {
-            System.out.println("로그인 성공");
-            // 토큰 생성
-            String jwts = tokenProvider.createToken(userDto.getUserId());
-            System.out.println("jwts:" + jwts);
-            // 생성된 토큰으로 응답을 생성
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + jwts).build();
-        } else {
-            System.out.println("로그인 실패");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @PostMapping("/signin")
+    public ResponseEntity<?> signIn(@RequestBody UserRequestDto.SignIn signIn, Errors errors) {
+        // validation check
+        if (errors.hasErrors()) {
+            return response.invalidFields(Helper.refineErrors(errors));
         }
+        return userService.signIn(signIn);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(@RequestBody UserRequestDto.Reissue reissue, Errors errors) {
+        // validation check
+        if (errors.hasErrors()) {
+            return response.invalidFields(Helper.refineErrors(errors));
+        }
+        return userService.reissue(reissue);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody UserRequestDto.Logout logout, Errors errors) {
+        // validation check
+        if (errors.hasErrors()) {
+            return response.invalidFields(Helper.refineErrors(errors));
+        }
+        return userService.logout(logout);
+    }
+
+    @GetMapping("/authority")
+    public ResponseEntity<?> authority() {
+        log.info("ADD ROLE_ADMIN");
+        return userService.authority();
     }
 }

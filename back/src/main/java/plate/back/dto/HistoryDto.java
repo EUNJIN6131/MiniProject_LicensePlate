@@ -16,6 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 public class HistoryDto {
+    private Integer id;
     private Integer logId;
     private String userId;
     private String workType;
