@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
 
-export default function Search(selectedTab) {
+export default function Search({selectedTab}) {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
   const [licensePlate, setLicensePlate] = useState("");             // 차량번호 입력 저장
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록

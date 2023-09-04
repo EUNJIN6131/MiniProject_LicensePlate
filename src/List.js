@@ -47,7 +47,7 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel,fetchEditHistory }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
