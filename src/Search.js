@@ -42,15 +42,15 @@ export default function Search({selectedTab}) {
       console.log("selectedTab 검색 탭 클릭", selectedTab)
       const today = dayjs();
       if (resetDateRange) {
-        setStartDate(startDate);
-        setEndDate(endDate);
+        setStartDate(today);
+        setEndDate(today);
       }
       onQuerySubmit(today, today);
       setResetDateRange(false); 
     } else {
       setResetDateRange(true); 
     }
-  }, [selectedTab, setStartDate, setEndDate, setResetDateRange]);
+  }, [selectedTab, setResetDateRange]);
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
