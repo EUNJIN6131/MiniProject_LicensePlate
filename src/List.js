@@ -47,7 +47,7 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel,fetchEditHistory }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
@@ -118,6 +118,11 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       })
       .then((response) => {
         console.log("수정 성공.", response.data);
+        const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
+        // 필터링된 행으로 'rows' 상태를 업데이트
+        
+        setRows(updatedRows);
+        fetchEditHistory();
       })
       .catch((error) => {
         console.error("수정 중 오류 발생", error);
@@ -187,11 +192,11 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       })
       .then((response) => {
         console.log("삭제 성공.", response.data);
-
         const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
 
         // 필터링된 행으로 'rows' 상태를 업데이트
         setRows(updatedRows);
+        fetchEditHistory();
       })
       .catch((error) => {
         console.error("삭제 중 오류 발생", error);

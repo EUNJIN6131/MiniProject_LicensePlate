@@ -246,6 +246,7 @@ export default function Search(selectedTab) {
           {/* <List isAdmin={isAdmin} rows={rows} /> */}
           <List setRows={setRows} rows={rows}
             rowSelectionModel={rowSelectionModel} setRowSelectionModel={setRowSelectionModel}
+            fetchEditHistory={fetchEditHistory}
           />
         </Box>
       </Box>
