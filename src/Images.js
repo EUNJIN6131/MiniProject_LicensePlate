@@ -26,28 +26,29 @@ export default function Images({ showRecord }) {
   const currentImage = imagesData[currentImageIndex];
 
   useEffect(() => {
-    console.log("currentImageIndex", currentImageIndex)
-    if (currentImage) {
-      // 이미지 Ref에 접근하여 src 속성 얻기
-      const src = imageRef.current ? imageRef.current.src : '';
-      loadImage(src);
-    }
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesData.length);
     }, 20000);
     return () => {
+      console.log("currentImageIndex", currentImageIndex)
+      if (currentImage) {
+        // 이미지 Ref에 접근하여 src 속성 얻기
+        const src = imageRef.current ? imageRef.current.src : '';
+        loadImage(src);
+      }
+
       clearInterval(interval);
     };
   }, [currentImageIndex]);
-  
+
 
   const loadImage = async (imageSrc) => {
     try {
       const response = await fetch(imageSrc);
       if (response.ok) {
         const blob = await response.blob();
-        showRecord(blob); 
+        showRecord(blob);
       } else {
         console.error('Failed to load image');
       }
@@ -55,7 +56,7 @@ export default function Images({ showRecord }) {
       console.error('Error loading image:', error);
     }
   };
-  
+
   // useEffect(() => {
   //   console.log("currentImageIndex", currentImageIndex)
   //   if (currentImage) {
