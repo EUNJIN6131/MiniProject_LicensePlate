@@ -6,7 +6,7 @@ import './Slideshow.css';
 const imagesData = [
   {
     id: 1,
-    src: '/car1.jpg',
+    src: 'https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/total/vehicle/05bbc11d-3d78-46f4-88f2-3d70fec0bc0b.jpg',
   },
   {
     id: 2,
@@ -15,6 +15,34 @@ const imagesData = [
   {
     id: 3,
     src: '/car3.jpg',
+  },
+  {
+    id: 4,
+    src: '/car4.jpg',
+  },
+  {
+    id: 5,
+    src: '/car5.jpg',
+  },
+  {
+    id: 6,
+    src: '/car6.jpg',
+  },
+  {
+    id: 7,
+    src: '/car7.jpg',
+  },
+  {
+    id: 8,
+    src: '/car8.jpg',
+  },
+  {
+    id: 9,
+    src: '/car9.jpg',
+  },
+  {
+    id: 10,
+    src: '/car10.jpg',
   },
 ];
 
