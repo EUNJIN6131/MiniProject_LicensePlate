@@ -24,7 +24,7 @@ export default function Images({ showRecord }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesData.length);
-    }, 10000);
+    }, 20000);
     return () => {
       clearInterval(interval);
     };
