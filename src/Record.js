@@ -12,7 +12,7 @@ export default function Record() {
   const [imageUpload, setImageUpload] = useState([]);
   const [recentNum, setRecentNum] = useState(null);
   const [imageQueue, setImageQueue] = useState([]);
-  
+
   // useEffect(() => {
   //   showRecord()
   // }, []);
@@ -25,7 +25,7 @@ export default function Record() {
 
     // 이미지 경로를 FormData에 추가
     const formData = new FormData();
-    
+
     formData.append("file", imageSrc);
     // for (let i = 0; i < imageSrc.length; i++) {
     //   formData.append("files", imageSrc[i]);
@@ -79,7 +79,7 @@ export default function Record() {
           <Box
             sx={{
               width: '100%',
-              height: '40vh',
+              height: '50vh',
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
@@ -88,7 +88,7 @@ export default function Record() {
           <Box
             sx={{
               width: '100%',
-              height: '55vh',
+              height: '45vh',
               border: "1px solid rgb(189, 188, 188)",
             }}
           >

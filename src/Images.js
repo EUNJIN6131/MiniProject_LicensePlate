@@ -37,7 +37,6 @@ export default function Images({ showRecord }) {
         const src = imageRef.current ? imageRef.current.src : '';
         loadImage(src);
       }
-
       clearInterval(interval);
     };
   }, [currentImageIndex]);
@@ -69,14 +68,13 @@ export default function Images({ showRecord }) {
   return (
     <div className="slideshow-container">
       {currentImage && (
-        <Card>
+        <Card  style={{ height: 'fit-content', width: '100%' }}>
           <CardMedia
             component="img"
             alt="Displayed Image"
             src={currentImage.src}
-            height="310px"
-            width="300px"
             ref={imageRef} // 이미지 요소에 Ref 설정
+            style={{ height: '50vh', width: '100%', objectFit: 'cover' }}
           />
         </Card>
       )}
