@@ -28,7 +28,7 @@ export default function Search({ selectedTab }) {
     fetchEditHistory()
   }, []);
 
-  // 3.차량 번호별 로그 조회
+  // 6.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
     console.log("Button clicked");
 
@@ -53,7 +53,7 @@ export default function Search({ selectedTab }) {
       });
   };
 
-  // 4.날짜별 로그 조회
+  // 5.날짜별 로그 조회
   const onQuerySubmit = async (startDate, endDate) => {
     console.log("Received startDate:", startDate);
     console.log("Received endDate:", endDate);
@@ -88,7 +88,7 @@ export default function Search({ selectedTab }) {
       });
   };
 
-  //6.수정/삭제 기록 조회
+  // 7.수정/삭제 기록 조회
   const fetchEditHistory = () => {
     console.log("Button clicked");
 

@@ -83,7 +83,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     setRowSelectionModel(newRowSelectionModel);
   }
 
-  // 7.로그 수정(admin)
+  // 8.로그 수정(admin)
   const handleEditClick = () => {
     console.log("Edit button clicked");
 
@@ -122,7 +122,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       });
   }
 
-  // 8.로그 삭제(admin)
+  // 9.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
 

@@ -9,40 +9,80 @@ const imagesData = [
     src: 'https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/total/vehicle/05bbc11d-3d78-46f4-88f2-3d70fec0bc0b.jpg',
   },
   {
-    id: 2,
-    src: '/car2.jpg',
+    id: 2, 
+    src: './images/car2.jpg',
   },
   {
     id: 3,
-    src: '/car3.jpg',
+    src: './images/car3.jpg',
   },
   {
     id: 4,
-    src: '/car4.jpg',
+    src: './images/car4.jpg',
   },
   {
     id: 5,
-    src: '/car5.jpg',
+    src: './images/car5.jpg',
   },
   {
     id: 6,
-    src: '/car6.jpg',
+    src: './images/car6.jpg',
   },
   {
     id: 7,
-    src: '/car7.jpg',
+    src: './images/car7.jpg',
   },
   {
     id: 8,
-    src: '/car8.jpg',
+    src: './images/car8.jpg',
   },
   {
     id: 9,
-    src: '/car9.jpg',
+    src: './images/car9.jpg',
   },
   {
     id: 10,
-    src: '/car10.jpg',
+    src: './images/car10.jpg',
+  },
+  {
+    id: 11,
+    src: './images/car11.jpg',
+  },
+  {
+    id: 12,
+    src: './images/car12.jpg',
+  },
+  {
+    id: 13,
+    src: './images/car13.jpg',
+  },
+  {
+    id: 14,
+    src: './images/car14.jpg',
+  },
+  {
+    id: 15,
+    src: './images/car15.jpg',
+  },
+  {
+    id: 16,
+    src: './images/car16.jpg',
+  },
+  {
+    id: 17,
+    src: './images/car17.jpg',
+  },
+  {
+    id: 18,
+    src: './images/car18.jpg',
+  },
+  {
+    id: 19,
+    src: './images/car19.jpg',
+  },
+  {
+    id: 20,
+    src: './images/car20.jpg',
   },
 ];
 
