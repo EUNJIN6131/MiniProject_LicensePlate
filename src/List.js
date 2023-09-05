@@ -9,6 +9,7 @@ import axios from "axios";
 
 const columns = [
   { field: "logId", type: "checkbox", headerName: "seq", width: 100, headerAlign: "center", align: "center" },
+  { field: "modelType", headerName: "모델명", width: 100, headerAlign: "center", align: "center" },
   { field: "licensePlate", headerName: "차량번호", width: 200, headerAlign: "center", align: "center", editable: true },
   {
     field: "accuracy",
