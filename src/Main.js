@@ -31,7 +31,7 @@ export default function Main() {
         onTabChange={handleTabChange}
         onLogout={handleLogout}
       />
-      {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} />}
+      {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} onTabChange={handleTabChange} />}
       {selectedTab === 1 && <Record />}
       {selectedTab === 2 && <Search selectedTab={selectedTab}/>}
       {selectedTab === 3 && <Enroll />}

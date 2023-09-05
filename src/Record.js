@@ -4,35 +4,57 @@ import Images from "./Images";
 import List from "./List";
 import { useState, useEffect } from 'react';
 import axios from "axios";
-import { call } from "./api/ApiService";
+import { API_BASE_URL } from "./api/api-config";
+
+
 export default function Record() {
 
   const [imageUpload, setImageUpload] = useState([]);
   const [recentNum, setRecentNum] = useState(null);
-
+  const [imageQueue, setImageQueue] = useState([]);
+  
   // useEffect(() => {
   //   showRecord()
   // }, []);
 
+
   // 3.차량 출입 로그 기록
   const showRecord = async (imageSrc) => {
     console.log("Enter the car");
-    
+
     // 이미지 경로를 FormData에 추가
     const formData = new FormData();
+    
     formData.append("file", imageSrc);
-  
-    console.log("File appended:", formData.get("file"));
-  
+    // for (let i = 0; i < imageSrc.length; i++) {
+    //   formData.append("files", imageSrc[i]);
+    // }
+
+    console.log("imageSrc appended:", imageSrc);
+    console.log('FormData 내용:', formData);
+
     try {
-      const response = await call(`/main/record`, "POST", formData);
+      const response = await axios.post(`${API_BASE_URL}/main/record`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       const data = response.data;
       console.log("Data", data);
     } catch (error) {
-      console.error("Error sending image:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error setting up the request:", error.message);
+      }
     }
   };
-  
+
+
+
   // const responseData = data.data;
   // if (Array.isArray(responseData)) {
   //   const updatedRows = responseData.map((img, index) => {
@@ -76,7 +98,7 @@ export default function Record() {
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            <Images  setImageUpload={setImageUpload} showRecord={showRecord} />
+            <Images setImageUpload={setImageUpload} showRecord={showRecord} />
           </Box>
           <Box
             sx={{

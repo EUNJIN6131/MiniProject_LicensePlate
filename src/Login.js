@@ -46,15 +46,16 @@ export default function Login({onTabChange}) {
     console.log("Password:", formData.password);
     const url = API_BASE_URL + "/user/signin";
     console.log(url);
+
     try {
       const res = await axios.post(url, formData);
       if (res.status === 200) {
         const accessToken = res.headers["authorization"];
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
-        // console.log("로그인성공")
-        // onTabChange(1);
-        // navigate("/main/record");
+        console.log("로그인 성공")
+        onTabChange(1);
+        navigate("/main/record");
       }
     } catch (error) {
       setOpen(true);
@@ -64,7 +65,6 @@ export default function Login({onTabChange}) {
 
 
   return (
-
     <Box sx={{ width: '100%', }}>
       <CssBaseline />
       <Box sx={{
