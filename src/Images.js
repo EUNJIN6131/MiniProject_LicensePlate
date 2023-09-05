@@ -30,49 +30,37 @@ export default function Images({ showRecord }) {
     };
   }, []);
 
-  // const loadImage = async (imageSrc,) => {
-  //   try {
-  //     const response = await fetch(imageSrc);
-  //     if (response.ok) {
-  //       const blob = await response.blob();
-  //       showRecord(blob); 
-  //     } else {
-  //       console.error('Failed to load image');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error loading image:', error);
-  //   }
-  // };
+  const loadImage = async (imageSrc,) => {
+    try {
+      const response = await fetch(imageSrc);
+      if (response.ok) {
+        const blob = await response.blob();
+        showRecord(blob); 
+      } else {
+        console.error('Failed to load image');
+      }
+    } catch (error) {
+      console.error('Error loading image:', error);
+    }
+  };
   
   useEffect(() => {
-    if (currentImageIndex >= 0 && currentImageIndex < imagesData.length) {
-      // Get the current image
-      const currentImage = imagesData[currentImageIndex];
-      const src = currentImage.src;
-      // Update the image source
-      imageRef.current.src = src;
-      // Send the current image to the showRecord function
-      showRecord(src);
+    if (currentImage) {
+      // 이미지 Ref에 접근하여 src 속성 얻기
+      const src = imageRef.current ? imageRef.current.src : '';
+      // showRecord(src);
+      loadImage(src);
     }
-  }, [currentImageIndex, ]);
-
-  // useEffect(() => {
-  //   if (currentImage) {
-  //     // 이미지 Ref에 접근하여 src 속성 얻기
-  //     const src = imageRef.current ? imageRef.current.src : '';
-  //     // showRecord(src);
-  //     loadImage(src);
-  //   }
-  // }, [currentImageIndex]);
+  }, [currentImageIndex]);
 
   return (
     <div className="slideshow-container">
-         {currentImageIndex >= 0 && currentImageIndex < imagesData.length && (
+      {currentImage && (
         <Card>
           <CardMedia
             component="img"
             alt="Displayed Image"
-            src={imagesData[currentImageIndex].src}
+            src={currentImage.src}
             height="310px"
             width="300px"
             ref={imageRef} // 이미지 요소에 Ref 설정

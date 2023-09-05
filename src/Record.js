@@ -21,6 +21,7 @@ export default function Record() {
   // 3.차량 출입 로그 기록
   const showRecord = async (imageSrc) => {
     console.log("Enter the car");
+    console.log("Image source received:", imageSrc);
 
     // 이미지 경로를 FormData에 추가
     const formData = new FormData();
@@ -52,19 +53,6 @@ export default function Record() {
       }
     }
   };
-
-
-
-  // const responseData = data.data;
-  // if (Array.isArray(responseData)) {
-  //   const updatedRows = responseData.map((img, index) => {
-  //     return { ...img, id: index + 1,};         // 새 객체 생성, ... <- 확산 연산자
-  //   });
-  //   setImageUpload(updatedRows);
-  // } else {
-  //   console.error("이미지가 없습니다:", responseData.data);
-  // }
-  // };
 
   return (
     <Box sx={{ margin: "20px" }}>
