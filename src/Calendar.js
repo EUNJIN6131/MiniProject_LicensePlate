@@ -5,12 +5,14 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { Box, Button } from "@mui/material";
 import dayjs from 'dayjs';
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { useState, useEffect } from "react";
 
 dayjs.extend(advancedFormat);
 
-export default function Calendar({ startDate, endDate, setStartDate, setEndDate, setRows, onDateChange, onQuerySubmit }) {
+export default function Calendar({ startDate, endDate, setStartDate, setEndDate, setRows, onDateChange, onQuerySubmit, selectedTab, }) {
     const [calendarDate, setCalendarDate] = React.useState(new Date());
     const [dateButtonText, setDateButtonText] = React.useState('');
+    const [resetDateRange, setResetDateRange] = useState(true);
 
     const handleShortcutClick = (shortcut) => {
         const today = dayjs();
@@ -21,6 +23,8 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         setEndDate(newEndDate);
         setCalendarDate(today);
         setDateButtonText(label);
+
+        onQuerySubmit(newStartDate, newEndDate);
     };
 
     const shortcuts = [
@@ -73,6 +77,20 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
         onQuerySubmit(startDate, endDate);
     };
 
+    useEffect(() => {
+        if (selectedTab === 2) {
+            const today = dayjs();
+            if (resetDateRange) {
+                setStartDate(today);
+                setEndDate(today);
+                onQuerySubmit(today, today);
+                handleQueryButtonClick() // 오늘 날짜로 데이터 조회
+            }
+            setResetDateRange(false);
+        } else {
+            setResetDateRange(true);
+        }
+    }, [selectedTab, resetDateRange]);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>

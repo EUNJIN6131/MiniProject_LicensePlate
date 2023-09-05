@@ -111,9 +111,9 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       })
       .then((response) => {
         console.log("수정 성공.", response.data);
-        const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
-        // 필터링된 행으로 'rows' 상태를 업데이트
+        const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
         
+        // 필터링된 행으로 'rows' 상태를 업데이트
         setRows(updatedRows);
         fetchEditHistory();
       })
@@ -177,7 +177,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
             ),
           }}
           // 행의 logId 수정, 삭제 추적 후 렌더링
-          key={(row) => row.logId}
+          key={(row) => row.logId }
         />
       </div>
     )

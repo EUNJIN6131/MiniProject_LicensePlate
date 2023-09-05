@@ -9,7 +9,7 @@ import { call } from "./api/ApiService";
 import { format, parseISO, } from "date-fns";
 import dayjs from 'dayjs';
 
-export default function Search({selectedTab}) {
+export default function Search({ selectedTab }) {
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
   const [licensePlate, setLicensePlate] = useState("");             // 차량번호 입력 저장
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록
@@ -27,31 +27,6 @@ export default function Search({selectedTab}) {
   useEffect(() => {
     fetchEditHistory()
   }, []);
-
-  // useEffect(() => {
-  //   if (selectedTab === 2) {
-  //     const today = dayjs();
-  //     setStartDate(today);
-  //     setEndDate(today);
-  //     onQuerySubmit(today, today);
-  //   }
-  // }, [selectedTab]);
-
-  useEffect(() => {
-    if (selectedTab === 2) {
-      const today = dayjs();
-      if (resetDateRange) {
-        
-        setStartDate(today);
-        setEndDate(today);
-      }
-      onQuerySubmit(today, today);
-      setResetDateRange(false); 
-    } else {
-      setResetDateRange(true);
-    }
-  }, [selectedTab, resetDateRange]);
-
 
   // 3.차량 번호별 로그 조회
   const handleSearchClick = (licensePlate) => {
@@ -171,7 +146,7 @@ export default function Search({selectedTab}) {
             paddingBlock: "10px",
           }}
         >
-          <Box sx={{ margin: "20px" }}>
+          <Box sx={{ margin: "20px", }}>
             <Calendar
               startDate={startDate}
               endDate={endDate}
@@ -180,6 +155,7 @@ export default function Search({selectedTab}) {
               onQuerySubmit={onQuerySubmit}
               setRows={setRows}
               onDateChange={onDateChange}
+              selectedTab={selectedTab}
             />
 
             <Box sx={{ width: "100%", marginTop: "55px", display: "flex", gap: "15px", justifyContent: "center", alignItems: "center" }}>
@@ -235,13 +211,16 @@ export default function Search({selectedTab}) {
 
               <Box sx={{
                 width: "100%",
+                height: "50vh",
                 display: "flex",
+                maxHeight: "50vh",
                 border: "1px solid rgb(189, 188, 188)",
               }}>
                 <EditLog
                   sx={{
                     width: "100%",
                     height: "50vh",
+                    maxHeight: "50vh",
                     display: "flex",
                     border: "1px solid rgb(189, 188, 188)",
                     alignItems: "center",
