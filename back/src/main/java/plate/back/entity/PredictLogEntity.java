@@ -37,6 +37,9 @@ public class PredictLogEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private LogEntity logEntity;
 
+    @Column(nullable = false, length = 10)
+    private String modelType;
+
     @Column(nullable = false, length = 20)
     private String predictedText;
 
@@ -45,4 +48,5 @@ public class PredictLogEntity {
 
     @Column(nullable = false)
     private boolean isPresent;
+
 }

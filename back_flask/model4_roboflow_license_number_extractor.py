@@ -25,10 +25,16 @@ def model_result(image_path):
             highest_confidence_by_x[rounded_x] = prediction
 
     for x, prediction in highest_confidence_by_x.items():
-        print(f'class: {prediction["class"]}, confidence: {prediction["confidence"]:.2f}')
         classes.append(prediction["class"])
         confidences.append(prediction["confidence"])
-    return classes, confidences
+
+    # Concatenate the classes list to get the final result
+    result_string = ''.join(classes)
+
+    # Calculate the average confidence
+    average_confidence = sum(confidences) / len(confidences) * 100
+
+    return [result_string, average_confidence]
 
 if __name__ == "__main__":
     model_result()

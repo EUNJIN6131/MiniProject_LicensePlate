@@ -36,6 +36,9 @@ public class LogEntity {
     private Integer logId;
 
     @Column(nullable = false, length = 20)
+    private String modelType;
+
+    @Column(nullable = false, length = 20)
     private String licensePlate;
 
     @Column(nullable = false)

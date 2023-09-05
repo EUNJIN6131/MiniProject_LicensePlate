@@ -49,8 +49,10 @@
 // .accuracy((double) random.nextInt(100))
 // .state(stateArr[random.nextInt(2)])
 // .build());
+// String[] modelTypes = new String[] { "ocr", "vgg", "robo" };
 // for (int i = 0; i < 3; i++) {
 // predRepo.save(PredictLogEntity.builder()
+// .modelType(modelTypes[i])
 // .logEntity(log)
 // .predictedText(i == 0 ? log.getLicensePlate() :
 // String.valueOf(random.nextInt(10000)))

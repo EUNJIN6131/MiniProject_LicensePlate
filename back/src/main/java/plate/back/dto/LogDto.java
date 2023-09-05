@@ -17,6 +17,7 @@ import lombok.ToString;
 @Builder
 public class LogDto {
     private Integer logId;
+    private String modelType;
     private String licensePlate;
     private String accuracy;
     private String vehicleImage;

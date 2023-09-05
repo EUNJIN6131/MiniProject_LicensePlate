@@ -1,4 +1,5 @@
 import os
+import io
 import shutil
 from PIL import Image
 import uuid
@@ -25,9 +26,16 @@ def YOLOv5(img_file_name, model, img_savefolder):
             #now_time = datetime.datetime.now().strftime(DATETIME_FORMAT)
             if not os.path.exists(img_savefolder):
                 os.makedirs(img_savefolder)
+                
             img_savename = f"{img_savefolder}/{uuid.uuid4()}.jpg"
             img_with_box.save(img_savename)
-            return img_savename
+            
+            img_byte_array = io.BytesIO()
+            img_with_box.save(img_byte_array, format='JPEG')
+            
+            # Reset the byte buffer to the beginning
+            img_byte_array.seek(0)
+            return img_savename, img_byte_array
     return None
 
 def YOLOv5_Load(img_file_name, img_savefolder):

@@ -13,11 +13,13 @@ import lombok.ToString;
 @AllArgsConstructor
 public class PredictDto {
     private Integer logId;
+    private String modelType;
     private String predictedText;
     private double accuracy;
     private boolean isPresent;
 
-    public PredictDto(String predictedText, double accuracy) {
+    public PredictDto(String modelType, String predictedText, double accuracy) {
+        this.modelType = modelType;
         this.predictedText = predictedText;
         this.accuracy = accuracy;
     }

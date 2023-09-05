@@ -26,7 +26,7 @@ def model_result(image):
 
     if selected_text:
         print(f'Class: {selected_text}, Confidence: {max_confidence:.2f}')
-        return selected_text[-4:], max_confidence
+        return [selected_text[-4:], max_confidence]
     else:
         return (print("None"))
 

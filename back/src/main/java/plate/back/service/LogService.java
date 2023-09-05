@@ -51,11 +51,18 @@ public class LogService {
         // flask api 호출
         LinkedHashMap<String, Object> response = (LinkedHashMap<String, Object>) flaskService.callApi(file).getBody();
         System.out.println("Response : " + response.entrySet());
+        LinkedHashMap<String, ArrayList<Object>> predictValue = (LinkedHashMap<String, ArrayList<Object>>) response
+                .get("predictedResults");
 
-        ArrayList<ArrayList<Object>> predictValue = (ArrayList<ArrayList<Object>>) response.get("predictedResults");
         ArrayList<PredictDto> predList = new ArrayList<>();
-        for (ArrayList<Object> obj : predictValue) {
-            predList.add(new PredictDto(String.valueOf(obj.get(0)), (double) obj.get(1)));
+        for (String key : predictValue.keySet()) {
+            List<Object> list = predictValue.get(key);
+            if (list == null) {
+                predList.add(new PredictDto(key, "예측실패", 0));
+            } else {
+                predList.add(new PredictDto(key, String.valueOf(list.get(0)), (double) list.get(1)));
+                predList.add(new PredictDto(key, String.valueOf(list.get(0)), (double) list.get(1)));
+            }
         }
 
         boolean flag = false;
@@ -82,12 +89,14 @@ public class LogService {
 
         if (flag) {
             savedLog = logRepo.save(LogEntity.builder()
+                    .modelType(predList.get(idx).getModelType())
                     .licensePlate(predList.get(idx).getPredictedText())
                     .accuracy(maxVal)
                     .state("수정 불필요")
                     .date(new Date()).build());
         } else {
             savedLog = logRepo.save(LogEntity.builder()
+                    .modelType(predList.get(idx).getModelType())
                     .licensePlate("-")
                     .accuracy(0.0)
                     .state("수정 필요")
@@ -119,6 +128,7 @@ public class LogService {
             PredictDto dto = predList.get(i);
             PredictLogEntity predEntity = predRepo.save(PredictLogEntity.builder()
                     .logEntity(savedLog)
+                    .modelType(dto.getModelType())
                     .isPresent(dto.isPresent())
                     .accuracy(dto.getAccuracy())
                     .predictedText(dto.getPredictedText()).build());
@@ -131,6 +141,7 @@ public class LogService {
                 .plateImage(plateImg.getImageUrl())
                 .state(savedLog.getState())
                 .date(savedLog.getDate())
+                .modelType(savedLog.getModelType())
                 .licensePlate(savedLog.getLicensePlate())
                 .accuracy(savedLog.getAccuracy() == 0.0 ? "-" : String.valueOf(savedLog.getAccuracy()))
                 .build();
@@ -149,6 +160,7 @@ public class LogService {
 
             list.add(LogDto.builder()
                     .logId(logEntity.getLogId())
+                    .modelType(logEntity.getModelType())
                     .vehicleImage(vehicleImg)
                     .plateImage(plateImg)
                     .state(logEntity.getState())
