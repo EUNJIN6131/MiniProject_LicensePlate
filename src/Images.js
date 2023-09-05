@@ -12,6 +12,10 @@ const imagesData = [
     id: 2,
     src: '/car2.jpg',
   },
+  {
+    id: 3,
+    src: '/car3.jpg',
+  },
 ];
 
 export default function Images({ showRecord }) {
@@ -22,15 +26,23 @@ export default function Images({ showRecord }) {
   const currentImage = imagesData[currentImageIndex];
 
   useEffect(() => {
+    console.log("currentImageIndex", currentImageIndex)
+    if (currentImage) {
+      // 이미지 Ref에 접근하여 src 속성 얻기
+      const src = imageRef.current ? imageRef.current.src : '';
+      loadImage(src);
+    }
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesData.length);
     }, 20000);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [currentImageIndex]);
+  
 
-  const loadImage = async (imageSrc,) => {
+  const loadImage = async (imageSrc) => {
     try {
       const response = await fetch(imageSrc);
       if (response.ok) {
@@ -44,14 +56,14 @@ export default function Images({ showRecord }) {
     }
   };
   
-  useEffect(() => {
-    if (currentImage) {
-      // 이미지 Ref에 접근하여 src 속성 얻기
-      const src = imageRef.current ? imageRef.current.src : '';
-      // showRecord(src);
-      loadImage(src);
-    }
-  }, [currentImageIndex]);
+  // useEffect(() => {
+  //   console.log("currentImageIndex", currentImageIndex)
+  //   if (currentImage) {
+  //     // 이미지 Ref에 접근하여 src 속성 얻기
+  //     const src = imageRef.current ? imageRef.current.src : '';
+  //     loadImage(src);
+  //   }
+  // }, [currentImageIndex]);
 
   return (
     <div className="slideshow-container">

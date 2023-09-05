@@ -31,9 +31,6 @@ export default function Record() {
     //   formData.append("files", imageSrc[i]);
     // }
 
-    console.log("imageSrc appended:", imageSrc);
-    console.log('FormData 내용:', formData);
-
     try {
       const response = await axios.post(`${API_BASE_URL}/main/record`, formData, {
         headers: {
