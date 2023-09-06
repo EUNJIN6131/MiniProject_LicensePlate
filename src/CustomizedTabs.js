@@ -73,7 +73,7 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout, onLo
       <Box sx={{ width: "100%", bgcolor: '#2e1534', display: 'flex', p: 3, }}>
         <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
           {!isLoggedIn ? (
-            <StyledTab label="로그인" onClick={onLogin} />
+            <StyledTab label="로그인"  />
           ) : (
             <StyledTab label="로그아웃" onClick={handleLogoutClick} />
           )}

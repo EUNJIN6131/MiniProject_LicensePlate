@@ -62,8 +62,8 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
         console.log("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN"))
         // setIsLoggedIn(true);
         onLogin();
-        onTabChange(1);
-        navigate("/main/record");
+        // onTabChange(1);
+        // navigate("/main/record");
       }
     } catch (error) {
       setOpen(true);
