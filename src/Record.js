@@ -2,21 +2,33 @@ import * as React from 'react';
 import { Box, Typography } from "@mui/material";
 import Images from "./Images";
 import List from "./List";
-import { useState, useEffect } from 'react';
 import axios from "axios";
 import { API_BASE_URL } from "./api/api-config";
+import { useState, useEffect } from "react";
+import { call } from "./api/ApiService";
+import { format, parseISO, } from "date-fns";
+import dayjs from 'dayjs';
+import advancedFormat from "dayjs/plugin/advancedFormat";
 
+dayjs.extend(advancedFormat);
 
 export default function Record() {
 
   const [imageUpload, setImageUpload] = useState([]);
   const [recentNum, setRecentNum] = useState(null);
-  const [imageQueue, setImageQueue] = useState([]);
+  const [startDate, setStartDate] = useState(null);                 // 시작날짜
+  const [endDate, setEndDate] = useState(null);                     // 종료날짜
+  const [rows, setRows] = useState([]);                             // 레코드(행) 목록
+  const [open, setOpen] = useState(false);                          // 검색결과 유무 팝업상태
 
   // useEffect(() => {
   //   showRecord()
   // }, []);
 
+  useEffect(() => {
+    const today = dayjs();
+    onQuerySubmit(today, today)
+  }, []);
 
   // 3.차량 출입 로그 기록
   const showRecord = async (imageSrc) => {
@@ -51,6 +63,48 @@ export default function Record() {
     }
   };
 
+  // 5.날짜별 로그 조회
+  const onQuerySubmit = async (startDate, endDate) => {
+    console.log("Received startDate:", startDate);
+    console.log("Received endDate:", endDate);
+
+    const jsStartDate = startDate.toDate();
+    const jsEndDate = endDate.toDate();
+
+    const formattedStartDate = format(jsStartDate, "yyyy-MM-dd");
+    const formattedEndDate = format(jsEndDate, "yyyy-MM-dd");
+
+    console.log("Formatted startDate:", formattedStartDate);
+    console.log("Formatted endDate:", formattedEndDate);
+
+    call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
+      .then((data) => {
+        console.log("data", data);
+        const responseData = data.data;
+
+        if (Array.isArray(responseData)) {
+          const updatedRows = responseData.map((record, index) => {
+            const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+            return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
+          });
+          setRows(updatedRows);
+        } else {
+          console.error("데이터가 배열이 아닙니다:", responseData.data);
+          setOpen(true);
+        }
+      })
+      .catch((error) => {
+        console.error("데이터 가져오기 오류:", error);
+      });
+  };
+
+  const onDateChange = (newStartDate, newEndDate) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    onQuerySubmit(newStartDate, newEndDate);
+  };
+
+
   return (
     <Box sx={{ margin: "20px" }}>
       <Box
@@ -79,7 +133,7 @@ export default function Record() {
           <Box
             sx={{
               width: '100%',
-              height: '50vh',
+              height: '50h',
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
@@ -88,12 +142,12 @@ export default function Record() {
           <Box
             sx={{
               width: '100%',
-              height: '45vh',
+              height: '48vh',
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            {/* <List rows={records} />/// */}
-            {/* <List /> */}
+            <List setRows={setRows} rows={rows}
+          />
           </Box>
         </Box>
 
@@ -103,7 +157,6 @@ export default function Record() {
           border: "1px solid rgb(189, 188, 188)",
           display: "flex",
         }}>
-
           <Typography variant="h4">차량번호: {recentNum}</Typography>
         </Box>
       </Box>
