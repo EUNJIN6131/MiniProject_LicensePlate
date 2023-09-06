@@ -5,17 +5,35 @@ import './Slideshow.css';
 // 이미지 데이터를 배열로 정의
 const imagesData = [];
 
-for (let i = 1; i < 21; i++) {
-  const image = { id: i, src: `https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/img${i}.jpg` };
+// for (let i = 1; i < 21; i++) {
+//   const image = { id: i, src: `https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/img${i}.jpg` };
+//   imagesData.push(image);
+// }
+
+const uniqueIds = Array.from({ length: 30 }, (_, index) => index +1 );
+
+for (let i = uniqueIds.length - 1; i >= 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [uniqueIds[i], uniqueIds[j]] = [uniqueIds[j], uniqueIds[i]];
+}
+console.log("uniqueIds", uniqueIds);
+
+
+for (let i = 1; i <= 30; i++) {
+  const randomI = uniqueIds[i - 1]; 
+  const image = { id: randomI, src: `https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/img${randomI}.jpg` };
   imagesData.push(image);
 }
+
+console.log(imagesData);
+
 export default function Images({ showRecord }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const imageRef = useRef(null); // Ref 생성
 
   // 현재 이미지를 가져와서 showRecord 함수에 전달
   const currentImage = imagesData[currentImageIndex];
-
+  console.log("imagesData", imagesData)
   useEffect(() => {
 
     const interval = setInterval(() => {

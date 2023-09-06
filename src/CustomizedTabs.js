@@ -5,7 +5,7 @@ import {
   Tabs,
   Box,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const StyledTabs = styled((props) => (
@@ -45,14 +45,13 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
   }),
 );
 
-export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
+export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout,  }) {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
     onTabChange(newValue);
   };
-
 
   return (
     <Box sx={{ width: '100%', }}>

@@ -19,7 +19,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 
-export default function Login({onTabChange}) {
+export default function Login({onTabChange, onLogin, onLogout, isLoggedIn }) {
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -50,13 +50,16 @@ export default function Login({onTabChange}) {
     try {
       const res = await axios.post(url, formData);
       if (res.status === 200) {
-        const accessToken = res.headers["Authorization"];
+        console.log("res.data.data.accessToken", res.data.data.accessToken)
+        const accessToken = res.data.data.accessToken;
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
         console.log("로그인 성공")
         console.log("ACCESS_TOKEN", accessToken)
+        isLoggedIn(true);
         onTabChange(1);
         navigate("/main/record");
+
       }
     } catch (error) {
       setOpen(true);

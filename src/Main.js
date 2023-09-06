@@ -15,7 +15,7 @@ export default function Main() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsLoggedIn(false)
     setSelectedTab(0);
   };
 
@@ -31,7 +31,7 @@ export default function Main() {
         onTabChange={handleTabChange}
         onLogout={handleLogout}
       />
-      {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} onTabChange={handleTabChange} />}
+      {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}/>}
       {selectedTab === 1 && <Record />}
       {selectedTab === 2 && <Search selectedTab={selectedTab}/>}
       {selectedTab === 3 && <Enroll />}
