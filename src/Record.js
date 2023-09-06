@@ -58,6 +58,7 @@ export default function Record() {
       console.log("Data", data);
       const today = dayjs();
       onQuerySubmit(today, today)
+
     } catch (error) {
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -93,7 +94,8 @@ export default function Record() {
           const updatedRows = responseData.map((record, index) => {
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
-          });
+          }).reverse();
+          
           setRows(updatedRows);
         } else {
           console.error("데이터가 배열이 아닙니다:", responseData.data);

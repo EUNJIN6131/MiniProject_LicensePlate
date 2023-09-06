@@ -50,10 +50,11 @@ export default function Login({onTabChange}) {
     try {
       const res = await axios.post(url, formData);
       if (res.status === 200) {
-        const accessToken = res.headers["authorization"];
+        const accessToken = res.headers["Authorization"];
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
         console.log("로그인 성공")
+        console.log("ACCESS_TOKEN", accessToken)
         onTabChange(1);
         navigate("/main/record");
       }
