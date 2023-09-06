@@ -30,16 +30,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        // HttpServletRequest httpRequest = (HttpServletRequest) request;
-        // String requestURI = httpRequest.getRequestURI();
-
-        // // Skip token validation for signup and signin endpoints
-        // if (requestURI.startsWith("/main") || requestURI.endsWith("/user/signup")
-        // || requestURI.endsWith("/user/signin")) {
-        // chain.doFilter(request, response);
-        // return;
-        // }
-
         // 1. Request Header 에서 JWT 토큰 추출
         String token = resolveToken((HttpServletRequest) request);
 

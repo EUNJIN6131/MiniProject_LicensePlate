@@ -28,6 +28,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     // auth.requestMatchers("/user/signin", "/user/signup").permitAll()
                     // .requestMatchers("/main/update", "/main/delete").hasRole("ADMIN")
+                    // .requestMatchers("/main/record", "main/search/date/**").hasRole("USER");
                     // .requestMatchers(HttpMethod.OPTIONS, "/main/**").permitAll()
                     // .anyRequest().authenticated();
                     auth.anyRequest().permitAll();

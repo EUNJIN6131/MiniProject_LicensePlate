@@ -2,7 +2,6 @@ import tensorflow as tf
 import os
 from keras.models import load_model
 import numpy as np
-from PIL import Image
 from keras.preprocessing import image
 
 def model_result(path):

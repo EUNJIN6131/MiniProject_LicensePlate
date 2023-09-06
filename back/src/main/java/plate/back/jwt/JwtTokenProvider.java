@@ -31,7 +31,7 @@ import plate.back.dto.user.UserResponseDto;
 public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "Bearer";
+    private static final String BEARER_TYPE = "Bearer+";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
     private final Key key;
@@ -65,11 +65,27 @@ public class JwtTokenProvider {
                 .compact();
 
         return UserResponseDto.TokenInfo.builder()
-                .grantType(BEARER_TYPE)
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .accessToken(BEARER_TYPE + accessToken)
+                .refreshToken(BEARER_TYPE + refreshToken)
                 .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
                 .build();
+    }
+
+    // 토큰 정보를 검증하는 메서드
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.error("Invalid JWT Token : " + token, e);
+        } catch (ExpiredJwtException e) {
+            log.error("Expired JWT Token : " + token, e);
+        } catch (UnsupportedJwtException e) {
+            log.error("Unsupported JWT Token : " + token, e);
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty.", e);
+        }
+        return false;
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
@@ -90,23 +106,6 @@ public class JwtTokenProvider {
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-    }
-
-    // 토큰 정보를 검증하는 메서드
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.error("Invalid JWT Token : " + token, e);
-        } catch (ExpiredJwtException e) {
-            log.error("Expired JWT Token : " + token, e);
-        } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT Token : " + token, e);
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty.", e);
-        }
-        return false;
     }
 
     private Claims parseClaims(String accessToken) {

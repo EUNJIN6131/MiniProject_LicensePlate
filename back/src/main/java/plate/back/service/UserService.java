@@ -1,18 +1,12 @@
 package plate.back.service;
 
-import java.util.Collections;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +38,7 @@ public class UserService {
                 .userId(signUp.getUserId())
                 .password(passwordEncoder.encode(signUp.getPassword()))
                 .name(signUp.getName())
-                .roles(Collections.singletonList(Authority.ROLE_USER.name()))
+                .role(Authority.ROLE_USER.name())
                 .build();
 
         userRepo.save(user);
@@ -65,17 +59,21 @@ public class UserService {
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername
         // 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
+        Authentication authentication;
+        try {
+            authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        } catch (Exception e) {
+            return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
+        String refreshToken = tokenInfo.getRefreshToken();
+        tokenInfo.setRefreshToken("http-only");
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         // redisTemplate.opsForValue()
         // .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
         // tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK, refreshToken);
     }
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {

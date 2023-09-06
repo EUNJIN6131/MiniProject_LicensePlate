@@ -16,9 +16,11 @@ import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
 import com.amazonaws.services.s3.model.DeleteObjectsResult;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,7 +67,7 @@ public class FileService {
         return urlMap;
     }
 
-    // 파일 삭제
+    // 특정 파일 삭제
     public void deleteFile(String vehicleImgTitle, String plateImgTitle) {
         List<KeyVersion> keysToDelete = new ArrayList<>();
 
@@ -80,5 +82,15 @@ public class FileService {
         DeleteObjectsResult delObjRes = amazonS3.deleteObjects(deleteObjectsRequest);
         int successfulDeletes = delObjRes.getDeletedObjects().size();
         System.out.println(successfulDeletes + " objects successfully deleted.");
+    }
+
+    // 전체 삭제
+    public void deleteAll(String directory) {
+        ObjectListing objectListing = amazonS3.listObjects(bucket, directory);
+
+        // Iterate through the objects in the directory and delete them
+        for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+            amazonS3.deleteObject(bucket, objectSummary.getKey());
+        }
     }
 }

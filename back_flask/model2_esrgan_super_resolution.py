@@ -15,20 +15,25 @@ SAVE_PATH = None
 model = hub.load(SAVED_MODEL_PATH)
 
 # 이미지 전처리
+# Image preprocessing
 def preprocess_image(image_path):
-    hr_image = tf.image.decode_image(tf.io.read_file(image_path))
+    with open(image_path, 'rb') as file:
+        image_data = file.read()
     
-    # 컬러 이미지를 흑백으로 변환
+    hr_image = tf.image.decode_image(image_data)
+    
+    # Convert color image to black and white
     hr_image = tf.image.rgb_to_grayscale(hr_image)
     
-    # 흑백 이미지를 컬러로 변환
+    # Convert black and white image to color
     hr_image = tf.image.grayscale_to_rgb(hr_image)
     
-    # 타 모델의 호환성 증가 (4의 배수)
+    # Increased compatibility with other models (multiple of 4)
     hr_size = (tf.convert_to_tensor(hr_image.shape[:-1]) // 4) * 4
     hr_image = tf.image.crop_to_bounding_box(hr_image, 0, 0, hr_size[0], hr_size[1])
     hr_image = tf.cast(hr_image, tf.float32)
     return tf.expand_dims(hr_image, 0)
+
 
 # 이미지 저장
 def save_image(image, filename):

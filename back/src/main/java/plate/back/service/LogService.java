@@ -4,21 +4,22 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import plate.back.dto.HistoryDto;
 import plate.back.dto.LogDto;
 import plate.back.dto.PredictDto;
+import plate.back.dto.Response;
 import plate.back.entity.HistoryEntity;
 import plate.back.entity.ImageEntity;
 import plate.back.entity.LogEntity;
@@ -33,25 +34,24 @@ import plate.back.persistence.PredictLogRepository;
 @Service
 public class LogService {
     private final CarInfoRepository carRepo;
-
     private final LogRepository logRepo;
-
     private final ImageRepository imgRepo;
-
     private final PredictLogRepository predRepo;
-
     private final HistoryRepository histRepo;
-
     private final FileService fileService;
-
     private final FlaskService flaskService;
+    private final Response response;
 
-    public LogDto recordLog(MultipartFile file) throws IOException {
-
+    // public LogDto recordLog(MultipartFile file) throws IOException {
+    public ResponseEntity<?> recordLog(MultipartFile file) throws IOException {
+        Object[] dtos = new Object[2];
         // flask api 호출
-        LinkedHashMap<String, Object> response = (LinkedHashMap<String, Object>) flaskService.callApi(file).getBody();
-        System.out.println("Response : " + response.entrySet());
-        LinkedHashMap<String, ArrayList<Object>> predictValue = (LinkedHashMap<String, ArrayList<Object>>) response
+        LinkedHashMap<String, Object> flaskResponse = (LinkedHashMap<String, Object>) flaskService.callApi(file)
+                .getBody();
+        if ((int) flaskResponse.get("status") == 500) {
+            return response.fail((String) flaskResponse.get("error"), HttpStatus.BAD_REQUEST);
+        }
+        LinkedHashMap<String, ArrayList<Object>> predictValue = (LinkedHashMap<String, ArrayList<Object>>) flaskResponse
                 .get("predictedResults");
 
         ArrayList<PredictDto> predList = new ArrayList<>();
@@ -60,7 +60,6 @@ public class LogService {
             if (list == null) {
                 predList.add(new PredictDto(key, "예측실패", 0));
             } else {
-                predList.add(new PredictDto(key, String.valueOf(list.get(0)), (double) list.get(1)));
                 predList.add(new PredictDto(key, String.valueOf(list.get(0)), (double) list.get(1)));
             }
         }
@@ -86,21 +85,18 @@ public class LogService {
 
         // Log 엔티티 저장
         LogEntity savedLog;
-
         if (flag) {
             savedLog = logRepo.save(LogEntity.builder()
                     .modelType(predList.get(idx).getModelType())
                     .licensePlate(predList.get(idx).getPredictedText())
                     .accuracy(maxVal)
-                    .state("수정 불필요")
-                    .date(new Date()).build());
+                    .state("수정 불필요").build());
         } else {
             savedLog = logRepo.save(LogEntity.builder()
-                    .modelType(predList.get(idx).getModelType())
+                    .modelType("-")
                     .licensePlate("-")
                     .accuracy(0.0)
-                    .state("수정 필요")
-                    .date(new Date()).build());
+                    .state("수정 필요").build());
         }
 
         // Image 엔티티 저장
@@ -108,8 +104,8 @@ public class LogService {
         String[] vehicleImgArr = fileService.uploadFile(file, 0);
         String vehicleImgUrl = vehicleImgArr[0];
         String vehicleImgTitle = vehicleImgArr[1];
-        String plateImgUrl = String.valueOf(response.get("plateImgUrl"));
-        String plateImgTitle = String.valueOf(response.get("plateImgTitle"));
+        String plateImgUrl = String.valueOf(flaskResponse.get("plateImgUrl"));
+        String plateImgTitle = String.valueOf(flaskResponse.get("plateImgTitle"));
 
         ImageEntity vehicleImg = imgRepo.save(ImageEntity.builder()
                 .logEntity(savedLog)
@@ -126,6 +122,7 @@ public class LogService {
         // PredictLog 엔티티 저장
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
+            dto.setLogId(savedLog.getLogId());
             PredictLogEntity predEntity = predRepo.save(PredictLogEntity.builder()
                     .logEntity(savedLog)
                     .modelType(dto.getModelType())
@@ -145,7 +142,10 @@ public class LogService {
                 .licensePlate(savedLog.getLicensePlate())
                 .accuracy(savedLog.getAccuracy() == 0.0 ? "-" : String.valueOf(savedLog.getAccuracy()))
                 .build();
-        return dto;
+
+        dtos[0] = dto;
+        dtos[1] = predList;
+        return response.success(dtos);
     }
 
     // LogEntity & ImageEntity -> LogDto
@@ -172,7 +172,7 @@ public class LogService {
         return list;
     }
 
-    public List<LogDto> searchDate(String start, String end) throws ParseException {
+    public ResponseEntity<?> searchDate(String start, String end) throws ParseException {
 
         // String -> Date 변환
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -187,10 +187,10 @@ public class LogService {
         // LogEntity -> LogDto 변환
         List<LogDto> list = createLogDto(logEntities);
 
-        return list;
+        return response.success(list);
     }
 
-    public List<LogDto> searchPlate(String plate) {
+    public ResponseEntity<?> searchPlate(String plate) {
 
         // 로그 조회
         List<LogEntity> logEntities = logRepo.findByPlate(plate);
@@ -198,10 +198,10 @@ public class LogService {
         // LogEntity -> LogDto 변환
         List<LogDto> list = createLogDto(logEntities);
 
-        return list;
+        return response.success(list);
     }
 
-    public List<HistoryDto> getHistory() {
+    public ResponseEntity<?> getHistory() {
         List<HistoryEntity> entities = histRepo.findAll();
         List<HistoryDto> list = new ArrayList<>();
         for (HistoryEntity entity : entities) {
@@ -215,14 +215,14 @@ public class LogService {
                     .date(entity.getDate())
                     .build());
         }
-        return list;
+        return response.success(list);
     }
 
-    public Boolean updateLog(ArrayList<LogDto> list, String userId) throws IOException {
+    public ResponseEntity<?> updateLog(ArrayList<LogDto> list, String userId) throws IOException {
         for (LogDto dto : list) {
             Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
             if (!optionalLog.isPresent()) {
-                throw new EntityNotFoundException("LogId not present in the database");
+                return response.fail("수정 실패", HttpStatus.BAD_REQUEST);
             }
 
             LogEntity entity = optionalLog.get();
@@ -265,10 +265,10 @@ public class LogService {
                 continue;
             }
         }
-        return true;
+        return response.success();
     }
 
-    public Boolean deleteLog(ArrayList<LogDto> list, String userId) {
+    public ResponseEntity<?> deleteLog(ArrayList<LogDto> list, String userId) {
         try {
             for (LogDto dto : list) {
                 int logId = dto.getLogId();
@@ -292,10 +292,10 @@ public class LogService {
                         .workType("delete")
                         .userId(userId).build());
             }
-            return true;
+            return response.success();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return response.fail("삭제 실패", HttpStatus.BAD_REQUEST);
         }
     }
 }

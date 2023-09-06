@@ -1,14 +1,17 @@
 package plate.back.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+import lombok.Builder;
+import lombok.Getter;
 
 @Component
 public class Response {
@@ -16,8 +19,7 @@ public class Response {
     @Getter
     @Builder
     private static class Body {
-
-        private int state;
+        private int status;
         private String result;
         private String massage;
         private Object data;
@@ -26,13 +28,37 @@ public class Response {
 
     public ResponseEntity<?> success(Object data, String msg, HttpStatus status) {
         Body body = Body.builder()
-                .state(status.value())
+                .status(status.value())
                 .data(data)
                 .result("success")
                 .massage(msg)
                 .error(Collections.emptyList())
                 .build();
         return ResponseEntity.ok(body);
+    }
+
+    public ResponseEntity<?> success(Object data, String msg, HttpStatus status, String refreshToken) {
+        Body body = Body.builder()
+                .status(status.value())
+                .data(data)
+                .result("success")
+                .massage(msg)
+                .error(Collections.emptyList())
+                .build();
+        ResponseCookie cookie = ResponseCookie.from(refreshToken)
+                // Set other cookie properties as needed
+                .maxAge(7 * 24 * 60 * 60)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .build();
+
+        // Create a HttpHeaders object to set the response headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        // Return the ResponseEntity with headers
+        return ResponseEntity.ok().headers(headers).body(body);
     }
 
     /**
@@ -42,7 +68,7 @@ public class Response {
      * 
      * <pre>
      *     {
-     *         "state" : 200,
+     *         "status" : 200,
      *         "result" : success,
      *         "message" : message,
      *         "data" : [],
@@ -64,7 +90,7 @@ public class Response {
      * 
      * <pre>
      *     {
-     *         "state" : 200,
+     *         "status" : 200,
      *         "result" : success,
      *         "message" : null,
      *         "data" : [{data1}, {data2}...],
@@ -86,7 +112,7 @@ public class Response {
      * 
      * <pre>
      *     {
-     *         "state" : 200,
+     *         "status" : 200,
      *         "result" : success,
      *         "message" : null,
      *         "data" : [],
@@ -102,7 +128,7 @@ public class Response {
 
     public ResponseEntity<?> fail(Object data, String msg, HttpStatus status) {
         Body body = Body.builder()
-                .state(status.value())
+                .status(status.value())
                 .data(data)
                 .result("fail")
                 .massage(msg)
@@ -118,7 +144,7 @@ public class Response {
      * 
      * <pre>
      *     {
-     *         "state" : HttpStatus Code,
+     *         "status" : HttpStatus Code,
      *         "result" : fail,
      *         "message" : message,
      *         "data" : [],
@@ -136,7 +162,7 @@ public class Response {
 
     public ResponseEntity<?> invalidFields(LinkedList<LinkedHashMap<String, String>> errors) {
         Body body = Body.builder()
-                .state(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .data(Collections.emptyList())
                 .result("fail")
                 .massage("")

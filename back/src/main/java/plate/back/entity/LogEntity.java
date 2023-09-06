@@ -18,13 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
-@Setter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -51,15 +47,11 @@ public class LogEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Date date;
 
-    // @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE,
-    // orphanRemoval = true)
-    // Set<PredictLogEntity> predList;
+    public void setState(String state) {
+        this.state = state;
+    }
 
-    // @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE,
-    // orphanRemoval = true)
-    // Set<HistoryEntity> historyList;
-
-    // @OneToMany(mappedBy = "logEntity", cascade = CascadeType.REMOVE,
-    // orphanRemoval = true)
-    // Set<ImageEntity> imageList;
+    public void setLicensePlate(String plate) {
+        this.licensePlate = plate;
+    }
 }
