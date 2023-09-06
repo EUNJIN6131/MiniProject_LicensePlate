@@ -14,12 +14,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "./api/api-config";
 import AlertError from "./alert/AlertError";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 
-export default function Login({onTabChange, onLogin, onLogout, isLoggedIn }) {
+export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIsLoggedIn, selectedTab }) {
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -50,16 +50,15 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn }) {
     try {
       const res = await axios.post(url, formData);
       if (res.status === 200) {
-        console.log("res.data.data.accessToken", res.data.data.accessToken)
+        console.log("res.headers", res.cookie)
         const accessToken = res.data.data.accessToken;
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
         console.log("로그인 성공")
-        console.log("ACCESS_TOKEN", accessToken)
-        isLoggedIn(true);
+        console.log("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN"))
+        setIsLoggedIn(true);
         onTabChange(1);
-        navigate("/main/record");
-
+        // navigate("/main/record");
       }
     } catch (error) {
       setOpen(true);
@@ -67,6 +66,9 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn }) {
     }
   };
 
+  useEffect(()=>{
+    
+  },[])
 
   return (
     <Box sx={{ width: '100%', }}>

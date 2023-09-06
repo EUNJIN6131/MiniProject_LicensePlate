@@ -25,7 +25,7 @@ for (let i = 1; i <= 30; i++) {
   imagesData.push(image);
 }
 
-console.log(imagesData);
+// console.log(imagesData);
 
 export default function Images({ showRecord }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

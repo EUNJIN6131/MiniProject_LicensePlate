@@ -169,6 +169,5 @@ export default function Record() {
         </Box>
       </Box>
     </Box>
-
   );
 }

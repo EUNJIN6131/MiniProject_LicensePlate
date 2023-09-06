@@ -15,13 +15,14 @@ export default function Main() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false)
+    setIsLoggedIn(false);
     setSelectedTab(0);
   };
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    setSelectedTab(1);
+    handleTabChange(1);
+    // setSelectedTab(1);
   };
 
   return (
@@ -30,10 +31,12 @@ export default function Main() {
         isLoggedIn={isLoggedIn}
         onTabChange={handleTabChange}
         onLogout={handleLogout}
+        onLogin={handleLogin}
       />
-      {selectedTab === 0 && !isLoggedIn && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}/>}
+      {selectedTab === 0 && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}
+      setIsLoggedIn={setIsLoggedIn} selectedTab={selectedTab}/>}
       {selectedTab === 1 && <Record />}
-      {selectedTab === 2 && <Search selectedTab={selectedTab}/>}
+      {selectedTab === 2 && <Search selectedTab={selectedTab} />}
       {selectedTab === 3 && <Enroll />}
     </Box>
   );
