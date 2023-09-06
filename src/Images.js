@@ -5,8 +5,8 @@ import './Slideshow.css';
 // 이미지 데이터를 배열로 정의
 const imagesData = [];
 
-for (let i = 1; i < 11; i++) {
-  const image = { id: i, src: `https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/possible/img${i}.jpg` };
+for (let i = 1; i < 21; i++) {
+  const image = { id: i, src: `https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/img${i}.jpg` };
   imagesData.push(image);
 }
 export default function Images({ showRecord }) {

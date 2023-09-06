@@ -10,6 +10,12 @@
 }
 
 
+/* styles.css */
+.hide-checkbox .record-component .MuiDataGrid-colCellCheckbox,
+.hide-checkbox .record-component .MuiDataGrid-cellCheckbox {
+  display: none;
+}
+
 /* @keyframes slide {
   0% {
     transform: translateX(100%);

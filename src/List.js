@@ -3,6 +3,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
 import axios from "axios";
+import './Slideshow.css';
+
 // import Pagination from "@mui/material/Pagination";
 // import Stack from "@mui/material/Stack";
 // import { Box, Button, TextField, Snackbar } from "@mui/material";
@@ -48,7 +50,7 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord  }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
@@ -151,14 +153,27 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       });
   };
 
+  const isRecordComponent = isRecord;
+  const containerClassName = isRecordComponent ? "hide-checkbox" : "";
+
+  const modifiedColumns = columns.map((column) => {
+    if (column.field === "logId") {
+      return containerClassName ? { ...column, type: undefined } : column;
+    }
+    return column;
+  });
+
+
   return (
     rows && (
       <div style={{ width: "100%", maxHeight: "100%", height: "100%", overflowY: "auto" }}>
         <DataGrid
           rows={rowsToDisplay}
-          columns={columns}
+          columns={modifiedColumns}
           pageSize={20}
-          checkboxSelection={true}
+          // checkboxSelection={true}
+          checkboxSelection={!isRecord} // Conditionally enable checkboxes
+          className={isRecord ? 'hide-checkbox' : ''}
           onRowSelectionModelChange={(newRowSelectionModel) => {
             setRowSelectionModel(newRowSelectionModel);
           }}

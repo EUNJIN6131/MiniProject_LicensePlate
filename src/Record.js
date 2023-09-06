@@ -19,11 +19,16 @@ export default function Record() {
   const [startDate, setStartDate] = useState(null);                 // 시작날짜
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [open, setOpen] = useState(false);                          // 검색결과 유무 팝업상태
 
   // useEffect(() => {
   //   showRecord()
   // }, []);
+
+  // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
+  // useEffect(() => {
+  // }, [rows]);
 
   useEffect(() => {
     const today = dayjs();
@@ -51,6 +56,8 @@ export default function Record() {
       });
       const data = response.data;
       console.log("Data", data);
+      const today = dayjs();
+      onQuerySubmit(today, today)
     } catch (error) {
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -104,7 +111,6 @@ export default function Record() {
     onQuerySubmit(newStartDate, newEndDate);
   };
 
-
   return (
     <Box sx={{ margin: "20px" }}>
       <Box
@@ -146,8 +152,8 @@ export default function Record() {
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            <List setRows={setRows} rows={rows}
-          />
+            <List isRecord={true} setRows={setRows} rows={rows}
+            />
           </Box>
         </Box>
 
