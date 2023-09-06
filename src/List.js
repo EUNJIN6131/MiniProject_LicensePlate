@@ -189,6 +189,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
                 pageCount={pageCount}
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditClick}
+                hideButtons={isRecord}
               />
             ),
           }}
