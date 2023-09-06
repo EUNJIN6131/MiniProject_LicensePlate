@@ -77,13 +77,13 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout, onLo
           ) : (
             <StyledTab label="로그아웃" onClick={handleLogoutClick} />
           )}
-         
-            {!isLoggedIn ? (
-              <><StyledTab label="차량 입출입 현황"disabled  /><StyledTab label="검색" disabled  /><StyledTab label="차량등록" disabled  /></>
-            ) : (
-              <><StyledTab label="차량 입출입 현황" onClick={() => { onTabChange(1); navigate('/main/record'); }} /><StyledTab label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} /><StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} /></>
-            )}
-          
+
+          {!isLoggedIn ? (
+            <><StyledTab label="차량 입출입 현황" disabled /><StyledTab label="검색" disabled /><StyledTab label="차량등록" disabled /></>
+          ) : (
+            <><StyledTab label="차량 입출입 현황" onClick={() => { onTabChange(1); navigate('/main/record'); }} /><StyledTab label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} /><StyledTab label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} /></>
+          )}
+
         </StyledTabs>
       </Box>
     </Box>

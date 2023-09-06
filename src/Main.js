@@ -5,11 +5,14 @@ import Record from "./Record.js";
 import Search from "./Search.js";
 import Enroll from "./Enroll.js";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Main() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
  
+  const navigate = useNavigate();
+
   const handleTabChange = (tabIndex) => {
     setSelectedTab(tabIndex);
   };
@@ -22,6 +25,8 @@ export default function Main() {
   const handleLogin = () => {
     setIsLoggedIn(true);
     handleTabChange(1);
+    navigate("/main/record");
+    // handleTabChange(1);
     // setSelectedTab(1);
   };
 

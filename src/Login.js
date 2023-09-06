@@ -50,15 +50,20 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
     try {
       const res = await axios.post(url, formData);
       if (res.status === 200) {
-        console.log("res.headers", res.cookie)
+        
+        const cookies = res.headers['set-cookie'];
+        console.log("cookies", cookies);
+
+
         const accessToken = res.data.data.accessToken;
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("userId", data.get("id"));
         console.log("로그인 성공")
         console.log("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN"))
-        setIsLoggedIn(true);
+        // setIsLoggedIn(true);
+        onLogin();
         onTabChange(1);
-        // navigate("/main/record");
+        navigate("/main/record");
       }
     } catch (error) {
       setOpen(true);
