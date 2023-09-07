@@ -21,14 +21,15 @@ export default function Record() {
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [open, setOpen] = useState(false);                          // 검색결과 유무 팝업상태
+  const [latestId, setLatestId] = useState(rows.length);
 
   // useEffect(() => {
   //   showRecord()
   // }, []);
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
-  // useEffect(() => {
-  // }, [rows]);
+  useEffect(() => {
+  }, [rows]);
 
   useEffect(() => {
     const today = dayjs();
@@ -51,13 +52,30 @@ export default function Record() {
     try {
       const response = await axios.post(`${API_BASE_URL}/main/record`, formData, {
         headers: {
+          // Authorization: localStorage.getItem("ACCESS_TOKEN"),
           "Content-Type": "multipart/form-data",
         },
       });
       const data = response.data;
       console.log("Data", data);
-      const today = dayjs();
-      onQuerySubmit(today, today)
+
+      const today = new Date();
+      const formattedDate = format(today, "yyyy-MM-dd HH:mm:ss");
+    
+      // 새로운 고유한 ID를 생성하기 위해 latestId 상태를 증가시킵니다.
+      
+      const newId = latestId + 1;
+      setLatestId(newId);
+    
+      // 업데이트된 newId와 현재 날짜를 사용하여 새로운 레코드를 생성합니다.
+      const newRecord = {
+        id: newId,
+        date: formattedDate,
+        // 필요한 다른 필드를 추가하세요.
+      };
+    
+      // 새 레코드를 목록의 시작 부분에 추가합니다.
+      setRows((prevRows) => [newRecord, ...prevRows]);
 
     } catch (error) {
       if (error.response) {
@@ -154,7 +172,7 @@ export default function Record() {
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            <List isRecord={true} setRows={setRows} rows={rows}
+            <List isRecord={true} setRows={setRows} rows={rows} rowSelectionModel={rowSelectionModel} setRowSelectionModel={setRowSelectionModel}
             />
           </Box>
         </Box>

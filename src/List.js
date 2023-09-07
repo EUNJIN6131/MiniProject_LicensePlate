@@ -50,16 +50,17 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord  }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, recordRows, setRecordRows  }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
   const rowsPerPage = 20;                                                   // 페이지 당 20rows
   const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
+  const [userId, setUserId] = useState("");
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
-  }, [rows]);
+  }, [rows,recordRows]);
 
   // Pagination 함수
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -128,13 +129,13 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   // 9.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
-
+    const userId = "IruIruIru";
     // "logId" 속성을 가진 객체 배열 생성
     const jsonData = selectedSeqValues.map((logId) => ({ logId }));
     // const userId = "admin";
     console.log("jsonData", jsonData);
     axios
-      .delete(`${API_BASE_URL}/main/delete/${"IruIruIru"}`, {
+      .delete(`${API_BASE_URL}/main/delete/${userId}`, {
         data: jsonData,
         headers: {
           "Content-Type": "application/json",
@@ -195,6 +196,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
           }}
           // 행의 logId 수정, 삭제 추적 후 렌더링
           key={(row) => row.logId }
+          key1={(recordRows) => recordRows.logId }
         />
       </div>
     )
