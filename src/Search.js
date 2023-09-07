@@ -53,7 +53,7 @@ export default function Search({ selectedTab }) {
       });
   };
 
-  // 5.날짜별 로그 조회
+  // 4.날짜별 로그 조회
   const onQuerySubmit = async (startDate, endDate) => {
     console.log("Received startDate:", startDate);
     console.log("Received endDate:", endDate);
@@ -88,7 +88,7 @@ export default function Search({ selectedTab }) {
       });
   };
 
-  // 7.수정/삭제 기록 조회
+  // 6.수정/삭제 기록 조회
   const fetchEditHistory = () => {
     console.log("Button clicked");
 

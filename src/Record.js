@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { Box, Typography } from "@mui/material";
 import Images from "./Images";
 import List from "./List";
@@ -6,22 +6,22 @@ import axios from "axios";
 import { API_BASE_URL } from "./api/api-config";
 import { useState, useEffect } from "react";
 import { call } from "./api/ApiService";
-import { format, parseISO, } from "date-fns";
-import dayjs from 'dayjs';
+import { format, parseISO } from "date-fns";
+import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import Predict from "./Predict";
 
 dayjs.extend(advancedFormat);
 
 export default function Record() {
-
   const [imageUpload, setImageUpload] = useState([]);
   const [recentNum, setRecentNum] = useState(null);
-  const [startDate, setStartDate] = useState(null);                 // 시작날짜
-  const [endDate, setEndDate] = useState(null);                     // 종료날짜
-  const [rows, setRows] = useState([]);                             // 레코드(행) 목록
+  const [startDate, setStartDate] = useState(null); // 시작날짜
+  const [endDate, setEndDate] = useState(null); // 종료날짜
+  const [rows, setRows] = useState([]); // 레코드(행) 목록
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [open, setOpen] = useState(false);                          // 검색결과 유무 팝업상태
-  const [latestId, setLatestId] = useState(rows.length);
+  const [open, setOpen] = useState(false); // 검색결과 유무 팝업상태
+  const [latestId, setLatestId] = useState(rows.length - 1);
 
   // useEffect(() => {
   //   showRecord()
@@ -29,11 +29,12 @@ export default function Record() {
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
+    
   }, [rows]);
 
   useEffect(() => {
     const today = dayjs();
-    onQuerySubmit(today, today)
+    onQuerySubmit(today, today);
   }, []);
 
   // 3.차량 출입 로그 기록
@@ -41,7 +42,6 @@ export default function Record() {
     console.log("Enter the car");
     console.log("Image source received:", imageSrc);
 
-    // 이미지 경로를 FormData에 추가
     const formData = new FormData();
 
     formData.append("file", imageSrc);
@@ -52,29 +52,30 @@ export default function Record() {
     try {
       const response = await axios.post(`${API_BASE_URL}/main/record`, formData, {
         headers: {
-          // Authorization: localStorage.getItem("ACCESS_TOKEN"),
+          Authorization: localStorage.getItem("ACCESS_TOKEN"),
           "Content-Type": "multipart/form-data",
         },
       });
-      const data = response.data;
-      console.log("Data", data);
+      const data = response.data.data[0];
 
       const today = new Date();
       const formattedDate = format(today, "yyyy-MM-dd HH:mm:ss");
-    
-      // 새로운 고유한 ID를 생성하기 위해 latestId 상태를 증가시킵니다.
-      
+
       const newId = latestId + 1;
       setLatestId(newId);
-    
-      // 업데이트된 newId와 현재 날짜를 사용하여 새로운 레코드를 생성합니다.
+
       const newRecord = {
-        id: newId,
+        id: data.logId,
+        accuracy: data.accuracy,
+        licensePlate: data.licensePlate,
+        logId: data.logId,
+        modelType: data.modelType,
+        plateImage: data.plateImage,
+        state: data.state,
+        vehicleImage: data.vehicleImage,
         date: formattedDate,
-        // 필요한 다른 필드를 추가하세요.
       };
-    
-      // 새 레코드를 목록의 시작 부분에 추가합니다.
+
       setRows((prevRows) => [newRecord, ...prevRows]);
 
     } catch (error) {
@@ -89,10 +90,8 @@ export default function Record() {
     }
   };
 
-  // 5.날짜별 로그 조회
+  // 4.날짜별 로그 조회
   const onQuerySubmit = async (startDate, endDate) => {
-    console.log("Received startDate:", startDate);
-    console.log("Received endDate:", endDate);
 
     const jsStartDate = startDate.toDate();
     const jsEndDate = endDate.toDate();
@@ -105,14 +104,15 @@ export default function Record() {
 
     call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
       .then((data) => {
-        console.log("data", data);
         const responseData = data.data;
 
         if (Array.isArray(responseData)) {
-          const updatedRows = responseData.map((record, index) => {
-            const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
-            return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
-          }).reverse();
+          const updatedRows = responseData
+            .map((record, index) => {
+              const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+              return { ...record, id: index + 1, date: formattedDate }; // 새 객체 생성, ... <- 확산 연산자
+            })
+            .reverse();
 
           setRows(updatedRows);
         } else {
@@ -135,31 +135,30 @@ export default function Record() {
     <Box sx={{ margin: "20px" }}>
       <Box
         sx={{
-          height: '100vh',
-          width: '100%',
+          height: "100vh",
+          width: "100%",
           display: "flex",
           alignItems: "center",
           flexDirection: "row",
           alignItems: "stretch",
           justifyContent: "space-between",
-          gap: '20px',
+          gap: "20px",
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: '65%',
-            height: '100vh',
+            width: "65%",
+            height: "100vh",
             alignItems: "center",
             justifyContent: "space-between",
-
           }}
         >
           <Box
             sx={{
-              width: '100%',
-              height: '50h',
+              width: "100%",
+              height: "50h",
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
@@ -167,23 +166,29 @@ export default function Record() {
           </Box>
           <Box
             sx={{
-              width: '100%',
-              height: '48vh',
+              width: "100%",
+              height: "48vh",
               border: "1px solid rgb(189, 188, 188)",
             }}
           >
-            <List isRecord={true} setRows={setRows} rows={rows} rowSelectionModel={rowSelectionModel} setRowSelectionModel={setRowSelectionModel}
+            <List
+              isRecord={true}
+              setRows={setRows}
+              rows={rows}
+              rowSelectionModel={rowSelectionModel}
+              setRowSelectionModel={setRowSelectionModel}
             />
           </Box>
         </Box>
-
-        <Box sx={{
-          height: '100vh',
-          width: '35%',
-          border: "1px solid rgb(189, 188, 188)",
-          display: "flex",
-        }}>
-          <Typography variant="h4">차량번호: {recentNum}</Typography>
+        <Box
+          sx={{
+            height: "100vh",
+            width: "35%",
+            border: "1px solid rgb(189, 188, 188)",
+            display: "flex",
+          }}
+        >
+          <Predict />
         </Box>
       </Box>
     </Box>

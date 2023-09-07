@@ -16,8 +16,6 @@ for (let i = uniqueIds.length - 1; i >= 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));
   [uniqueIds[i], uniqueIds[j]] = [uniqueIds[j], uniqueIds[i]];
 }
-console.log("uniqueIds", uniqueIds);
-
 
 for (let i = 1; i <= 30; i++) {
   const randomI = uniqueIds[i - 1]; 
@@ -25,7 +23,6 @@ for (let i = 1; i <= 30; i++) {
   imagesData.push(image);
 }
 
-// console.log(imagesData);
 
 export default function Images({ showRecord }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -33,7 +30,7 @@ export default function Images({ showRecord }) {
 
   // 현재 이미지를 가져와서 showRecord 함수에 전달
   const currentImage = imagesData[currentImageIndex];
-  console.log("imagesData", imagesData)
+  
   useEffect(() => {
 
     const interval = setInterval(() => {

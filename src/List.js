@@ -50,7 +50,7 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, recordRows, setRecordRows  }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
@@ -60,7 +60,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
-  }, [rows,recordRows]);
+  }, [rows]);
 
   // Pagination 함수
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -87,7 +87,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     setRowSelectionModel(newRowSelectionModel);
   }
 
-  // 8.로그 수정(admin)
+  // 7.로그 수정(admin)
   const handleEditClick = () => {
     console.log("Edit button clicked");
 
@@ -110,6 +110,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     axios
       .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
         headers: {
+          Authorization: localStorage.getItem("ACCESS_TOKEN"),
           "Content-Type": "application/json",
         },
       })
@@ -126,7 +127,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       });
   }
 
-  // 9.로그 삭제(admin)
+  // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
     const userId = "IruIruIru";
@@ -138,6 +139,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       .delete(`${API_BASE_URL}/main/delete/${userId}`, {
         data: jsonData,
         headers: {
+          Authorization: localStorage.getItem("ACCESS_TOKEN"),
           "Content-Type": "application/json",
         },
       })
@@ -196,7 +198,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
           }}
           // 행의 logId 수정, 삭제 추적 후 렌더링
           key={(row) => row.logId }
-          key1={(recordRows) => recordRows.logId }
         />
       </div>
     )
