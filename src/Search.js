@@ -28,31 +28,6 @@ export default function Search({ selectedTab }) {
     fetchEditHistory()
   }, []);
 
-  // 6.차량 번호별 로그 조회
-  const handleSearchClick = (licensePlate) => {
-    console.log("Button clicked");
-
-    call(`/main/search/plate/${licensePlate}`, "GET", null)
-      .then((data) => {
-        console.log("data", data.data);
-        const responseData = data.data;
-
-        if (responseData.length > 0) {
-          const updatedRows = responseData.map((record, index) => {
-            const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
-            return { ...record, id: index + 1, date: formattedDate };           // 새 객체 생성, ... <- 확산 연산자
-          });
-          setRows(updatedRows);
-        } else {
-          setOpen(true);
-          setRows([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-
   // 4.날짜별 로그 조회
   const onQuerySubmit = async (startDate, endDate) => {
     console.log("Received startDate:", startDate);
@@ -88,6 +63,31 @@ export default function Search({ selectedTab }) {
       });
   };
 
+    // 5.차량 번호별 로그 조회
+    const handleSearchClick = (licensePlate) => {
+      console.log("Button clicked");
+  
+      call(`/main/search/plate/${licensePlate}`, "GET", null)
+        .then((data) => {
+          console.log("data", data.data);
+          const responseData = data.data;
+  
+          if (responseData.length > 0) {
+            const updatedRows = responseData.map((record, index) => {
+              const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+              return { ...record, id: index + 1, date: formattedDate };           // 새 객체 생성, ... <- 확산 연산자
+            });
+            setRows(updatedRows);
+          } else {
+            setOpen(true);
+            setRows([]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    };
+
   // 6.수정/삭제 기록 조회
   const fetchEditHistory = () => {
     console.log("Button clicked");
@@ -101,7 +101,7 @@ export default function Search({ selectedTab }) {
           const updatedRows = responseData.map((record, index) => {
             const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
-          });
+          })
           setHistoryRows(updatedRows)
         } else {
           console.error("데이터가 배열이 아닙니다:", responseData.data);

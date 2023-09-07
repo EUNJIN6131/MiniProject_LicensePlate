@@ -104,11 +104,10 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     console.log("Selected Rows:", selectedSeqValues[0]);
     // 수정한 licensePlate 값 출력
 
-    const userId = "IruIruIru";
     const jsonData = selectedSeqValues.map((item) => ({logId:item.logId, licensePlate:item.licensePlate}));
 
     axios
-      .put(`${API_BASE_URL}/main/update/${userId}`, jsonData, {
+      .put(`${API_BASE_URL}/main/update`, jsonData, {
         headers: {
           Authorization: localStorage.getItem("ACCESS_TOKEN"),
           "Content-Type": "application/json",
@@ -130,13 +129,12 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
-    const userId = "IruIruIru";
+   
     // "logId" 속성을 가진 객체 배열 생성
     const jsonData = selectedSeqValues.map((logId) => ({ logId }));
-    // const userId = "admin";
     console.log("jsonData", jsonData);
     axios
-      .delete(`${API_BASE_URL}/main/delete/${userId}`, {
+      .delete(`${API_BASE_URL}/main/delete`, {
         data: jsonData,
         headers: {
           Authorization: localStorage.getItem("ACCESS_TOKEN"),

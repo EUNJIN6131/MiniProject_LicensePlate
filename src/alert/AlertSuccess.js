@@ -22,7 +22,7 @@ export default function AlertSuccess(props) {
       >
         <Box>
           <Typography>{props.text}</Typography>
-          <ListItemButton sx={{ p: 0 }} onClick={() => navigate("/MiniProject_MealNote/")}>
+          <ListItemButton sx={{ p: 0 }} onClick={() => navigate("/")}>
             <ListItemText primary="로그인 페이지로 이동하기"></ListItemText>
           </ListItemButton>
         </Box>

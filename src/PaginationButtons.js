@@ -7,7 +7,8 @@ export default function PaginationButtons({ currentPage, onPageChange, pageCount
   return (
     <Stack spacing={2} direction="row" alignItems="center" >
         <div  style={{ marginRight: '10px' }}>
-        {isAdmin && !hideButtons && ( 
+        {/* isAdmin && */}
+        {!hideButtons && ( 
           <>
             <button style={{ marginRight: '10px' }} onClick={onEditClick}>수정</button>
             <button onClick={onDeleteClick}>삭제</button>

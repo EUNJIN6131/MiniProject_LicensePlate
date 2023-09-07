@@ -43,27 +43,28 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
     };
 
     console.log("id:", formData.userId);
-    console.log("Password:", formData.password);
+    // console.log("Password:", formData.password);
     const url = API_BASE_URL + "/user/signin";
     console.log(url);
 
-    try {
+    try { 
       const res = await axios.post(url, formData);
-      if (res.status === 200) {
-        
-        const cookies = res.headers['set-cookie'];
-        console.log("cookies", cookies);
+      const data = res.data
+      console.log("res.data", res.data)
+      if (data.status === 200) {
 
-
-        const accessToken = res.data.data.accessToken;
+        const accessToken = data.data.accessToken;
         localStorage.setItem("ACCESS_TOKEN", accessToken);
-        localStorage.setItem("userId", data.get("id"));
+        localStorage.setItem("role", data.role);
+
         console.log("로그인 성공")
         console.log("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN"))
-        // setIsLoggedIn(true);
         onLogin();
+        // setIsLoggedIn(true);
         // onTabChange(1);
         // navigate("/main/record");
+      } else {
+        console.log("로그인실패")
       }
     } catch (error) {
       setOpen(true);
@@ -140,7 +141,6 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
             />
 
             <Button
-              onClick={() => navigate("/main/record")}
               type="submit"
               fullWidth
               variant="contained"
@@ -154,7 +154,7 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
               로그인
             </Button>
             <Button
-              onClick={() => navigate("/users/signup")}
+              onClick={() => navigate("/user/signup")}
               fullWidth
               variant="contained"
               sx={{
