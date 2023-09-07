@@ -115,10 +115,10 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       })
       .then((response) => {
         console.log("수정 성공.", response.data);
-        const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
+        // const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
         
         // 필터링된 행으로 'rows' 상태를 업데이트
-        setRows(updatedRows);
+        // setRows(updatedRows);
         fetchEditHistory();
       })
       .catch((error) => {

@@ -11,10 +11,6 @@ import TableRow from '@mui/material/TableRow';
 
 const columns = [
     {
-        id: 'id', label: 'id', minWidth: 5,
-        align: 'center',
-    },
-    {
         id: 'logId', label: 'seq', minWidth: 5,
         align: 'center',
     },
