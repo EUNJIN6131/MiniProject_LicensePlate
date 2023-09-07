@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Component
-public class Response {
+public class ResponseDto {
 
     @Getter
     @Builder
@@ -35,30 +35,6 @@ public class Response {
                 .error(Collections.emptyList())
                 .build();
         return ResponseEntity.ok(body);
-    }
-
-    public ResponseEntity<?> success(Object data, String msg, HttpStatus status, String refreshToken) {
-        Body body = Body.builder()
-                .status(status.value())
-                .data(data)
-                .result("success")
-                .massage(msg)
-                .error(Collections.emptyList())
-                .build();
-        ResponseCookie cookie = ResponseCookie.from(refreshToken)
-                // Set other cookie properties as needed
-                .maxAge(7 * 24 * 60 * 60)
-                .path("/")
-                .sameSite("None")
-                .httpOnly(true)
-                .build();
-
-        // Create a HttpHeaders object to set the response headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
-
-        // Return the ResponseEntity with headers
-        return ResponseEntity.ok().headers(headers).body(body);
     }
 
     /**
@@ -158,6 +134,10 @@ public class Response {
      */
     public ResponseEntity<?> fail(String msg, HttpStatus status) {
         return fail(Collections.emptyList(), msg, status);
+    }
+
+    public ResponseEntity<?> fail(HttpStatus status) {
+        return fail(Collections.emptyList(), null, status);
     }
 
     public ResponseEntity<?> invalidFields(LinkedList<LinkedHashMap<String, String>> errors) {

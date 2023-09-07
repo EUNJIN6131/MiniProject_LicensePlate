@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import plate.back.dto.LogDto;
-import plate.back.dto.Response;
+import plate.back.dto.ResponseDto;
 import plate.back.lib.Helper;
 import plate.back.service.LogService;
 
@@ -28,7 +28,7 @@ import plate.back.service.LogService;
 public class LogController {
 
     private final LogService logService;
-    private final Response response;
+    private final ResponseDto response;
 
     // 3. 차량 출입 로그 기록
     @PostMapping("/record")
@@ -68,22 +68,21 @@ public class LogController {
     }
 
     // 7. 로그 수정(admin)
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<?> updateLog(@RequestBody ArrayList<LogDto> list, Errors errors, @PathVariable String userId)
+    @PutMapping("/update")
+    public ResponseEntity<?> updateLog(@RequestBody ArrayList<LogDto> list, Errors errors)
             throws IOException {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return logService.updateLog(list, userId);
+        return logService.updateLog(list);
     }
 
     // 8. 로그 삭제(admin)
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<?> deleteLog(@RequestBody ArrayList<LogDto> list, Errors errors,
-            @PathVariable String userId) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteLog(@RequestBody ArrayList<LogDto> list, Errors errors) {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return logService.deleteLog(list, userId);
+        return logService.deleteLog(list);
     }
 }

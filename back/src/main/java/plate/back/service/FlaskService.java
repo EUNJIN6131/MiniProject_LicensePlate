@@ -2,10 +2,12 @@ package plate.back.service;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,28 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.RequiredArgsConstructor;
+import plate.back.dto.ResponseDto;
+import plate.back.lib.RateLimiter;
+
+@RequiredArgsConstructor
 @Service
 public class FlaskService {
 
-    public ResponseEntity<Object> callApi(MultipartFile file) throws IOException {
+    @Value("${flask.api.url}")
+    private String flaskApiUrl;
+
+    private final RateLimiter rateLimiter;
+
+    private final ResponseDto response;
+
+    public ResponseEntity<?> callApi(MultipartFile file) throws IOException {
+        // Check if the request is allowed by the rate limiter
+        if (!rateLimiter.allowRequest()) {
+            System.out.println("not allowed");
+            return response.fail(HttpStatus.TOO_MANY_REQUESTS);
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -34,7 +54,7 @@ public class FlaskService {
         System.out.println("Flask Connection Starts");
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> response = restTemplate.exchange(
-                "http://localhost:5000/main/record",
+                flaskApiUrl + "/main/record", // Use the configured API URL
                 HttpMethod.POST,
                 requestEntity,
                 Object.class);

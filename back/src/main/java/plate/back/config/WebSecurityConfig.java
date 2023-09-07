@@ -26,12 +26,14 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable()).httpBasic(httpbasic -> httpbasic.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    // auth.requestMatchers("/user/signin", "/user/signup").permitAll()
-                    // .requestMatchers("/main/update", "/main/delete").hasRole("ADMIN")
-                    // .requestMatchers("/main/record", "main/search/date/**").hasRole("USER");
-                    // .requestMatchers(HttpMethod.OPTIONS, "/main/**").permitAll()
-                    // .anyRequest().authenticated();
-                    auth.anyRequest().permitAll();
+                    auth.requestMatchers("/user/signin", "/user/signup").permitAll()
+                            .requestMatchers(HttpMethod.OPTIONS, "/main/**").permitAll()
+                            .requestMatchers("main/search/date/**", "/main/record")
+                            .hasAnyRole("ADMIN", "USER")
+                            .requestMatchers("/main/update", "/main/delete",
+                                    "main/history")
+                            .hasRole("ADMIN")
+                            .anyRequest().authenticated();
                     // auth.requestMatchers("/**").permitAll();
 
                 }).addFilterBefore(jwtAuthenticationFilter,

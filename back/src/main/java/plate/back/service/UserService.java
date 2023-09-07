@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import plate.back.dto.Response;
+import plate.back.dto.ResponseDto;
 import plate.back.dto.user.UserRequestDto;
 import plate.back.dto.user.UserResponseDto;
 import plate.back.entity.UserEntity;
@@ -24,11 +24,12 @@ import plate.back.persistence.UserRepository;
 public class UserService {
 
     private final UserRepository userRepo;
-    private final Response response;
+    private final ResponseDto response;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    // 1. 회원가입
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (userRepo.existsByUserId(signUp.getUserId())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
@@ -46,6 +47,7 @@ public class UserService {
         return response.success("회원가입에 성공했습니다.");
     }
 
+    // 2. 로그인
     public ResponseEntity<?> signIn(UserRequestDto.SignIn signIn) {
 
         if (userRepo.findByUserId(signIn.getUserId()).orElse(null) == null) {
@@ -67,13 +69,8 @@ public class UserService {
         }
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-        String refreshToken = tokenInfo.getRefreshToken();
-        tokenInfo.setRefreshToken("http-only");
-        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
-        // redisTemplate.opsForValue()
-        // .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
-        // tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK, refreshToken);
+
+        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {

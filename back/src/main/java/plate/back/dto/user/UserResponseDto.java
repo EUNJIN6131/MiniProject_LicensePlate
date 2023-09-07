@@ -11,11 +11,6 @@ public class UserResponseDto {
     @AllArgsConstructor
     public static class TokenInfo {
         private String accessToken;
-        private String refreshToken;
-        private Long refreshTokenExpirationTime;
-
-        public void setRefreshToken(String text) {
-            refreshToken = text;
-        }
+        private String role;
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import plate.back.dto.Response;
+import plate.back.dto.ResponseDto;
 import plate.back.dto.user.UserRequestDto;
 import plate.back.lib.Helper;
 import plate.back.service.UserService;
@@ -23,8 +23,9 @@ import plate.back.service.UserService;
 public class UserController {
 
     private final UserService userService;
-    private final Response response;
+    private final ResponseDto response;
 
+    // 1. 회원가입
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserRequestDto.SignUp signUp, Errors errors) {
         // validation check
@@ -34,6 +35,7 @@ public class UserController {
         return userService.signUp(signUp);
     }
 
+    // 2. 로그인
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody UserRequestDto.SignIn signIn, Errors errors) {
         // validation check

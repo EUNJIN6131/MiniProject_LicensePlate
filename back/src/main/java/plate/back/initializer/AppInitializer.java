@@ -1,4 +1,4 @@
-package plate.back;
+package plate.back.initializer;
 
 import java.util.Collections;
 
@@ -48,16 +48,5 @@ public class AppInitializer implements ApplicationRunner {
                 .name("Mary")
                 .role(Authority.ROLE_ADMIN.name())
                 .build());
-        // for (int num = 0; num < 1000; num++) {
-        // Random random = new Random();
-        // int randomNumber = random.nextInt(10000);
-        // String text = String.valueOf(randomNumber);
-        // int len = text.length();
-        // for (int i = 0; i < 4 - len; i++) {
-        // text = "0" + text;
-        // }
-        // if (text)
-        // carRepo.save(CarInfoEntity.builder().licensePlate(text).build());
-        // }
     }
 }

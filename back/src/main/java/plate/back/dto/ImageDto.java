@@ -12,7 +12,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 public class ImageDto {
-    private Integer LogId;
+    private Integer logId;
     private String imageUrl;
     private String imageType;
 }

@@ -12,14 +12,16 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import plate.back.dto.HistoryDto;
+import plate.back.dto.ImageDto;
 import plate.back.dto.LogDto;
 import plate.back.dto.PredictDto;
-import plate.back.dto.Response;
+import plate.back.dto.ResponseDto;
 import plate.back.entity.HistoryEntity;
 import plate.back.entity.ImageEntity;
 import plate.back.entity.LogEntity;
@@ -40,14 +42,20 @@ public class LogService {
     private final HistoryRepository histRepo;
     private final FileService fileService;
     private final FlaskService flaskService;
-    private final Response response;
+    private final ResponseDto response;
 
-    // public LogDto recordLog(MultipartFile file) throws IOException {
+    // 3. 차량 출입 로그 기록
     public ResponseEntity<?> recordLog(MultipartFile file) throws IOException {
-        Object[] dtos = new Object[2];
+        Object[] dtos = new Object[3];
         // flask api 호출
-        LinkedHashMap<String, Object> flaskResponse = (LinkedHashMap<String, Object>) flaskService.callApi(file)
-                .getBody();
+        LinkedHashMap<String, Object> flaskResponse;
+        try {
+            flaskResponse = (LinkedHashMap<String, Object>) flaskService.callApi(file).getBody();
+        } catch (java.lang.ClassCastException caseException) {
+            return response.fail("Too many requests. Please try again later.", HttpStatus.TOO_MANY_REQUESTS);
+        } catch (Exception e) {
+            return response.fail("Exception while executing Flask", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         if ((int) flaskResponse.get("status") == 500) {
             return response.fail((String) flaskResponse.get("error"), HttpStatus.BAD_REQUEST);
         }
@@ -67,7 +75,7 @@ public class LogService {
         boolean flag = false;
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
-            if (carRepo.findById(String.valueOf(dto.getPredictedText())).isPresent()) {
+            if (carRepo.findByLicensePlate(String.valueOf(dto.getPredictedText())).isPresent()) {
                 dto.setPresent(true);
                 flag = true;
             }
@@ -145,6 +153,10 @@ public class LogService {
 
         dtos[0] = dto;
         dtos[1] = predList;
+        dtos[2] = ImageDto.builder()
+                .logId(savedLog.getLogId())
+                .imageType("plate")
+                .imageUrl(plateImgUrl).build();
         return response.success(dtos);
     }
 
@@ -172,6 +184,7 @@ public class LogService {
         return list;
     }
 
+    // 4. 날짜별 로그 조회 yy-MM-dd
     public ResponseEntity<?> searchDate(String start, String end) throws ParseException {
 
         // String -> Date 변환
@@ -190,6 +203,7 @@ public class LogService {
         return response.success(list);
     }
 
+    // 5. 차량 번호별 로그 조회
     public ResponseEntity<?> searchPlate(String plate) {
 
         // 로그 조회
@@ -201,6 +215,7 @@ public class LogService {
         return response.success(list);
     }
 
+    // 6. 수정/삭제 기록 조회
     public ResponseEntity<?> getHistory() {
         List<HistoryEntity> entities = histRepo.findAll();
         List<HistoryDto> list = new ArrayList<>();
@@ -218,7 +233,9 @@ public class LogService {
         return response.success(list);
     }
 
-    public ResponseEntity<?> updateLog(ArrayList<LogDto> list, String userId) throws IOException {
+    // 7. 로그 수정(admin)
+    public ResponseEntity<?> updateLog(ArrayList<LogDto> list) throws IOException {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         for (LogDto dto : list) {
             Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
             if (!optionalLog.isPresent()) {
@@ -233,7 +250,7 @@ public class LogService {
                     .previousText(entity.getLicensePlate())
                     .currentText(dto.getLicensePlate())
                     .workType("update")
-                    .userId("admin").build());
+                    .userId(userId).build());
 
             // 수정된 log 기록
             entity.setLicensePlate(dto.getLicensePlate());
@@ -268,7 +285,9 @@ public class LogService {
         return response.success();
     }
 
-    public ResponseEntity<?> deleteLog(ArrayList<LogDto> list, String userId) {
+    // 8. 로그 삭제(admin)
+    public ResponseEntity<?> deleteLog(ArrayList<LogDto> list) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             for (LogDto dto : list) {
                 int logId = dto.getLogId();
