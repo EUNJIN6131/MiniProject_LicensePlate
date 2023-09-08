@@ -51,7 +51,7 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
                     width: '80%',
                     mb: 3
                 }}>
-                    <Skeleton variant="text" width={'100%'} height={'30vh'} animation="wave" />
+                    <Skeleton variant="rectangular" width={'100%'} height={'30vh'} animation="wave" alignItems= 'center' justifyContent= 'center' />
                     {/* <img
                         src={plateImage}
                         alt="Plate Image"
@@ -160,9 +160,11 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
                     width: '100%',
                     justifyContent: 'center'
                 }}>
+                    <CardContent>
                     <Typography variant="h3">
                         인식 실패
                     </Typography>
+                    </CardContent>
                 </Card>
             // </Box>
     );
