@@ -82,6 +82,7 @@ export default function Record() {
 
       setRows((prevRows) => [newRecord, ...prevRows]);
       setIsLoading(false);
+
     } catch (error) {
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -193,7 +194,7 @@ export default function Record() {
             display: "flex",
           }}
         >
-          <Predict />
+          <Predict rows={rows} isLoading={isLoading} />
         </Box>
       </Box>
     </Box>

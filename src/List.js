@@ -172,32 +172,11 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   });
 
 
- const modifiedRows = [...rowsToDisplay]; 
-
-if (showSkeleton) {
-  // Add the loading indicator for the new car entry
-  const loadingRow = {
-    id: 'loadingRow', // 고유 ID를 사용할 수 있습니다.
-    modelType: <Skeleton variant="rectangular" />,
-    logId: 'Loading...',
-    licensePlate: <Skeleton variant="text" />,
-    accuracy: <Skeleton variant="text" />,
-    vehicleImage: <Skeleton variant="text" />,
-    plateImage: <Skeleton variant="text" />,
-    state: <Skeleton variant="text" />,
-    date: <Skeleton variant="text" />,
-    isNew: true, // 이것이 로딩 행임을 나타냅니다.
-  };
-  modifiedRows.unshift(loadingRow); // Add the loading row to the beginning
-  console.log("modifiedRows",modifiedRows)
-}
-
-  
   return (
     rows && (
       <div style={{ width: "100%", maxHeight: "100%", height: "100%", overflowY: "auto" }}>
         <DataGrid
-          rows={modifiedRows}
+          rows={rowsToDisplay}
           columns={modifiedColumns}
           loading={showSkeleton}
           pageSize={20}

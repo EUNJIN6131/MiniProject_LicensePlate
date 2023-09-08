@@ -19,8 +19,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 
-export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIsLoggedIn, selectedTab }) {
+export default function Login({ onTabChange, onLogin, onLogout, isLoggedIn, setIsLoggedIn, selectedTab }) {
   const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -47,10 +48,12 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
     const url = API_BASE_URL + "/user/signin";
     console.log(url);
 
-    try { 
+    try {
       const res = await axios.post(url, formData);
       const data = res.data
+      setMessage(data.message)
       console.log("res.data", res.data)
+
       if (data.status === 200) {
 
         const accessToken = data.data.accessToken;
@@ -64,17 +67,17 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
         // onTabChange(1);
         // navigate("/main/record");
       } else {
+        setOpen(true);
         console.log("로그인실패")
       }
     } catch (error) {
-      setOpen(true);
       console.error("Error during API call:", error);
     }
   };
 
-  useEffect(()=>{
-    
-  },[])
+  useEffect(() => {
+
+  }, [])
 
   return (
     <Box sx={{ width: '100%', }}>
@@ -134,12 +137,13 @@ export default function Login({onTabChange, onLogin, onLogout, isLoggedIn, setIs
                 fullWidth
               />
             </FormControl>
-            <AlertError
-              open={open}
-              setOpen={setOpen}
-              text={"아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."}
-            />
-
+            <Box sx={{ position: 'relative' }}>
+              <AlertError
+                open={open}
+                setOpen={setOpen}
+                text={message}
+              />
+            </Box>
             <Button
               type="submit"
               fullWidth

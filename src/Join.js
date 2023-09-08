@@ -139,7 +139,7 @@ export default function Join() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                onClick={() => navigate("/*")}
+                                onClick={() => navigate("/")}
                                 sx={{
                                     borderRadius: "10px",
                                     backgroundColor: "#2e1534",
