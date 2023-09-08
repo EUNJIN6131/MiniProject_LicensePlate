@@ -61,6 +61,11 @@ export default function Record() {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      if(response.data.status === 500) {
+
+      }
+
       const data = response.data.data[0];
       console.log("response.data", response.data)
       const plateImage = data.plateImage;
@@ -198,9 +203,10 @@ export default function Record() {
             width: "35%",
             border: "1px solid rgb(189, 188, 188)",
             display: "flex",
+            
           }}
         >
-          <Predict rows = {rows} data={responseData} isLoading={isLoading} plateImage={plateImage} />
+          <Predict rows ={rows} data={responseData} isLoading={isLoading} plateImage={plateImage} />
         </Box>
       </Box>
     </Box>
