@@ -5,7 +5,7 @@ import { API_BASE_URL } from "./api/api-config";
 import Skeleton from '@mui/material/Skeleton';
 import axios from "axios";
 import './Slideshow.css';
-
+import ImageModal from "./ImageModal";
 // import Pagination from "@mui/material/Pagination";
 // import Stack from "@mui/material/Stack";
 // import { Box, Button, TextField, Snackbar } from "@mui/material";
@@ -111,7 +111,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     console.log("Selected Rows:", selectedSeqValues[0]);
     // 수정한 licensePlate 값 출력
 
-    const jsonData = selectedSeqValues.map((item) => ({logId:item.logId, licensePlate:item.licensePlate}));
+    const jsonData = selectedSeqValues.map((item) => ({ logId: item.logId, licensePlate: item.licensePlate }));
 
     axios
       .put(`${API_BASE_URL}/main/update`, jsonData, {
@@ -123,7 +123,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       .then((response) => {
         console.log("수정 성공.", response.data);
         // const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
-        
+
         // 필터링된 행으로 'rows' 상태를 업데이트
         // setRows(updatedRows);
         fetchEditHistory();
@@ -136,7 +136,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
-   
+
     // "logId" 속성을 가진 객체 배열 생성
     const jsonData = selectedSeqValues.map((logId) => ({ logId }));
     console.log("jsonData", jsonData);
@@ -164,13 +164,79 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   const isRecordComponent = isRecord;
   const containerClassName = isRecordComponent ? "hide-checkbox" : "";
 
+  // const modifiedColumns = columns.map((column) => {
+  //   if (column.field === "logId") {
+  //     return containerClassName ? { ...column, type: undefined } : column;
+  //   }
+  //   return column;
+  // });
+
   const modifiedColumns = columns.map((column) => {
     if (column.field === "logId") {
       return containerClassName ? { ...column, type: undefined } : column;
     }
+
+
+    if (column.field === "plateImage") {
+      return {
+        ...column,
+        renderCell: (params) => {
+          const plateImage = params.value;
+          if (plateImage !== "인식 실패") {
+            // Display the 🖼 emoji when plateImage is not "인식 실패"
+            return (
+              <div className="emoticon" onClick={() => handleImageClick(params.row.plateImage)}>
+                <img src="./"></img>
+              </div>
+            );
+          } else {
+            // Display the actual value when plateImage is "인식 실패"
+            return plateImage;
+          }
+        },
+      };
+    }
+
+    if (column.field === "vehicleImage") {
+      return {
+        ...column,
+        renderCell: (params) => {
+          const vehicleImage = params.value;
+          if (vehicleImage) {
+            // Display the 🖼 emoji when there is a vehicleImage
+            return (
+              <div className="emoticon" onClick={() => handleImageClick(params.row.vehicleImage)}>
+                <img src="./"></img>
+              </div>
+            );
+          } else {
+            // Display an empty cell when there is no vehicleImage
+            return null;
+          }
+        },
+      };
+    }
+
     return column;
   });
 
+
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
+
+  const openImageModal = (imageUrl) => {
+    setSelectedImageUrl(imageUrl);
+    setImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImageUrl("");
+    setImageModalOpen(false);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    openImageModal(imageUrl);
+  };
 
   return (
     rows && (
@@ -203,8 +269,11 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
             ),
           }}
           // 행의 logId 수정, 삭제 추적 후 렌더링
-          key={(row) => row.logId }
+          key={(row) => row.logId}
         />
+        {isImageModalOpen && (
+          <ImageModal isOpen={isImageModalOpen} imageUrl={selectedImageUrl} onClose={closeImageModal} />
+        )}
       </div>
     )
   );
