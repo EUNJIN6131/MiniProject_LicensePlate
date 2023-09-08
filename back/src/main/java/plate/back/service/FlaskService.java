@@ -34,7 +34,7 @@ public class FlaskService {
     public ResponseEntity<?> callApi(MultipartFile file) throws IOException {
         // Check if the request is allowed by the rate limiter
         if (!rateLimiter.allowRequest()) {
-            System.out.println("not allowed");
+            System.out.println("Too many requests");
             return response.fail(HttpStatus.TOO_MANY_REQUESTS);
         }
 
