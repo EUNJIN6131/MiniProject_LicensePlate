@@ -23,6 +23,8 @@ export default function Record() {
   const [open, setOpen] = useState(false); // 검색결과 유무 팝업상태
   const [latestId, setLatestId] = useState(rows.length - 1);
   const [isLoading, setIsLoading] =useState(false);
+  const [responseData, setResponseData] = useState(null);
+  const [plateImage, setPlateImage] = useState(null);
 
   // useEffect(() => {
   //   showRecord()
@@ -59,14 +61,19 @@ export default function Record() {
           "Content-Type": "multipart/form-data",
         },
       });
-
       const data = response.data.data[0];
       console.log("response.data", response.data)
+      const plateImage = data.plateImage;
+      const item = response.data.data[1];
+      setResponseData(item);
+      
+      console.log("data", data)
       const today = new Date();
       const formattedDate = format(today, "yyyy-MM-dd HH:mm:ss");
 
       const newId = latestId + 1;
       setLatestId(newId);
+      setPlateImage(plateImage);
 
       const newRecord = {
         id: data.logId,
@@ -82,7 +89,6 @@ export default function Record() {
 
       setRows((prevRows) => [newRecord, ...prevRows]);
       setIsLoading(false);
-
     } catch (error) {
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -194,7 +200,7 @@ export default function Record() {
             display: "flex",
           }}
         >
-          <Predict rows={rows} isLoading={isLoading} />
+          <Predict rows = {rows} data={responseData} isLoading={isLoading} plateImage={plateImage} />
         </Box>
       </Box>
     </Box>

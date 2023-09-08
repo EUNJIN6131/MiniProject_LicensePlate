@@ -5,8 +5,10 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState, useEffect } from "react";
+import Modal from 'react-modal';
 
 const bull = (
+
     <Box
         component="span"
         sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
@@ -14,41 +16,52 @@ const bull = (
     </Box>
 );
 
+export default function Predict({ rows, data, isLoading, plateImage  }) {
 
-export default function Predict({data, isLoading}) {
-    
     const [showSkeleton, setShowSkeleton] = useState(isLoading);
 
     useEffect(() => {
-    }, [data]);
-  
+        console.log("plateImage", plateImage)
+    }, [data, plateImage]);
+    
     useEffect(() => {
-      setShowSkeleton(isLoading);
+        setShowSkeleton(isLoading);
     }, [isLoading]);
 
     if (!data) {
         return <div>Loading...</div>;
-      }
+    }
 
+        
     return (
-        <Card  loading={showSkeleton} sx={{ minWidth: 275 }} >
-            <CardContent>
+        <>
+       <div>
+            <img src={plateImage} alt="Plate Image" />
+        </div>
+
+        <div>
+          {data.map((item, index) => (
+            <Card isLoading={showSkeleton} key={index} sx={{ width:'100%',minWidth: 275, margin: '16px' }}>
+              <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Log Details
                 </Typography>
                 <Typography variant="h5" component="div">
-                    Log ID: {rows.logId}
+                seq : {item.logId}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    License Plate: {rows.licensePlate}
+                  예측 차량번호 : {item.predictedText}
                 </Typography>
                 <Typography variant="body2">
-                    Accuracy: {rows.accuracy}
-                    <br />
-                    State: {rows.state}
-                    {/* Add more fields as needed */}
+                  모델명 : {item.modelType}
+                  <br />
+                  {/* Add more fields as needed */}
+                  인식률 : {item.accuracy}
                 </Typography>
-            </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        </>
+
     );
 }
