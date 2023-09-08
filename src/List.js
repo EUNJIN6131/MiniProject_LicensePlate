@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
+import Skeleton from '@mui/material/Skeleton';
 import axios from "axios";
 import './Slideshow.css';
 
@@ -50,17 +51,23 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
   const rowsPerPage = 20;                                                   // 페이지 당 20rows
   const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
   const [userId, setUserId] = useState("");
+  const [showSkeleton, setShowSkeleton] = useState(isLoading);
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
   }, [rows]);
+
+  useEffect(() => {
+    setShowSkeleton(isLoading);
+  }, [isLoading]);
+
 
   // Pagination 함수
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -165,12 +172,34 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   });
 
 
+ const modifiedRows = [...rowsToDisplay]; 
+
+if (showSkeleton) {
+  // Add the loading indicator for the new car entry
+  const loadingRow = {
+    id: 'loadingRow', // 고유 ID를 사용할 수 있습니다.
+    modelType: <Skeleton variant="rectangular" />,
+    logId: 'Loading...',
+    licensePlate: <Skeleton variant="text" />,
+    accuracy: <Skeleton variant="text" />,
+    vehicleImage: <Skeleton variant="text" />,
+    plateImage: <Skeleton variant="text" />,
+    state: <Skeleton variant="text" />,
+    date: <Skeleton variant="text" />,
+    isNew: true, // 이것이 로딩 행임을 나타냅니다.
+  };
+  modifiedRows.unshift(loadingRow); // Add the loading row to the beginning
+  console.log("modifiedRows",modifiedRows)
+}
+
+  
   return (
     rows && (
       <div style={{ width: "100%", maxHeight: "100%", height: "100%", overflowY: "auto" }}>
         <DataGrid
-          rows={rowsToDisplay}
+          rows={modifiedRows}
           columns={modifiedColumns}
+          loading={showSkeleton}
           pageSize={20}
           // checkboxSelection={true}
           checkboxSelection={!isRecord} // Conditionally enable checkboxes

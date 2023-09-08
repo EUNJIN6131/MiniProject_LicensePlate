@@ -22,6 +22,7 @@ export default function Record() {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [open, setOpen] = useState(false); // 검색결과 유무 팝업상태
   const [latestId, setLatestId] = useState(rows.length - 1);
+  const [isLoading, setIsLoading] =useState(false);
 
   // useEffect(() => {
   //   showRecord()
@@ -49,6 +50,8 @@ export default function Record() {
     //   formData.append("files", imageSrc[i]);
     // }
 
+    setIsLoading(true);
+
     try {
       const response = await axios.post(`${API_BASE_URL}/main/record`, formData, {
         headers: {
@@ -56,8 +59,9 @@ export default function Record() {
           "Content-Type": "multipart/form-data",
         },
       });
-      const data = response.data.data[0];
 
+      const data = response.data.data[0];
+      console.log("response.data", response.data)
       const today = new Date();
       const formattedDate = format(today, "yyyy-MM-dd HH:mm:ss");
 
@@ -77,7 +81,7 @@ export default function Record() {
       };
 
       setRows((prevRows) => [newRecord, ...prevRows]);
-
+      setIsLoading(false);
     } catch (error) {
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -177,6 +181,7 @@ export default function Record() {
               rows={rows}
               rowSelectionModel={rowSelectionModel}
               setRowSelectionModel={setRowSelectionModel}
+              isLoading={isLoading}
             />
           </Box>
         </Box>
