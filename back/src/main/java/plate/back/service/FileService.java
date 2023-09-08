@@ -48,33 +48,31 @@ public class FileService {
     }
 
     // 파일 이동(복사)
-    public Map<String, String> moveFile(String vehicleImgTitle, String plateImgTitle) {
-        Map<String, String> urlMap = new HashMap<>();
-        urlMap.put("vehicle", amazonS3.getUrl(bucket, directories[2] + vehicleImgTitle).toString());
-        urlMap.put("plate", amazonS3.getUrl(bucket, directories[3] + plateImgTitle).toString());
+    public Map<String, String> moveFile(String imageTitle, String imageType, String answer) {
+        String[] imgTitleArr = imageTitle.split("\\.");
+        String answerTitle = String.format("%sans%s.%s", imgTitleArr[0], answer,
+                imgTitleArr[1]);
+        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucket,
+                "total/" + imageType + "/" + imageTitle, bucket,
+                "relearn/" + imageType + "/" + answerTitle);
 
-        CopyObjectRequest[] copyObjRequests = new CopyObjectRequest[2];
+        amazonS3.copyObject(copyObjectRequest);
 
-        copyObjRequests[0] = new CopyObjectRequest(bucket, directories[0] + vehicleImgTitle, bucket,
-                directories[2] + vehicleImgTitle);
-        copyObjRequests[1] = new CopyObjectRequest(bucket, directories[1] + plateImgTitle, bucket,
-                directories[3] + plateImgTitle);
+        Map<String, String> result = new HashMap<>();
+        String url = amazonS3.getUrl(bucket, "relearn/" + imageType + "/" + answerTitle).toString();
+        result.put("url", url);
+        result.put("title", answerTitle);
 
-        for (CopyObjectRequest copyObjectRequest : copyObjRequests) {
-            amazonS3.copyObject(copyObjectRequest);
-        }
-
-        return urlMap;
+        return result;
     }
 
     // 특정 파일 삭제
-    public void deleteFile(String vehicleImgTitle, String plateImgTitle) {
+    public void deleteFile(String imageTitle, String imageType) {
+
         List<KeyVersion> keysToDelete = new ArrayList<>();
 
-        keysToDelete.add(new KeyVersion(directories[0] + vehicleImgTitle));
-        keysToDelete.add(new KeyVersion(directories[2] + vehicleImgTitle));
-        keysToDelete.add(new KeyVersion(directories[1] + plateImgTitle));
-        keysToDelete.add(new KeyVersion(directories[3] + plateImgTitle));
+        keysToDelete.add(new KeyVersion("total/" + imageType + "/" + imageTitle));
+        keysToDelete.add(new KeyVersion("relearn/" + imageType + "/" + imageTitle));
 
         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket)
                 .withKeys(keysToDelete);
