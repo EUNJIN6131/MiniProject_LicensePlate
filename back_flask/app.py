@@ -14,8 +14,8 @@ from tempfile import NamedTemporaryFile
 import model2_esrgan_super_resolution as esrgan
 import model3_easy_ocr as ocr
 import model4_roboflow_license_number_extractor as robo
-import model1_img_classfication as vgg
 import model_YOLOv5 as yolo
+import model5_num_classification_YOLO as ncy
 
 load_dotenv()  # Load variables from .env file
 
@@ -63,24 +63,37 @@ def predict():
             with NamedTemporaryFile(delete=False, suffix=".jpg") as temp_img_file:
                 temp_img_file.write(img_bytes)
                 temp_img_file_name = temp_img_file.name
-                file_name, plate_img = yolo.YOLOv5_Load(temp_img_file_name, img_savefolder)
-                print(file_name, plate_img)
+                file_name = yolo.YOLOv5_Load(temp_img_file_name, img_savefolder)
         except:
             return jsonify({"status":500, "error": "번호판 인식 불가"}) 
-        print("fileName", file_name)
+        
+        if file_name == None:
+            return jsonify({"status":500, "error": "번호판 인식 불가"}) 
+
         file_path_name = f"./{file_name}"
         print("step1 passed")
-        success, img_url, img_title = upload_to_s3_and_get_url(plate_img, 'licenseplate-iru', 'total/plate')
-        
-
-        # Step 2: Number Result 1 (VGG)
-        vgg_result = vgg.model_result(file_path_name)
-        print("step2 passed")
 
         # Step 3: Plate Preprocessing (Super-Resolution)
-        esrgan.model_result(file_path_name, after_path)
-        print("step3 passed")
-        os.remove(file_path_name)
+        try:
+            esrgan.model_result(file_path_name, after_path)
+            print("file_path_name", file_path_name)
+            print("step3 passed")
+        except Exception as e:
+            return jsonify({"status":500, "error": str(e)}) 
+
+       # Open the processed image using PIL
+        plate_img = Image.open(after_path)
+
+        # Save the PIL image to a temporary file
+        with NamedTemporaryFile(delete=False, suffix=".jpg") as temp_plate_img_file:
+            plate_img.save(temp_plate_img_file, format='JPEG')
+
+        # Upload the temporary file to Amazon S3
+        with open(temp_plate_img_file.name, 'rb') as plate_file:
+            success, img_url, img_title = upload_to_s3_and_get_url(plate_file, 'licenseplate-iru', 'total/plate')
+
+        # Remove the temporary file
+        os.remove(temp_plate_img_file.name)
 
         # Step 4: Number Result 2 (OCR)
         ocr_result = ocr.model_result(after_path)
@@ -90,9 +103,18 @@ def predict():
         robo_result = robo.model_result(after_path)
         print("step5 passed")
 
+        # Step 6: Number Result 4 (YOLOv5)
+        try:
+            yolo_result = ncy.load_yolo(after_path)
+        except Exception as e:
+            return jsonify({"status":500, "error": str(e)}) 
+
+        os.remove(file_path_name)
+        os.remove(after_path)
+
         return jsonify({
             "status" : 200,
-            "predictedResults":{"vgg": vgg_result,
+            "predictedResults":{"yolo": yolo_result,
                                 "ocr": ocr_result,
                                 "robo": robo_result},
             "plateImgUrl": img_url,

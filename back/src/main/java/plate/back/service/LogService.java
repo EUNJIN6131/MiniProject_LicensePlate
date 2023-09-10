@@ -54,11 +54,41 @@ public class LogService {
         } catch (java.lang.ClassCastException caseException) {
             return response.fail("Too many requests. Please try again later.", HttpStatus.TOO_MANY_REQUESTS);
         } catch (Exception e) {
-            return response.fail("Exception while executing Flask", HttpStatus.INTERNAL_SERVER_ERROR);
+            return response.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        // 번호판 인식 실패
         if ((int) flaskResponse.get("status") == 500) {
-            return response.fail((String) flaskResponse.get("error"), HttpStatus.BAD_REQUEST);
+            LogEntity savedLog = logRepo.save(LogEntity.builder()
+                    .modelType("인식 실패")
+                    .licensePlate("인식 실패")
+                    .accuracy(0.0)
+                    .state("수정 필요")
+                    .build());
+            // 현장 이미지만 업로드
+            String[] vehicleImgArr = fileService.uploadFile(file, 0);
+            String vehicleImgUrl = vehicleImgArr[0];
+            String vehicleImgTitle = vehicleImgArr[1];
+            ImageEntity vehicleImg = imgRepo.save(ImageEntity.builder()
+                    .logEntity(savedLog)
+                    .imageUrl(vehicleImgUrl)
+                    .imageType("vehicle")
+                    .imageTitle(vehicleImgTitle).build());
+
+            LogDto dto = LogDto.builder()
+                    .logId(savedLog.getLogId())
+                    .vehicleImage(vehicleImg.getImageUrl())
+                    .plateImage("인식 실패")
+                    .state(savedLog.getState())
+                    .date(savedLog.getDate())
+                    .modelType("인식 실패")
+                    .licensePlate("인식 실패")
+                    .accuracy("인식 실패")
+                    .build();
+            dtos[0] = dto;
+            return response.fail(dtos, (String) flaskResponse.get("error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
         LinkedHashMap<String, ArrayList<Object>> predictValue = (LinkedHashMap<String, ArrayList<Object>>) flaskResponse
                 .get("predictedResults");
 
@@ -72,12 +102,12 @@ public class LogService {
             }
         }
 
-        boolean flag = false;
+        int isPresent = 0;
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
             if (carRepo.findByLicensePlate(String.valueOf(dto.getPredictedText())).isPresent()) {
-                dto.setPresent(true);
-                flag = true;
+                dto.setIsPresent(true);
+                isPresent++;
             }
         }
 
@@ -85,27 +115,19 @@ public class LogService {
         int idx = 0;
         for (int i = 0; i < predList.size(); i++) {
             PredictDto dto = predList.get(i);
-            if (dto.isPresent() && maxVal < (double) dto.getAccuracy()) {
+            if (maxVal < (double) dto.getAccuracy()) {
                 maxVal = dto.getAccuracy();
                 idx = i;
             }
         }
 
         // Log 엔티티 저장
-        LogEntity savedLog;
-        if (flag) {
-            savedLog = logRepo.save(LogEntity.builder()
-                    .modelType(predList.get(idx).getModelType())
-                    .licensePlate(predList.get(idx).getPredictedText())
-                    .accuracy(maxVal)
-                    .state("수정 불필요").build());
-        } else {
-            savedLog = logRepo.save(LogEntity.builder()
-                    .modelType("-")
-                    .licensePlate("-")
-                    .accuracy(0.0)
-                    .state("수정 필요").build());
-        }
+        LogEntity savedLog = logRepo.save(LogEntity.builder()
+                .modelType(predList.get(idx).getModelType())
+                .licensePlate(predList.get(idx).getPredictedText())
+                .accuracy(maxVal)
+                .state(isPresent >= 2 ? "수정 불필요" : "수정 필요")
+                .build());
 
         // Image 엔티티 저장
         // 원본 file 업로드(Aws S3)
@@ -239,7 +261,7 @@ public class LogService {
         for (LogDto dto : list) {
             Optional<LogEntity> optionalLog = logRepo.findById(dto.getLogId());
             if (!optionalLog.isPresent()) {
-                return response.fail("수정 실패", HttpStatus.BAD_REQUEST);
+                return response.fail("존재하지 않는 기록입니다.", HttpStatus.BAD_REQUEST);
             }
 
             LogEntity entity = optionalLog.get();
@@ -260,26 +282,27 @@ public class LogService {
 
             dto.setState("수정 완료");
             // AWS S3 파일 이동
-            List<ImageEntity> imgEntities = imgRepo.findByLogId(entity.getLogId());
-            String vehicleImgTitle = imgEntities.get(0).getImageTitle();
-            String plateImgTitle = imgEntities.get(1).getImageTitle();
-
             try {
-                Map<String, String> urlMap = fileService.moveFile(vehicleImgTitle, plateImgTitle);
-                ImageEntity vehicleEntity = imgEntities.get(0);
-                ImageEntity plateEntity = imgEntities.get(1);
+                List<ImageEntity> imgEntities = imgRepo.findByLogId(entity.getLogId());
 
-                // image_url 수정
-                vehicleEntity.setImageUrl(urlMap.get("vehicle"));
-                imgRepo.save(vehicleEntity);
-                plateEntity.setImageUrl(urlMap.get("plate"));
-                imgRepo.save(plateEntity);
+                for (ImageEntity imageEntity : imgEntities) {
+                    String answer = entity.getLicensePlate();
+                    String imageTitle = imageEntity.getImageTitle();
+                    String imageType = imageEntity.getImageType();
 
-                // AWS S3 파일 삭제
-                fileService.deleteFile(vehicleImgTitle, plateImgTitle);
+                    Map<String, String> map = fileService.moveFile(imageTitle, imageType, answer);
+
+                    // AWS S3 파일 삭제
+                    fileService.deleteFile(imageTitle, imageType);
+
+                    imageEntity.setImageUrl(map.get("url"));
+                    imageEntity.setImageTitle(map.get("title"));
+                    imgRepo.save(imageEntity);
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
-                continue;
+                return response.fail(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
             }
         }
         return response.success();

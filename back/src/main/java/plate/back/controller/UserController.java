@@ -54,14 +54,15 @@ public class UserController {
         return userService.reissue(reissue);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody UserRequestDto.Logout logout, Errors errors) {
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
-        }
-        return userService.logout(logout);
-    }
+    // @PostMapping("/logout")
+    // public ResponseEntity<?> logout(@RequestBody UserRequestDto.Logout logout,
+    // Errors errors) {
+    // // validation check
+    // if (errors.hasErrors()) {
+    // return response.invalidFields(Helper.refineErrors(errors));
+    // }
+    // return userService.logout(logout);
+    // }
 
     @GetMapping("/authority")
     public ResponseEntity<?> authority() {

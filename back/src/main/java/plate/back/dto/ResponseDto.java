@@ -21,7 +21,7 @@ public class ResponseDto {
     private static class Body {
         private int status;
         private String result;
-        private String massage;
+        private String message;
         private Object data;
         private Object error;
     }
@@ -31,7 +31,7 @@ public class ResponseDto {
                 .status(status.value())
                 .data(data)
                 .result("success")
-                .massage(msg)
+                .message(msg)
                 .error(Collections.emptyList())
                 .build();
         return ResponseEntity.ok(body);
@@ -107,7 +107,7 @@ public class ResponseDto {
                 .status(status.value())
                 .data(data)
                 .result("fail")
-                .massage(msg)
+                .message(msg)
                 .error(Collections.emptyList())
                 .build();
         return ResponseEntity.ok(body);
@@ -145,7 +145,7 @@ public class ResponseDto {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .data(Collections.emptyList())
                 .result("fail")
-                .massage("")
+                .message("")
                 .error(errors)
                 .build();
         return ResponseEntity.ok(body);

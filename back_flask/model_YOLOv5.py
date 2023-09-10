@@ -30,20 +30,11 @@ def YOLOv5(img_file_name, model, img_savefolder):
             img_savename = f"{img_savefolder}/{uuid.uuid4()}.jpg"
             img_with_box.save(img_savename)
             
-            img_byte_array = io.BytesIO()
-            img_with_box.save(img_byte_array, format='JPEG')
-            
-            # Reset the byte buffer to the beginning
-            img_byte_array.seek(0)
-            return img_savename, img_byte_array
+            return img_savename
     return None
 
 def YOLOv5_Load(img_file_name, img_savefolder):
     model = torch.hub.load('ultralytics/yolov5','custom',path='./weights/yolov5_license_plate.pt')  # force_reload = recache latest code
     model.eval()
     result_img = YOLOv5(img_file_name, model, img_savefolder)
-    if result_img:
-        print(f"Detected object saved as: {result_img}")
-    else:
-        print("No object detected.")
     return result_img

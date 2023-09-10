@@ -7,8 +7,8 @@ reader = easyocr.Reader(['en'], gpu=False)
 # 이미지 삽입 경로
 input_path = None
 
-def model_result(image):
-    result = reader.readtext(image, allowlist='0123456789')
+def model_result(image_path):
+    result = reader.readtext(image_path, allowlist='0123456789')
 
     max_confidence = -1  # 초기화
     selected_text = None

@@ -12,33 +12,33 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
-import plate.back.jwt.JwtAuthenticationFilter;
+import plate.back.jwt.JwtAuthorizationFilter;
+import plate.back.jwt.JwtExceptionHandler;
 import plate.back.jwt.JwtTokenProvider;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
 public class WebSecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtExceptionHandler exceptionHandler;
 
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()).httpBasic(httpbasic -> httpbasic.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/user/signin", "/user/signup").permitAll()
-                            .requestMatchers(HttpMethod.OPTIONS, "/main/**").permitAll()
-                            .requestMatchers("main/search/date/**", "/main/record")
+                    auth.requestMatchers(HttpMethod.OPTIONS, "/main/**").permitAll()
+                            .requestMatchers("/user/signin").permitAll()
+                            .requestMatchers("/user/signup").permitAll()
+                            .requestMatchers("main/search/plate/**", "main/search/date/**", "/main/record")
                             .hasAnyRole("ADMIN", "USER")
-                            .requestMatchers("/main/update", "/main/delete",
-                                    "main/history")
-                            .hasRole("ADMIN")
+                            .requestMatchers("/main/update", "/main/delete", "main/history").hasRole("ADMIN")
                             .anyRequest().authenticated();
                     // auth.requestMatchers("/**").permitAll();
-
-                }).addFilterBefore(jwtAuthenticationFilter,
+                })
+                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider, exceptionHandler),
                         UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

@@ -5,11 +5,9 @@ import tensorflow_hub as hub
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-import main
 
 # 파일 경로 설정
 SAVED_MODEL_PATH = "https://tfhub.dev/captain-pool/esrgan-tf2/1"
-SAVE_PATH = None 
 
 # ESRGAN 모델 불러오기
 model = hub.load(SAVED_MODEL_PATH)

@@ -45,4 +45,8 @@ public class ImageEntity {
     public void setImageUrl(String url) {
         this.imageUrl = url;
     }
+
+    public void setImageTitle(String title) {
+        this.imageTitle = title;
+    }
 }

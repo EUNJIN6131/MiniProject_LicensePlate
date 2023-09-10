@@ -75,7 +75,9 @@ public class UserService {
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
         // 1. Refresh Token 검증
-        if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
+        try {
+            jwtTokenProvider.validateToken(reissue.getRefreshToken());
+        } catch (Exception e) {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
@@ -104,30 +106,33 @@ public class UserService {
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
-        // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
-        }
+    // public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
+    // // 1. Access Token 검증
+    // try {
+    // jwtTokenProvider.validateToken(reissue.getRefreshToken());
+    // } catch (Exception e) {
+    // return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+    // }
 
-        // 2. Access Token 에서 User userId 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
+    // // 2. Access Token 에서 User userId 을 가져옵니다.
+    // Authentication authentication =
+    // jwtTokenProvider.getAuthentication(logout.getAccessToken());
 
-        // 3. Redis 에서 해당 User userId 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
-        // if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) !=
-        // null) {
-        // Refresh Token 삭제
-        // redisTemplate.delete("RT:" + authentication.getName());
-        // }
+    // // 3. Redis 에서 해당 User userId 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+    // // if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) !=
+    // // null) {
+    // // Refresh Token 삭제
+    // // redisTemplate.delete("RT:" + authentication.getName());
+    // // }
 
-        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        // Long expiration = jwtTokenProvider.getExpiration(logout
-        // .getAccessToken());
-        // redisTemplate.opsForValue().set(logout.getAccessToken(), "logout",
-        // expiration, TimeUnit.MILLISECONDS);
+    // // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
+    // // Long expiration = jwtTokenProvider.getExpiration(logout
+    // // .getAccessToken());
+    // // redisTemplate.opsForValue().set(logout.getAccessToken(), "logout",
+    // // expiration, TimeUnit.MILLISECONDS);
 
-        return response.success("로그아웃 되었습니다.");
-    }
+    // return response.success("로그아웃 되었습니다.");
+    // }
 
     public ResponseEntity<?> authority() {
         // SecurityContext에 담겨 있는 authentication userEamil 정보
