@@ -79,8 +79,7 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   const handleLogoutClick = () => {
     onLogout();
     onTabChange(0); // 로그아웃 후 첫 번째 탭으로 이동
-    navigate('/main');
-
+    navigate('/');
   };
 
 
