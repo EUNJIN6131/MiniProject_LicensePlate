@@ -4,7 +4,7 @@ import Login from "./Login.js";
 import Record from "./Record.js";
 import Search from "./Search.js";
 import Enroll from "./Enroll.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Main() {
@@ -20,7 +20,7 @@ export default function Main() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setSelectedTab(0);
-    navigate('/main');
+    navigate('/main/*');
   };
 
   const handleLogin = () => {
@@ -41,11 +41,11 @@ export default function Main() {
         onLogout={handleLogout}
         onLogin={handleLogin}
       />
-      {selectedTab === 0 && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}
-      setIsLoggedIn={setIsLoggedIn} selectedTab={selectedTab}/>}
       {selectedTab === 1 && <Record />}
       {selectedTab === 2 && <Search selectedTab={selectedTab} />}
       {selectedTab === 3 && <Enroll />}
+      {selectedTab === 0 && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}
+      setIsLoggedIn={setIsLoggedIn} selectedTab={selectedTab}/>}
     </Box>
   );
 }
