@@ -289,7 +289,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
           key={(row) => row.logId}
         />
         {isImageModalOpen && (
-          <ImageModal isOpen={isImageModalOpen} imageUrl={selectedImageUrl} onClose={closeImageModal} />
+          <ImageModal isOpen={isImageModalOpen} imageUrl={selectedImageUrl} onClose={closeImageModal}  />
         )}
       </div>
     )

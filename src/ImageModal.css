@@ -1,0 +1,46 @@
+.draggable-modal {
+    position: fixed;
+    width: '300px'; /* 모달 창의 너비를 원하는 크기로 조정합니다. */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+    z-index: 9999;
+  }
+  
+  .draggable-modal.open {
+    transform: translate(0, 0);
+  }
+  
+  .drag-handle {
+    background-color: #007bff;
+    color: #fff;
+    cursor: move;
+    user-select: none;
+    padding: 8px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  
+  .drag-handle span {
+    margin-left: 8px;
+  }
+  
+  .content {
+    padding: 16px;
+  }
+  
+  button {
+    margin: 8px;
+  }
+
+  .close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: transparent;
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Add rounded corners */
+    cursor: pointer;
+  }
