@@ -20,6 +20,7 @@ export default function Main() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setSelectedTab(0);
+    navigate('/main/login');
   };
 
   const handleLogin = () => {
