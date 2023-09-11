@@ -53,7 +53,7 @@ const columns = [
   },
 ];
 
-export default function List({  rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
+export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
   const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
@@ -69,7 +69,6 @@ export default function List({  rows, setRows, rowSelectionModel, setRowSelectio
 
   useEffect(() => {
     setShowSkeleton(isLoading);
-    findIsAdmin();
   }, [isLoading]);
 
 
@@ -102,10 +101,15 @@ export default function List({  rows, setRows, rowSelectionModel, setRowSelectio
     const jwtToken = localStorage.getItem("ACCESS_TOKEN");
     if (jwtToken) {
       // JWT 토큰이 존재한다면 디코딩하여 Role을 확인
-      const decodedToken = jwt_decode(jwtToken); // jwt_decode를 사용하여 JWT 토큰 디코딩
+      const decodedToken = jwt_decode(jwtToken);
       if (decodedToken.role === "ADMIN") {
         setIsAdmin(true);
+        console.log("decodedToken.role", decodedToken.role);
+      } else {
+        setIsAdmin(false);
       }
+    } else {
+      setIsAdmin(false);
     }
   }
 
@@ -207,7 +211,7 @@ export default function List({  rows, setRows, rowSelectionModel, setRowSelectio
         },
       };
     }
-    
+
 
     if (column.field === "plateImage") {
       return {
@@ -279,7 +283,7 @@ export default function List({  rows, setRows, rowSelectionModel, setRowSelectio
           loading={showSkeleton}
           pageSize={20}
           // checkboxSelection={true}
-          checkboxSelection={!isRecord} // Conditionally enable checkboxes
+          checkboxSelection={!isRecord}
           className={isRecord ? 'hide-checkbox' : ''}
           onRowSelectionModelChange={(newRowSelectionModel) => {
             setRowSelectionModel(newRowSelectionModel);
@@ -306,7 +310,7 @@ export default function List({  rows, setRows, rowSelectionModel, setRowSelectio
           key={(row) => row.logId}
         />
         {isImageModalOpen && (
-          <ImageModal isOpen={isImageModalOpen} imageUrl={selectedImageUrl} onClose={closeImageModal}  />
+          <ImageModal isOpen={isImageModalOpen} imageUrl={selectedImageUrl} onClose={closeImageModal} />
         )}
       </div>
     )

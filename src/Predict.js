@@ -133,7 +133,7 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
                                     예측 차량번호 : {item.predictedText}
                                 </Typography>
                                 <Typography variant="body2">
-                                    인식률 : {item.accuracy}
+                                    인식률 : {item.accuracy.toFixed(3)}
                                     <br />
                                     등록상태 : {item.present ? '등록 번호' : '미등록 번호'}
                                 </Typography>
