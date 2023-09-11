@@ -8,8 +8,18 @@ const ImageModal = ({ isOpen, imageUrl, onClose }) => {
     setShowImage(!showImage);
   };
 
+  const customStyles = {
+    overlay: {
+      zIndex: 9999, // 모달 창을 가장 위로 올리기 위한 z-index 값
+    },
+    content: {
+      zIndex: 10000, // 모달 내용을 가장 위로 올리기 위한 z-index 값
+    },
+  };
+
+  
   return (
-    <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Image Modal">
+    <Modal isOpen={isOpen} onRequestClose={onClose} style={customStyles} contentLabel="Image Modal">
       <div className="image-container">
         {showImage ? (
           <img src={imageUrl} alt="Full Image" />

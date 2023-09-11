@@ -20,15 +20,17 @@ export default function Main() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setSelectedTab(0);
-    navigate('/main/login');
+    navigate('/main');
   };
 
   const handleLogin = () => {
     setIsLoggedIn(true);
+    if (setIsLoggedIn) {
     handleTabChange(1);
     navigate("/main/record");
     // handleTabChange(1);
     // setSelectedTab(1);
+    }
   };
 
   return (

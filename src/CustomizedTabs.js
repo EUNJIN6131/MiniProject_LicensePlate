@@ -67,7 +67,7 @@ const RightBox = styled(Tab)(
   }),
 );
 
-export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout, onLogin }) {
+export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
 
@@ -76,43 +76,37 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout, onLo
     onTabChange(newValue);
   };
 
-  // const handleLoginClick = () => {
-  //   // 로그인 버튼을 클릭할 때 로그인 처리를 수행하고 탭을 변경합니다.
-  //   onLogin();
-  //   // onTabChange(1);
-  // };
-
   const handleLogoutClick = () => {
-    // 로그아웃 버튼을 클릭할 때 로그아웃 처리를 수행하고 탭을 변경합니다.
     onLogout();
     onTabChange(0); // 로그아웃 후 첫 번째 탭으로 이동
-    navigate('/main/login');
+    navigate('/main');
+
   };
 
 
   return (
     <Box sx={{ width: '100%', }}>
       <Box sx={{ bgcolor: '#2e1534', display: 'flex', p: 3, }}>
-       <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
-  {!isLoggedIn ? (
-    [
-      <StyledTab key="tab1" label="차량 입출입 현황" disabled />,
-      <StyledTab key="tab2" label="검색" disabled />,
-      <StyledTab key="tab3" label="차량등록" disabled />
-    ]
-  ) : (
-    [
-      <StyledTab key="tab1" label="차량 입출입 현황" onClick={() => { onTabChange(1); navigate('/main/record'); }} />,
-      <StyledTab key="tab2" label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} />,
-      <StyledTab key="tab3" label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} />
-    ]
-  )}
-  {!isLoggedIn ? (
-    <RightBox key="tab0" label="로그인" />
-  ) : (
-    <RightBox key="tab0" label="로그아웃" onClick={handleLogoutClick} />
-  )}
-</StyledTabs>
+        <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
+          {!isLoggedIn ? (
+            [
+              <StyledTab key="tab1" label="차량 입출입 현황" disabled />,
+              <StyledTab key="tab2" label="검색" disabled />,
+              <StyledTab key="tab3" label="차량등록" disabled />
+            ]
+          ) : (
+            [
+              <StyledTab key="tab1" label="차량 입출입 현황" onClick={() => { onTabChange(1); navigate('/main/record'); }} />,
+              <StyledTab key="tab2" label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} />,
+              <StyledTab key="tab3" label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} />
+            ]
+          )}
+          {!isLoggedIn ? (
+            <RightBox key="tab0" label="로그인" />
+          ) : (
+            <RightBox key="tab0" label="로그아웃" onClick={handleLogoutClick} />
+          )}
+        </StyledTabs>
       </Box>
     </Box>
   );

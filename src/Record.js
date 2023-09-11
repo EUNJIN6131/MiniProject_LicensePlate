@@ -22,7 +22,7 @@ export default function Record() {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [open, setOpen] = useState(false); // 검색결과 유무 팝업상태
   const [latestId, setLatestId] = useState(rows.length - 1);
-  const [isLoading, setIsLoading] =useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState(null);
   const [plateImage, setPlateImage] = useState(null);
 
@@ -32,7 +32,7 @@ export default function Record() {
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
-    
+
   }, [rows]);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function Record() {
         },
       });
 
-      if(response.data.status === 500) {
+      if (response.data.status === 500) {
 
       }
 
@@ -71,7 +71,7 @@ export default function Record() {
       const plateImage = data.plateImage;
       const item = response.data.data[1];
       setResponseData(item);
-      
+
       console.log("data", data)
       const today = new Date();
       const formattedDate = format(today, "yyyy-MM-dd HH:mm:ss");
@@ -121,7 +121,8 @@ export default function Record() {
     call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
       .then((data) => {
         const responseData = data.data;
-
+        console.log("responseData", responseData)
+        
         if (Array.isArray(responseData)) {
           const updatedRows = responseData
             .map((record, index) => {
@@ -203,10 +204,10 @@ export default function Record() {
             width: "35%",
             border: "1px solid rgb(189, 188, 188)",
             display: "flex",
-            
+
           }}
         >
-          <Predict rows ={rows} data={responseData} isLoading={isLoading} plateImage={plateImage} />
+          <Predict rows={rows} data={responseData} isLoading={isLoading} plateImage={plateImage} />
         </Box>
       </Box>
     </Box>

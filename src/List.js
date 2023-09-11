@@ -176,6 +176,23 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       return containerClassName ? { ...column, type: undefined } : column;
     }
 
+    if (column.field === "accuracy") {
+      return {
+        ...column,
+        renderCell: (params) => {
+          const accuracy = params.value;
+          if (isNaN(accuracy)) {
+            // 숫자가 아닌 경우 (예: "인식 실패")
+            return accuracy;
+          } else {
+            // 숫자인 경우 소수점 셋째 자리까지 형식화
+            const formattedAccuracy = parseFloat(accuracy).toFixed(3);
+            return formattedAccuracy;
+          }
+        },
+      };
+    }
+    
 
     if (column.field === "plateImage") {
       return {
