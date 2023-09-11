@@ -305,8 +305,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditClick}
                 hideButtons={isRecord}
-                isAdmin={isAdmin}
-                findIsAdmin={findIsAdmin}
               />
             ),
           }}
