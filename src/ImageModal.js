@@ -6,6 +6,7 @@ import "./ImageModal.css";
 const ImageModal = ({ isOpen, imageUrl, onClose }) => {
   const [showImage, setShowImage] = useState(false);
   const [imageWidth, setImageWidth] = useState(300);
+  const [brightness, setBrightness] = useState(100);
 
   useEffect(() => {
     // 이미지가 로드되면 이미지의 너비를 설정합니다.
@@ -30,13 +31,21 @@ const ImageModal = ({ isOpen, imageUrl, onClose }) => {
     content: {
       position: "relative",
       zIndex: 10000,
-      border: "none", // Remove modal border
-      background: "none", // Remove modal background
-      overflow: "visible", // Allow content to overflow modal
-      width: `${imageWidth}px`, // Set modal width based on image width
+      border: "none", 
+      background: "none",
+      overflow: "visible", 
+      width: `${imageWidth}px`, 
     },
   };
   
+  const handleBrightnessChange = (event) => {
+    setBrightness(event.target.value);
+  };
+
+  const imageStyle = {
+    filter: `brightness(${brightness}%)`,
+  };
+
   
   return (
     <Modal
@@ -57,12 +66,26 @@ const ImageModal = ({ isOpen, imageUrl, onClose }) => {
           </div>
           <div className="image-container">
             {showImage ? (
-              <img src={imageUrl} alt="Full Image" />
+              <img src={imageUrl} alt="Full Image" style={imageStyle} />
             ) : (
               <div className="emoticon" onClick={toggleImage}>
                 {toggleImage()}
               </div>
             )}
+          </div>
+          <div className="adjustment-controls">
+            <div>
+              <label htmlFor="brightness">밝기</label>
+              <input
+                type="range"
+                id="brightness"
+                min="0"
+                max="200"
+                value={brightness}
+                onChange={handleBrightnessChange}
+              />
+               <span>{brightness}%</span> 
+            </div>
           </div>
           <button onClick={onClose}>닫기</button>
         </div>
