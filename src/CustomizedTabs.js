@@ -89,21 +89,21 @@ export default function CustomizedTabs({ isLoggedIn, onTabChange, onLogout }) {
         <StyledTabs value={value} onChange={handleChange} aria-label="styled tabs example">
           {!isLoggedIn ? (
             [
-              <StyledTab key="tab1" label="차량 입출입 현황" disabled />,
-              <StyledTab key="tab2" label="검색" disabled />,
-              <StyledTab key="tab3" label="차량등록" disabled />
+              <StyledTab key="1" label="차량 입출입 현황" disabled />,
+              <StyledTab key="2" label="검색" disabled />,
+              <StyledTab key="3" label="차량등록" disabled />
             ]
           ) : (
             [
-              <StyledTab key="tab1" label="차량 입출입 현황" onClick={() => { onTabChange(1); navigate('/main/record'); }} />,
-              <StyledTab key="tab2" label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} />,
-              <StyledTab key="tab3" label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} />
+              <StyledTab key="1" label="차량 입출입 현황" onClick={() => { onTabChange(1); navigate('/main/record'); }} />,
+              <StyledTab key="2" label="검색" onClick={() => { onTabChange(2); navigate('/main/search'); }} />,
+              <StyledTab key="3" label="차량등록" onClick={() => { onTabChange(3); navigate('/main/enroll'); }} />
             ]
           )}
           {!isLoggedIn ? (
-            <RightBox key="tab0" label="로그인" />
+            <RightBox key="0" label="로그인" />
           ) : (
-            <RightBox key="tab0" label="로그아웃" onClick={handleLogoutClick} />
+            <RightBox key="0" label="로그아웃" onClick={handleLogoutClick} />
           )}
         </StyledTabs>
       </Box>
