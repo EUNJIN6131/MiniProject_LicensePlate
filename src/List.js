@@ -6,6 +6,8 @@ import Skeleton from '@mui/material/Skeleton';
 import axios from "axios";
 import './Slideshow.css';
 import ImageModal from "./ImageModal";
+import jwt_decode from "jwt-decode";
+
 // import Pagination from "@mui/material/Pagination";
 // import Stack from "@mui/material/Stack";
 // import { Box, Button, TextField, Snackbar } from "@mui/material";
@@ -51,9 +53,10 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
+export default function List({  rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
 
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
+  const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
   const rowsPerPage = 20;                                                   // 페이지 당 20rows
   const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
@@ -66,6 +69,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
   useEffect(() => {
     setShowSkeleton(isLoading);
+    findIsAdmin();
   }, [isLoading]);
 
 
@@ -92,6 +96,17 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
   const handleRowSelection = (newRowSelectionModel) => {
     setRowSelectionModel(newRowSelectionModel);
+  }
+
+  const findIsAdmin = () => {
+    const jwtToken = localStorage.getItem("ACCESS_TOKEN");
+    if (jwtToken) {
+      // JWT 토큰이 존재한다면 디코딩하여 Role을 확인
+      const decodedToken = jwt_decode(jwtToken); // jwt_decode를 사용하여 JWT 토큰 디코딩
+      if (decodedToken.role === "ADMIN") {
+        setIsAdmin(true);
+      }
+    }
   }
 
   // 7.로그 수정(admin)
@@ -282,6 +297,8 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditClick}
                 hideButtons={isRecord}
+                isAdmin={isAdmin}
+                findIsAdmin={findIsAdmin}
               />
             ),
           }}
