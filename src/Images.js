@@ -35,7 +35,7 @@ export default function Images({ showRecord }) {
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesData.length);
-    }, 20000);
+    }, 15000);
     return () => {
       console.log("currentImageIndex", currentImageIndex)
       if (currentImage) {

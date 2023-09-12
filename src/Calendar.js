@@ -78,7 +78,7 @@ export default function Calendar({ startDate, endDate, setStartDate, setEndDate,
     };
 
     useEffect(() => {
-        if (selectedTab === 2) {
+        if (selectedTab === 1) {
             const today = dayjs();
             if (resetDateRange) {
                 setStartDate(today);

@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Main() {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(3);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
- 
+
   const navigate = useNavigate();
 
   const handleTabChange = (tabIndex) => {
@@ -18,18 +18,18 @@ export default function Main() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setSelectedTab(0);
-    navigate('/main');
+    setIsLoggedIn(false); 
+    setSelectedTab(3);
+    navigate('/');
   };
 
   const handleLogin = () => {
     setIsLoggedIn(true);
     if (setIsLoggedIn) {
-    handleTabChange(1);
-    navigate("/main/record");
-    // handleTabChange(1);
-    // setSelectedTab(1);
+      handleTabChange(0);
+      navigate("/main/record");
+      // handleTabChange(1);
+      // setSelectedTab(1);
     }
   };
 
@@ -41,11 +41,11 @@ export default function Main() {
         onLogout={handleLogout}
         onLogin={handleLogin}
       />
-      {selectedTab === 1 && <Record />}
-      {selectedTab === 2 && <Search selectedTab={selectedTab} />}
-      {selectedTab === 3 && <Enroll />}
-      {selectedTab === 0 && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}
-      setIsLoggedIn={setIsLoggedIn} selectedTab={selectedTab}/>}
+      {selectedTab === 0 && <Record />}
+      {selectedTab === 1 && <Search selectedTab={selectedTab} />}
+      {selectedTab === 2 && <Enroll />}
+      {selectedTab === 3 && <Login onLogin={handleLogin} onTabChange={handleTabChange} onLogout={handleLogout} isLoggedIn={isLoggedIn}
+        setIsLoggedIn={setIsLoggedIn} selectedTab={selectedTab} />}
     </Box>
   );
 }
