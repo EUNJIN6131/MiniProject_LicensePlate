@@ -36,8 +36,8 @@ export default function Search({ selectedTab }) {
     const jsStartDate = startDate.toDate();
     const jsEndDate = endDate.toDate();
 
-    const formattedStartDate = format(jsStartDate, "yyyy-MM-dd");
-    const formattedEndDate = format(jsEndDate, "yyyy-MM-dd");
+    const formattedStartDate = format(jsStartDate, "yy-MM-dd");
+    const formattedEndDate = format(jsEndDate, "yy-MM-dd");
 
     console.log("Formatted startDate:", formattedStartDate);
     console.log("Formatted endDate:", formattedEndDate);
@@ -49,7 +49,7 @@ export default function Search({ selectedTab }) {
 
         if (Array.isArray(responseData)) {
           const updatedRows = responseData.map((record, index) => {
-            const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+            const formattedDate = format(parseISO(record.date), "yy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
           });
           setRows(updatedRows);
@@ -74,7 +74,7 @@ export default function Search({ selectedTab }) {
   
           if (responseData.length > 0) {
             const updatedRows = responseData.map((record, index) => {
-              const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+              const formattedDate = format(parseISO(record.date), "yy-MM-dd HH:mm:ss");
               return { ...record, id: index + 1, date: formattedDate };           // 새 객체 생성, ... <- 확산 연산자
             });
             setRows(updatedRows);
@@ -99,7 +99,7 @@ export default function Search({ selectedTab }) {
 
         if (Array.isArray(responseData)) {
           const updatedRows = responseData.map((record, index) => {
-            const formattedDate = format(parseISO(record.date), "yyyy-MM-dd HH:mm:ss");
+            const formattedDate = format(parseISO(record.date), "yy-MM-dd HH:mm:ss");
             return { ...record, id: index + 1, date: formattedDate };         // 새 객체 생성, ... <- 확산 연산자
           }).reverse();
           setHistoryRows(updatedRows)

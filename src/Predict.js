@@ -51,7 +51,7 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
                     width: '80%',
                     mb: 3
                 }}>
-                    <Skeleton variant="rectangular" width={'100%'} height={'30vh'} animation="wave" alignItems= 'center' justifyContent= 'center' />
+                    <Skeleton variant="rectangular" width={'100%'} height={'30vh'} animation="wave" alignItems='center' justifyContent='center' />
                     {/* <img
                         src={plateImage}
                         alt="Plate Image"
@@ -153,19 +153,17 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
             //         justifyContent: 'center'
             //     }}
             // >
-                <Card sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '30px',
-                    width: '100%',
-                    justifyContent: 'center'
-                }}>
-                    <CardContent>
-                    <Typography variant="h3">
-                        인식 실패
-                    </Typography>
-                    </CardContent>
-                </Card>
-            // </Box>
+
+            <Card sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '30px',
+                width: '100%',
+                justifyContent: 'center'
+            }}>
+                {/* <CardContent> */}
+                <img src="/fail.png" />
+                {/* </CardContent> */}
+            </Card>
     );
 }
