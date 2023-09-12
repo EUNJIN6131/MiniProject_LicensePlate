@@ -1,11 +1,13 @@
 package plate.back;
 
+import java.util.Date;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import plate.back.entity.LogEntity;
-import plate.back.entity.PredictLogEntity;
 import plate.back.persistence.CarInfoRepository;
 import plate.back.persistence.LogRepository;
 import plate.back.persistence.PredictLogRepository;
@@ -22,11 +24,8 @@ class BackApplicationTests {
 
     @Test
     void contextLoads() {
-
+        List<LogEntity> logEntities = logRepo.findByDate(new Date(), new Date());
+        System.out.println(logEntities.get(0).getLogId());
     }
 
-    @Test
-    void contextLoads1() {
-        logRepo.deleteById(2);
-    }
 }

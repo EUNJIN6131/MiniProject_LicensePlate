@@ -18,5 +18,7 @@ public class ImageInitializer implements ApplicationRunner {
         // s3 파일 전체 삭제
         fileService.deleteAll("total/vehicle");
         fileService.deleteAll("total/plate");
+        fileService.deleteAll("relearn/vehicle");
+        fileService.deleteAll("relearn/plate");
     }
 }

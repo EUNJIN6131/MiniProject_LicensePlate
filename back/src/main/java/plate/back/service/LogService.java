@@ -187,11 +187,15 @@ public class LogService {
         List<LogDto> list = new ArrayList<>();
         for (LogEntity logEntity : logEntities) {
             List<ImageEntity> imgEntities = imgRepo.findByLogId(logEntity.getLogId());
-            String vehicleImg = imgEntities.get(0).getImageType().equals("vehicle") ? imgEntities.get(0).getImageUrl()
-                    : imgEntities.get(1).getImageUrl();
-            String plateImg = imgEntities.get(0).getImageType().equals("plate") ? imgEntities.get(0).getImageUrl()
-                    : imgEntities.get(1).getImageUrl();
-
+            String vehicleImg;
+            String plateImg;
+            if (imgEntities.size() == 2) {
+                vehicleImg = imgEntities.get(0).getImageUrl();
+                plateImg = imgEntities.get(1).getImageUrl();
+            } else {
+                vehicleImg = imgEntities.get(0).getImageUrl();
+                plateImg = "인식 실패";
+            }
             list.add(LogDto.builder()
                     .logId(logEntity.getLogId())
                     .modelType(logEntity.getModelType())
@@ -210,7 +214,7 @@ public class LogService {
     public ResponseEntity<?> searchDate(String start, String end) throws ParseException {
 
         // String -> Date 변환
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
         Date startDate = dateFormat.parse(start);
         Date endDate = dateFormat.parse(end);
         System.out.printf("%s ~ %s", startDate, endDate);

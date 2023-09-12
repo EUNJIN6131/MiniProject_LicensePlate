@@ -50,7 +50,7 @@ public class UserService {
     // 2. 로그인
     public ResponseEntity<?> signIn(UserRequestDto.SignIn signIn) {
 
-        if (userRepo.findByUserId(signIn.getUserId()).orElse(null) == null) {
+        if (userRepo.findByUserId(signIn.getUserId().trim()).orElse(null) == null) {
             return response.fail("일치하는 아이디가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
