@@ -54,6 +54,21 @@
 ![image](https://file.notion.so/f/s/b1f81bed-4a33-426d-8f3c-85a73c8aa7f9/Untitled.png?id=3b1e2af4-ea4b-4f7a-ba89-b32098c778d0&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693324800000&signature=XY71KiivZQHGlN8Muvvvrn_yvKrbZ7PYf68mO5zJyf8&downloadName=Untitled.png)
 
 ## 6. 화면 구성
+| 로그인 페이지  |  회원가입 페이지   |
+| :-------------------------------------------: | :------------: |
+|  <img width="450" height="350"  src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/1dea1fa7-1cf7-47fe-8df5-54e00d60f1ab"/> |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/62ecc733-1e5e-4603-adcc-284bfeb83485"/>|  
+
+| 메인 페이지(차량 입출입 현황)  |  메인 페이지(차량 검색)   |  
+| :-------------------------------------------: | :------------: |
+| <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/b86b1a21-b047-47f8-8632-fdca89c8312a"/>   |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/eee3055a-24b4-4472-807b-b48b3ee95b47"/>|
+
+| 메인 페이지(관리자 권한 기능)  |  메인 페이지(수정/삭제 기록)   |
+| :-------------------------------------------: | :------------: |
+|  <img width="450" height="350"  src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/1dea1fa7-1cf7-47fe-8df5-54e00d60f1ab"/> |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/62ecc733-1e5e-4603-adcc-284bfeb83485"/>|  
+
+| 메인 페이지(차량 등록)  |  메인 페이지(기록 저장)   |  
+| :-------------------------------------------: | :------------: |
+| <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/b86b1a21-b047-47f8-8632-fdca89c8312a"/>   |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/eee3055a-24b4-4472-807b-b48b3ee95b47"/>|
 
 ## 7. REST API 명세 
 ### Spring Boot
