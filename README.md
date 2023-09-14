@@ -42,13 +42,13 @@
 </div>
 
 ## 4. 주요 기능 
-- [ ] 회원가입/로그인
-- [ ] 출입 차량 실시간 기록 기능  
-- [ ] 날짜별 출입 기록 조회 기능
-- [ ] 차량 번호별 출입 기록 조회 기능
-- [ ] 기록 수정 기능
-- [ ] 기록 삭제 기능
-- [ ] 출입 기록 수정/삭제 히스토리 기능 
+- [x] 회원가입/로그인
+- [x] 출입 차량 실시간 기록 기능  
+- [x] 날짜별 출입 기록 조회 기능
+- [x] 차량 번호별 출입 기록 조회 기능
+- [x] 기록 수정 기능
+- [x] 기록 삭제 기능
+- [x] 출입 기록 수정/삭제 히스토리 기능 
 
 ## 5. 서비스 아키텍처
 ![image](https://file.notion.so/f/s/b1f81bed-4a33-426d-8f3c-85a73c8aa7f9/Untitled.png?id=3b1e2af4-ea4b-4f7a-ba89-b32098c778d0&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693324800000&signature=XY71KiivZQHGlN8Muvvvrn_yvKrbZ7PYf68mO5zJyf8&downloadName=Untitled.png)
