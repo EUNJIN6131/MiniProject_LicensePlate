@@ -56,19 +56,19 @@
 ## 6. 화면 구성
 | 로그인 페이지  |  회원가입 페이지   |
 | :-------------------------------------------: | :------------: |
-|  <img width="450" height="350"  src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/1dea1fa7-1cf7-47fe-8df5-54e00d60f1ab"/> |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/62ecc733-1e5e-4603-adcc-284bfeb83485"/>|  
+|  <img width="450" height="350"  src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/0d2a3f2b-4663-4003-a8b1-80bb42acb0b3"/> |  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/398cbe50-a0a7-4272-b3b7-38f3bfe0bc00"/>|  
 
 | 메인 페이지(차량 입출입 현황)  |  메인 페이지(차량 검색)   |  
 | :-------------------------------------------: | :------------: |
-| <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/b86b1a21-b047-47f8-8632-fdca89c8312a"/>   |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/eee3055a-24b4-4472-807b-b48b3ee95b47"/>|
+| <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/4d26aa28-a936-4751-97aa-e15f5d81e9b9"/>   |  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/ae1061e6-67dc-4eb9-8afb-db93087a7077"/>|
 
 | 메인 페이지(관리자 권한 기능)  |  메인 페이지(수정/삭제 기록)   |
 | :-------------------------------------------: | :------------: |
-|  <img width="450" height="350"  src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/1dea1fa7-1cf7-47fe-8df5-54e00d60f1ab"/> |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/62ecc733-1e5e-4603-adcc-284bfeb83485"/>|  
+|  <img width="450" height="350"  src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/00512f7f-8f9c-411e-8cb2-49cd722987fb"/> |  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/adc6aa2d-302f-49c7-a2d4-b6a4ab2dc37c"/>|  
 
-| 메인 페이지(차량 등록)  |  메인 페이지(기록 저장)   |  
-| :-------------------------------------------: | :------------: |
-| <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/b86b1a21-b047-47f8-8632-fdca89c8312a"/>   |  <img width="450" height="350" src="https://github.com/JaeMin1130/MiniProject_MealNote/assets/98063854/eee3055a-24b4-4472-807b-b48b3ee95b47"/>|
+| 메인 페이지(차량 등록)  |     
+| :-------------------------------------------: | 
+| <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/a00df5e6-0a2c-4508-9997-a336655397a9"/>   |  
 
 ## 7. REST API 명세 
 ### Spring Boot
