@@ -96,7 +96,7 @@ public class LogService {
         for (String key : predictValue.keySet()) {
             List<Object> list = predictValue.get(key);
             if (list == null) {
-                predList.add(new PredictDto(key, "예측실패", 0));
+                predList.add(new PredictDto(key, "예측 실패", 0));
             } else {
                 predList.add(new PredictDto(key, String.valueOf(list.get(0)), (double) list.get(1)));
             }

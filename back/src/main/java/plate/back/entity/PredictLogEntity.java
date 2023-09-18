@@ -36,7 +36,7 @@ public class PredictLogEntity {
     @Column(nullable = false, length = 10)
     private String modelType;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 10)
     private String predictedText;
 
     @Column(nullable = false)

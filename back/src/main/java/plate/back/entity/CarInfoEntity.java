@@ -31,7 +31,7 @@ public class CarInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 4)
     private String licensePlate;
 
     @CreatedDate

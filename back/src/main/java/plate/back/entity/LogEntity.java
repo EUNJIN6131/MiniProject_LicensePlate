@@ -34,13 +34,13 @@ public class LogEntity {
     @Column(nullable = false, length = 20)
     private String modelType;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 10)
     private String licensePlate;
 
     @Column(nullable = false)
     private Double accuracy;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 10)
     private String state;
 
     @CreatedDate

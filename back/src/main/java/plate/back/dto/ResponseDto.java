@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +17,7 @@ public class ResponseDto {
     @Getter
     @Builder
     private static class Body {
-        private int status;
+        private Integer status;
         private String result;
         private String message;
         private Object data;
