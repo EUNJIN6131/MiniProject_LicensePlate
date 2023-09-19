@@ -113,7 +113,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       })
       .then((response) => {
         const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
-        setRows(updatedRows);
+        // setRows(updatedRows);
         fetchEditHistory();
       })
       .catch((error) => {
