@@ -121,6 +121,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       });
   }
 
+  
   // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
