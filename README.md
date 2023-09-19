@@ -70,6 +70,10 @@
 | :-------------------------------------------: | 
 | <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/a00df5e6-0a2c-4508-9997-a336655397a9"/>   |  
 
+| 시연 영상  |
+| :-------------------------------------------: | 
+|   <img width="900" height="600" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/63260f92-db31-4891-8512-ead532c36c1d"> |
+
 ## 7. REST API 명세 
 ### Spring Boot
 | ID | Method | URI | Params | Return | Description |
