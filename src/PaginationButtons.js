@@ -6,10 +6,10 @@ import jwt_decode from "jwt-decode";
 
 export default function PaginationButtons({ currentPage, onPageChange, pageCount, onEditClick, onDeleteClick, hideButtons }) {
 
-  const [isAdmin, setIsAdmin] = useState(false);    
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    findIsAdmin(); 
+    findIsAdmin();
   }, []);
 
   const findIsAdmin = () => {
@@ -28,13 +28,13 @@ export default function PaginationButtons({ currentPage, onPageChange, pageCount
   }
   return (
     <Stack spacing={2} direction="row" alignItems="center" >
-        <div  style={{ marginRight: '10px' }}>
-        { !hideButtons && isAdmin && ( 
+      <div style={{ marginRight: '10px' }}>
+        {!hideButtons && isAdmin && (
           <>
             <button style={{ marginRight: '10px' }} onClick={onEditClick}>수정</button>
             <button onClick={onDeleteClick}>삭제</button>
           </>
-       )} 
+        )}
       </div>
       <Pagination count={pageCount} page={currentPage} onChange={onPageChange} showFirstButton showLastButton />
     </Stack>

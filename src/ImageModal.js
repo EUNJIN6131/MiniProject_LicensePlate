@@ -9,7 +9,7 @@ const ImageModal = ({ isOpen, imageUrl, onClose }) => {
   const [brightness, setBrightness] = useState(100);
 
   useEffect(() => {
-    // 이미지가 로드되면 이미지의 너비를 설정합니다.
+   
     const img = new Image();
     img.src = imageUrl;
     img.onload = () => {

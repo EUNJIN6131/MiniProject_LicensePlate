@@ -18,7 +18,7 @@ export default function Main() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false); 
+    setIsLoggedIn(false);
     setSelectedTab(3);
     navigate('/');
   };

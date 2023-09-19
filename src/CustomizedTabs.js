@@ -68,7 +68,7 @@ const RightBox = styled(Tab)(
 );
 
 export default function CustomizedTabs({ onLogin, isLoggedIn, onTabChange, onLogout }) {
-  const [value, setValue] =  useState(isLoggedIn ? 0 : 3);
+  const [value, setValue] = useState(isLoggedIn ? 0 : 3);
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
@@ -77,7 +77,7 @@ export default function CustomizedTabs({ onLogin, isLoggedIn, onTabChange, onLog
   };
 
   const handleLogoutClick = () => {
-    onTabChange(3);                     
+    onTabChange(3);
     onLogout();
     // navigate('/main');
   };
@@ -99,11 +99,11 @@ export default function CustomizedTabs({ onLogin, isLoggedIn, onTabChange, onLog
               <StyledTab key="2" label="차량등록" onClick={() => { onTabChange(2); navigate('/main/enroll'); }} />,
             ]
           )}
-          {!isLoggedIn ? ( 
-            <RightBox key="3" label="로그인" onClick={onLogin}/>
+          {!isLoggedIn ? (
+            <RightBox key="3" label="로그인" onClick={onLogin} />
           ) : (
             <RightBox key="3" label="로그아웃" onClick={handleLogoutClick} />
-          )}  
+          )}
         </StyledTabs>
       </Box>
     </Box>

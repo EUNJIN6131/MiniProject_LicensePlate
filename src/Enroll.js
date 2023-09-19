@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import ImageLoader from './ImageLoader';
 
 export default function Enroll() {
-    const [carNumber, setCarNumber] = useState(""); 
+    const [carNumber, setCarNumber] = useState("");
 
     const handleCarNumberChange = (event) => {
         setCarNumber(event.target.value);
@@ -18,7 +18,8 @@ export default function Enroll() {
     return (
         <Box sx={{ margin: "20px" }}>
             <Box
-                sx={{height: '100vh',
+                sx={{
+                    height: '100vh',
                     width: '100%',
                     display: "flex",
                     alignItems: "center",
@@ -59,9 +60,11 @@ export default function Enroll() {
                             onChange={handleCarNumberChange}
                             sx={{ width: 300, mb: 2 }}
                         />
-                        <Button sx={{ mb: 2, bgcolor: "#CCCCCC", '&:hover': {
-                  bgcolor: "#635ee7",
-                }, color:'black', border:'1px solid black' }} variant="contained" color="primary" onClick={handleRegister}>
+                        <Button sx={{
+                            mb: 2, bgcolor: "#CCCCCC", '&:hover': {
+                                bgcolor: "#635ee7",
+                            }, color: 'black', border: '1px solid black'
+                        }} variant="contained" color="primary" onClick={handleRegister}>
                             등록
                         </Button>
                     </Box>

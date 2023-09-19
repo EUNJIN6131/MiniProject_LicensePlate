@@ -15,10 +15,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 export default function ImageLoader() {
   const [uploadPreview, setUploadPreview] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [imageUpload, setImageUpload] = useState([]); // 상태로 관리
+  const [imageUpload, setImageUpload] = useState([]); 
 
   const handleImageCompress = async (file) => {
-    // ... (이전과 동일)
   };
 
   const handleNextPhoto = () => {
@@ -33,7 +32,7 @@ export default function ImageLoader() {
 
   const handleDeletePhoto = (index, event) => {
     event.stopPropagation();
-    setImageUpload((prevFiles) => prevFiles.filter((_, i) => i !== index)); // 상태 업데이트
+    setImageUpload((prevFiles) => prevFiles.filter((_, i) => i !== index)); 
   };
 
   const handleDrop = useCallback(
@@ -45,7 +44,7 @@ export default function ImageLoader() {
         const validCompressedFiles = compressedFiles.filter(
           (file) => file !== null
         );
-        setImageUpload((prevFiles) => [...prevFiles, ...validCompressedFiles]); // 상태 업데이트
+        setImageUpload((prevFiles) => [...prevFiles, ...validCompressedFiles]); 
         setUploadPreview(
           validCompressedFiles.map((file) => URL.createObjectURL(file))
         );
@@ -68,9 +67,9 @@ export default function ImageLoader() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center", // Center the image vertically
+          alignItems: "center",
           width: "73%",
-          aspectRatio: "1 / 1", // Make the Box container square
+          aspectRatio: "1 / 1",
           border: isDragActive ? "2px solid tomato" : "2px solid grey",
           borderRadius: "5px",
           position: "relative",
@@ -98,7 +97,7 @@ export default function ImageLoader() {
             {imageUpload.map((file, index) => (
               <IconButton
                 key={index}
-                onClick={(event) => handleDeletePhoto(index, event)} // Pass the event parameter to the handler
+                onClick={(event) => handleDeletePhoto(index, event)} 
                 sx={{
                   position: "absolute",
                   right: -5,

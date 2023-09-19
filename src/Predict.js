@@ -1,13 +1,10 @@
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState, useEffect } from "react";
-import Modal from 'react-modal';
 import Skeleton from '@mui/material/Skeleton';
-import Stack from '@mui/material/Stack';
+
 
 export default function Predict({ rows, data, isLoading, plateImage }) {
 
@@ -20,10 +17,6 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
     useEffect(() => {
         setShowSkeleton(isLoading);
     }, [isLoading]);
-
-    // if (isLoading) {
-    //     return <div>Loading...</div>;
-    // }
 
     let sortedData = [];
     if (data) {
@@ -52,11 +45,6 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
                     mb: 3
                 }}>
                     <Skeleton variant="rectangular" width={'100%'} height={'30vh'} animation="wave" alignItems='center' justifyContent='center' />
-                    {/* <img
-                        src={plateImage}
-                        alt="Plate Image"
-                        style={{ width: '100%', height: '30vh', alignItems: 'center', justifyContent: 'center', }}
-                    /> */}
                 </Card>
 
                 <Box

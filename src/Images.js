@@ -2,14 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardMedia } from '@mui/material';
 import './Slideshow.css';
 
-// 이미지 데이터를 배열로 정의
 const imagesData = [];
-
-// for (let i = 1; i < 21; i++) {
-//   const image = { id: i, src: `https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/img${i}.jpg` };
-//   imagesData.push(image);
-// }
-
 const uniqueIds = Array.from({ length: 30 }, (_, index) => index +1 );
 
 for (let i = uniqueIds.length - 1; i >= 0; i--) {
@@ -26,9 +19,7 @@ for (let i = 1; i <= 30; i++) {
 
 export default function Images({ showRecord }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const imageRef = useRef(null); // Ref 생성
-
-  // 현재 이미지를 가져와서 showRecord 함수에 전달
+  const imageRef = useRef(null); 
   const currentImage = imagesData[currentImageIndex];
   
   useEffect(() => {
@@ -39,7 +30,6 @@ export default function Images({ showRecord }) {
     return () => {
       console.log("currentImageIndex", currentImageIndex)
       if (currentImage) {
-        // 이미지 Ref에 접근하여 src 속성 얻기
         const src = imageRef.current ? imageRef.current.src : '';
         loadImage(src);
       }
@@ -62,15 +52,6 @@ export default function Images({ showRecord }) {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("currentImageIndex", currentImageIndex)
-  //   if (currentImage) {
-  //     // 이미지 Ref에 접근하여 src 속성 얻기
-  //     const src = imageRef.current ? imageRef.current.src : '';
-  //     loadImage(src);
-  //   }
-  // }, [currentImageIndex]);
-
   return (
     <div className="slideshow-container">
       {currentImage && (
@@ -79,7 +60,7 @@ export default function Images({ showRecord }) {
             component="img"
             alt="Displayed Image"
             src={currentImage.src}
-            ref={imageRef} // 이미지 요소에 Ref 설정
+            ref={imageRef} 
             style={{ height: '50vh', width: '100%', objectFit: 'cover' }}
           />
         </Card>

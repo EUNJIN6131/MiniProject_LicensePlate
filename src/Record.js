@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Images from "./Images";
 import List from "./List";
 import axios from "axios";
@@ -15,7 +15,6 @@ dayjs.extend(advancedFormat);
 
 export default function Record() {
   const [imageUpload, setImageUpload] = useState([]);
-  const [recentNum, setRecentNum] = useState(null);
   const [startDate, setStartDate] = useState(null); // 시작날짜
   const [endDate, setEndDate] = useState(null); // 종료날짜
   const [rows, setRows] = useState([]); // 레코드(행) 목록
@@ -25,10 +24,6 @@ export default function Record() {
   const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState(null);
   const [plateImage, setPlateImage] = useState(null);
-
-  // useEffect(() => {
-  //   showRecord()
-  // }, []);
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
   useEffect(() => {
@@ -42,15 +37,10 @@ export default function Record() {
 
   // 3.차량 출입 로그 기록
   const showRecord = async (imageSrc) => {
-    console.log("Enter the car");
-    console.log("Image source received:", imageSrc);
 
     const formData = new FormData();
 
     formData.append("file", imageSrc);
-    // for (let i = 0; i < imageSrc.length; i++) {
-    //   formData.append("files", imageSrc[i]);
-    // }
 
     setIsLoading(true);
 

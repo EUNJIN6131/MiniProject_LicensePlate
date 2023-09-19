@@ -2,15 +2,9 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
-import Skeleton from '@mui/material/Skeleton';
 import axios from "axios";
 import './Slideshow.css';
 import ImageModal from "./ImageModal";
-import jwt_decode from "jwt-decode";
-
-// import Pagination from "@mui/material/Pagination";
-// import Stack from "@mui/material/Stack";
-// import { Box, Button, TextField, Snackbar } from "@mui/material";
 
 const columns = [
   { field: "logId", type: "checkbox", headerName: "seq", width: 100, headerAlign: "center", align: "center" },
@@ -55,8 +49,6 @@ const columns = [
 
 export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
 
-  // const [rowSelectionModel, setRowSelectionModel] = useState([]);           // 선택 행 배열
-  // const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
   const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
   const rowsPerPage = 20;                                                   // 페이지 당 20rows
   const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
@@ -98,25 +90,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     setRowSelectionModel(newRowSelectionModel);
   }
 
-  // const findIsAdmin = () => {
-  //   const jwtToken = localStorage.getItem("ACCESS_TOKEN");
-  //   console.log("jwtToken", jwtToken)
-  //   if (jwtToken) {
-  //     // JWT 토큰이 존재한다면 디코딩하여 Role을 확인
-  //     const decodedToken = jwt_decode(jwtToken);
-  //     if (decodedToken.role === "ADMIN") {
-  //       setIsAdmin(true);
-  //       console.log("decodedToken.role", decodedToken.role);
-  //     } else {
-  //       setIsAdmin(false);
-  //     }
-  //   } else {
-  //     setIsAdmin(false);
-  //   }
-  // }
-
-
-
   // 7.로그 수정(admin)
   const handleEditClick = () => {
     console.log("Edit button clicked");
@@ -131,9 +104,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       return;
     }
 
-    console.log("Selected Rows:", selectedSeqValues[0]);
-    // 수정한 licensePlate 값 출력
-
     const jsonData = selectedSeqValues.map((item) => ({ logId: item.logId, licensePlate: item.licensePlate }));
 
     axios
@@ -145,10 +115,9 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       })
       .then((response) => {
         console.log("수정 성공.", response.data);
-        // const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
 
-        // 필터링된 행으로 'rows' 상태를 업데이트
-        // setRows(updatedRows);
+        const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
+        setRows(updatedRows);
         fetchEditHistory();
       })
       .catch((error) => {
@@ -186,14 +155,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
   const isRecordComponent = isRecord;
   const containerClassName = isRecordComponent ? "hide-checkbox" : "";
-
-  // const modifiedColumns = columns.map((column) => {
-  //   if (column.field === "logId") {
-  //     return containerClassName ? { ...column, type: undefined } : column;
-  //   }
-  //   return column;
-  // });
-
   const modifiedColumns = columns.map((column) => {
     if (column.field === "logId") {
       return containerClassName ? { ...column, type: undefined } : column;
@@ -205,10 +166,8 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
         renderCell: (params) => {
           const accuracy = params.value;
           if (isNaN(accuracy)) {
-            // 숫자가 아닌 경우 (예: "인식 실패")
             return accuracy;
           } else {
-            // 숫자인 경우 소수점 셋째 자리까지 형식화
             const formattedAccuracy = parseFloat(accuracy).toFixed(3);
             return formattedAccuracy;
           }
@@ -223,14 +182,12 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
         renderCell: (params) => {
           const plateImage = params.value;
           if (plateImage !== "인식 실패") {
-            // Display the 🖼 emoji when plateImage is not "인식 실패"
             return (
               <div className="emoticon" onClick={() => handleImageClick(params.row.plateImage)}>
                 <img src="./"></img>
               </div>
             );
           } else {
-            // Display the actual value when plateImage is "인식 실패"
             return plateImage;
           }
         },
@@ -243,14 +200,12 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
         renderCell: (params) => {
           const vehicleImage = params.value;
           if (vehicleImage) {
-            // Display the 🖼 emoji when there is a vehicleImage
             return (
               <div className="emoticon" onClick={() => handleImageClick(params.row.vehicleImage)}>
                 <img src="./"></img>
               </div>
             );
           } else {
-            // Display an empty cell when there is no vehicleImage
             return null;
           }
         },
@@ -286,7 +241,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
           columns={modifiedColumns}
           loading={showSkeleton}
           pageSize={20}
-          // checkboxSelection={true}
           checkboxSelection={!isRecord}
           className={isRecord ? 'hide-checkbox' : ''}
           onRowSelectionModelChange={(newRowSelectionModel) => {

@@ -19,7 +19,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 
-export default function Login({ onTabChange, onLogin, onLogout, isLoggedIn, setIsLoggedIn, selectedTab }) {
+export default function Login({ onLogin }) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);

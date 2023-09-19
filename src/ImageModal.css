@@ -1,6 +1,6 @@
 .draggable-modal {
     position: fixed;
-    width: '300px'; /* 모달 창의 너비를 원하는 크기로 조정합니다. */
+    width: '300px';
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -40,7 +40,7 @@
     right: 0;
     top: 0;
     background-color: transparent;
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 4px; /* Add rounded corners */
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
     cursor: pointer;
   }

@@ -10,7 +10,7 @@ import { format, parseISO, } from "date-fns";
 import dayjs from 'dayjs';
 
 export default function Search({ selectedTab }) {
-  const [isAdmin, setIsAdmin] = useState(false);                    // 관리자 여부
+
   const [licensePlate, setLicensePlate] = useState("");             // 차량번호 입력 저장
   const [rows, setRows] = useState([]);                             // 레코드(행) 목록
   const [open, setOpen] = useState(false);                          // 검색결과 유무 팝업상태
@@ -18,9 +18,6 @@ export default function Search({ selectedTab }) {
   const [startDate, setStartDate] = useState(null);                 // 시작날짜
   const [endDate, setEndDate] = useState(null);                     // 종료날짜
   const [isEnterPressed, setIsEnterPressed] = useState(false);      // 엔터키 동작
-  const [resetDateRange, setResetDateRange] = useState(true);
-  const [calendarLoaded, setCalendarLoaded] = useState(false);
-
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [historyRows, setHistoryRows] = useState([]);
 
@@ -202,7 +199,6 @@ export default function Search({ selectedTab }) {
                 display: "flex",
                 marginTop: "35px",
                 flexDirection: "column"
-                // border: "1px solid rgb(189, 188, 188)",
               }}
             >
               <Typography variant="수정/삭제 조회" sx={{ marginBottom: "10px", textAlign: "left" }}>
@@ -240,7 +236,6 @@ export default function Search({ selectedTab }) {
             paddingBlock: "10px",
           }}
         >
-          {/* <List isAdmin={isAdmin} rows={rows} /> */}
           <List setRows={setRows} rows={rows}
             rowSelectionModel={rowSelectionModel} setRowSelectionModel={setRowSelectionModel}
             fetchEditHistory={fetchEditHistory}
