@@ -54,4 +54,8 @@ public class LogEntity {
     public void setLicensePlate(String plate) {
         this.licensePlate = plate;
     }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }

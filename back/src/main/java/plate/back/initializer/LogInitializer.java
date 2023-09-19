@@ -22,31 +22,31 @@ public class LogInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        // logRepo.deleteAll();
+        logRepo.deleteAll();
 
-        // for (int num = 0; num < 100; num++) {
-        // Random random = new Random();
-        // int randomIdx = random.nextInt(10);
-        // int randomAccuracy = random.nextInt(100);
+        for (int num = 0; num < 100; num++) {
+            Random random = new Random();
+            int randomIdx = random.nextInt(10);
+            int randomAccuracy = random.nextInt(100);
 
-        // LocalDateTime now = LocalDateTime.now();
-        // LocalDateTime lastYear = now.minus(1, ChronoUnit.YEARS);
-        // long daysBetween = ChronoUnit.DAYS.between(lastYear, now);
-        // int randomNum = random.nextInt((int) daysBetween);
-        // LocalDateTime randomTime = lastYear.plus(randomNum, ChronoUnit.DAYS);
-        // Date randomDate =
-        // Date.from(randomTime.atZone(ZoneId.systemDefault()).toInstant());
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime lastYear = now.minus(1, ChronoUnit.YEARS);
+            long daysBetween = ChronoUnit.DAYS.between(lastYear, now);
+            int randomNum = random.nextInt((int) daysBetween);
+            LocalDateTime randomTime = lastYear.plus(randomNum, ChronoUnit.DAYS);
+            Date randomDate = Date.from(randomTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        // int[] randomText = { 1063, 2580, 2591, 3231, 4365, 5061, 6214, 7136, 7979,
-        // 8080 };
+            int[] randomText = { 1063, 2580, 2591, 3231, 4365, 5061, 6214, 7136, 7979,
+                    8080 };
 
-        // logRepo.save(LogEntity.builder()
-        // .date(randomDate)
-        // .licensePlate(String.valueOf(randomText[randomIdx]))
-        // .modelType("model")
-        // .accuracy((double) randomAccuracy)
-        // .state("state")
-        // .build());
-        // }
+            LogEntity logEntity = logRepo.save(LogEntity.builder()
+                    .licensePlate(String.valueOf(randomText[randomIdx]))
+                    .modelType("model")
+                    .accuracy((double) randomAccuracy)
+                    .state("state")
+                    .build());
+            logEntity.setDate(randomDate);
+            logRepo.save(logEntity);
+        }
     }
 }
