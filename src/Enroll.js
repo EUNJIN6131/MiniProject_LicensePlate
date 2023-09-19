@@ -12,7 +12,6 @@ export default function Enroll() {
     };
 
     const handleRegister = () => {
-        console.log("Vehicle license plate registration:", carNumber);
     };
 
     return (

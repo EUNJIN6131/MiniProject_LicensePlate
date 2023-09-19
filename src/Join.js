@@ -22,10 +22,6 @@ export default function Join() {
             password: data.get("password"),
         };
 
-        console.log("username:", formData.name);
-        console.log("id:", formData.userId);
-        console.log("Password:", formData.password);
-
         const url = API_BASE_URL + "/user/signup";
 
         fetch(url, {

@@ -36,23 +36,17 @@ export default function Login({ onLogin }) {
     event.preventDefault();
     const data = new FormData(event.target);
 
-    console.log("Form Data:", data.entries());
-
     const formData = {
       userId: data.get("id"),
       password: data.get("password"),
     };
 
-    console.log("id:", formData.userId);
-    // console.log("Password:", formData.password);
     const url = API_BASE_URL + "/user/signin";
-    console.log(url);
 
     try {
       const res = await axios.post(url, formData);
       const data = res.data
       setMessage(data.message)
-      console.log("res.data", res.data)
 
       if (data.status === 200) {
 
@@ -60,15 +54,12 @@ export default function Login({ onLogin }) {
         localStorage.setItem("ACCESS_TOKEN", accessToken);
         localStorage.setItem("role", data.role);
 
-        console.log("로그인 성공")
-        console.log("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN"))
         onLogin();
         // setIsLoggedIn(true);
         // onTabChange(1);
         // navigate("/main/record");
       } else {
         setOpen(true);
-        console.log("로그인실패")
       }
     } catch (error) {
       console.error("Error during API call:", error);

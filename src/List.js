@@ -77,7 +77,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
   const handleLicensePlateEdit = (event) => {
     setUserEditedLicensePlate(event.target.value);
-    console.log("Edited License Plate:", event.target.value);
   };
 
   const processRowUpdate = (newRow) => {
@@ -92,8 +91,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
   // 7.로그 수정(admin)
   const handleEditClick = () => {
-    console.log("Edit button clicked");
-
+   
     const selectedSeqValues = rowSelectionModel.map((rowId) => ({
       logId: rowsToDisplay[rowId - 1].logId,
       licensePlate: rowsToDisplay[rowId - 1].licensePlate,
@@ -114,8 +112,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
         },
       })
       .then((response) => {
-        console.log("수정 성공.", response.data);
-
         const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
         setRows(updatedRows);
         fetchEditHistory();
@@ -131,7 +127,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
 
     // "logId" 속성을 가진 객체 배열 생성
     const jsonData = selectedSeqValues.map((logId) => ({ logId }));
-    console.log("jsonData", jsonData);
     axios
       .delete(`${API_BASE_URL}/main/delete`, {
         data: jsonData,
@@ -141,7 +136,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
         },
       })
       .then((response) => {
-        console.log("삭제 성공.", response.data);
         const updatedRows = rows.filter((row) => !selectedSeqValues.includes(row.logId));
 
         // 필터링된 행으로 'rows' 상태를 업데이트

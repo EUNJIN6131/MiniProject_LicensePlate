@@ -57,12 +57,10 @@ export default function Record() {
       }
 
       const data = response.data.data[0];
-      console.log("response.data", response.data)
       const plateImage = data.plateImage;
       const item = response.data.data[1];
       setResponseData(item);
 
-      console.log("data", data)
       const today = new Date();
       const formattedDate = format(today, "yy-MM-dd HH:mm:ss");
 
@@ -105,14 +103,10 @@ export default function Record() {
     const formattedStartDate = format(jsStartDate, "yy-MM-dd");
     const formattedEndDate = format(jsEndDate, "yy-MM-dd");
 
-    console.log("Formatted startDate:", formattedStartDate);
-    console.log("Formatted endDate:", formattedEndDate);
-
     call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
       .then((data) => {
         const responseData = data.data;
-        console.log("responseData", responseData)
-        
+      
         if (Array.isArray(responseData)) {
           const updatedRows = responseData
             .map((record, index) => {

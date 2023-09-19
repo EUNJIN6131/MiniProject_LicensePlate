@@ -11,7 +11,6 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
     const [showSkeleton, setShowSkeleton] = useState(isLoading);
 
     useEffect(() => {
-        console.log("plateImage", plateImage)
     }, [data, plateImage]);
 
     useEffect(() => {
@@ -21,7 +20,6 @@ export default function Predict({ rows, data, isLoading, plateImage }) {
     let sortedData = [];
     if (data) {
         sortedData = [...data].sort((a, b) => b.accuracy - a.accuracy);
-        console.log("sortedData", sortedData)
     }
 
     if (isLoading) {

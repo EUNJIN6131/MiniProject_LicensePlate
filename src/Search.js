@@ -27,21 +27,16 @@ export default function Search({ selectedTab }) {
 
   // 4.날짜별 로그 조회
   const onQuerySubmit = async (startDate, endDate) => {
-    console.log("Received startDate:", startDate);
-    console.log("Received endDate:", endDate);
-
+   
     const jsStartDate = startDate.toDate();
     const jsEndDate = endDate.toDate();
 
     const formattedStartDate = format(jsStartDate, "yy-MM-dd");
     const formattedEndDate = format(jsEndDate, "yy-MM-dd");
 
-    console.log("Formatted startDate:", formattedStartDate);
-    console.log("Formatted endDate:", formattedEndDate);
-
     call(`/main/search/date/${formattedStartDate}/${formattedEndDate}`, "GET", null)
       .then((data) => {
-        console.log("data", data);
+       
         const responseData = data.data;
 
         if (Array.isArray(responseData)) {
@@ -62,11 +57,10 @@ export default function Search({ selectedTab }) {
 
     // 5.차량 번호별 로그 조회
     const handleSearchClick = (licensePlate) => {
-      console.log("Button clicked");
-  
+       
       call(`/main/search/plate/${licensePlate}`, "GET", null)
         .then((data) => {
-          console.log("data", data.data);
+         
           const responseData = data.data;
   
           if (responseData.length > 0) {
@@ -87,11 +81,9 @@ export default function Search({ selectedTab }) {
 
   // 6.수정/삭제 기록 조회
   const fetchEditHistory = () => {
-    console.log("Button clicked");
-
+   
     call(`/main/history`, "GET", null)
       .then((data) => {
-        console.log("data", data.data);
         const responseData = data.data;
 
         if (Array.isArray(responseData)) {

@@ -23,10 +23,8 @@ export function call(api, method, request) {
   }
   return fetch(options.url, options)
     .then((response) => {
-      console.log(options.url);
       return response.json();
     })
     .catch((error) => {
-      console.log(error);
     });
 }

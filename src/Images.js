@@ -28,7 +28,6 @@ export default function Images({ showRecord }) {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesData.length);
     }, 15000);
     return () => {
-      console.log("currentImageIndex", currentImageIndex)
       if (currentImage) {
         const src = imageRef.current ? imageRef.current.src : '';
         loadImage(src);
