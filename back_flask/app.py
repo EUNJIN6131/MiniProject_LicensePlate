@@ -64,8 +64,8 @@ def predict():
                 temp_img_file.write(img_bytes)
                 temp_img_file_name = temp_img_file.name
                 file_name = yolo.YOLOv5_Load(temp_img_file_name, img_savefolder)
-        except:
-            return jsonify({"status":500, "error": "번호판 인식 불가"}) 
+        except Exception as e:
+            return jsonify({"status":500, "error": str(e)}) 
         
         if file_name == None:
             return jsonify({"status":500, "error": "번호판 인식 불가"}) 
@@ -79,6 +79,7 @@ def predict():
             print("file_path_name", file_path_name)
             print("step3 passed")
         except Exception as e:
+            os.remove(file_path_name)
             return jsonify({"status":500, "error": str(e)}) 
 
        # Open the processed image using PIL

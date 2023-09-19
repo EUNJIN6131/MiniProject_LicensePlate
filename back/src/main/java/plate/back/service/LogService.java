@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+
 import lombok.RequiredArgsConstructor;
 import plate.back.dto.HistoryDto;
 import plate.back.dto.ImageDto;
@@ -192,9 +194,12 @@ public class LogService {
             if (imgEntities.size() == 2) {
                 vehicleImg = imgEntities.get(0).getImageUrl();
                 plateImg = imgEntities.get(1).getImageUrl();
-            } else {
+            } else if (imgEntities.size() == 1) {
                 vehicleImg = imgEntities.get(0).getImageUrl();
                 plateImg = "인식 실패";
+            } else {
+                vehicleImg = "https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/img10.jpg";
+                plateImg = "https://licenseplate-iru.s3.ap-northeast-2.amazonaws.com/sample/3441e8bb-f992-4879-8360-c2c70488902e.jpg";
             }
             list.add(LogDto.builder()
                     .logId(logEntity.getLogId())
@@ -304,6 +309,8 @@ public class LogService {
                     imgRepo.save(imageEntity);
                 }
 
+            } catch (AmazonS3Exception s3Exception) {
+                continue;
             } catch (Exception e) {
                 e.printStackTrace();
                 return response.fail(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
@@ -321,11 +328,12 @@ public class LogService {
                 System.out.println("logId : " + logId);
 
                 // AWS S3 파일 삭제
-                List<ImageEntity> imgEntity = imgRepo.findByLogId(logId);
-                System.out.println("imgEntity : " + imgEntity.toString());
-                String vehicleImgTitle = imgEntity.get(0).getImageTitle();
-                String plateImgTitle = imgEntity.get(1).getImageTitle();
-                fileService.deleteFile(vehicleImgTitle, plateImgTitle);
+                List<ImageEntity> imgEntities = imgRepo.findByLogId(logId);
+                for (ImageEntity imgEntity : imgEntities) {
+                    String imageTitle = imgEntity.getImageTitle();
+                    String imageType = imgEntity.getImageType();
+                    fileService.deleteFile(imageTitle, imageType);
+                }
 
                 // log 삭제
                 logRepo.deleteById(logId);
