@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import PaginationButtons from "./PaginationButtons";
 import { API_BASE_URL } from "./api/api-config";
 import axios from "axios";
-import './Slideshow.css';
+import "./Slideshow.css";
 import ImageModal from "./ImageModal";
 
 const columns = [
@@ -47,23 +47,27 @@ const columns = [
   },
 ];
 
-export default function List({ rows, setRows, rowSelectionModel, setRowSelectionModel, fetchEditHistory, isRecord, isLoading }) {
-
-  const [currentPage, setCurrentPage] = useState(1);                        // 현재 페이지
-  const rowsPerPage = 20;                                                   // 페이지 당 20rows
+export default function List({
+  rows,
+  setRows,
+  rowSelectionModel,
+  setRowSelectionModel,
+  fetchEditHistory,
+  isRecord,
+  isLoading,
+}) {
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const rowsPerPage = 20; // 페이지 당 20rows
   const [userEditedLicensePlate, setUserEditedLicensePlate] = useState(""); // 차량번호판 수정
   const [userId, setUserId] = useState("");
   const [showSkeleton, setShowSkeleton] = useState(isLoading);
 
   // rows 상태가 변경될 때마다 재랜더링 ([] <-종속성에 추가)
-  useEffect(() => {
-  }, [rows]);
+  useEffect(() => {}, [rows]);
 
   useEffect(() => {
     setShowSkeleton(isLoading);
-
   }, [isLoading]);
-
 
   // Pagination 함수
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -80,18 +84,17 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
   };
 
   const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };                           // ...newRow 새로운 복제본 객체 생성
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));    //이전 행과 새로운 행 식별 후 업데이트 else 기존 행 유지
+    const updatedRow = { ...newRow, isNew: false }; // ...newRow 새로운 복제본 객체 생성
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row))); //이전 행과 새로운 행 식별 후 업데이트 else 기존 행 유지
     return updatedRow;
   };
 
   const handleRowSelection = (newRowSelectionModel) => {
     setRowSelectionModel(newRowSelectionModel);
-  }
+  };
 
   // 7.로그 수정(admin)
   const handleEditClick = () => {
-   
     const selectedSeqValues = rowSelectionModel.map((rowId) => ({
       logId: rowsToDisplay[rowId - 1].logId,
       licensePlate: rowsToDisplay[rowId - 1].licensePlate,
@@ -112,16 +115,17 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
         },
       })
       .then((response) => {
-        const updatedRows = rows.filter((row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId));
+        const updatedRows = rows.filter(
+          (row) => !selectedSeqValues.some((selectedRow) => selectedRow.logId === row.logId)
+        );
         // setRows(updatedRows);
         fetchEditHistory();
       })
       .catch((error) => {
         console.error("수정 중 오류 발생", error);
       });
-  }
+  };
 
-  
   // 8.로그 삭제(admin)
   const handleDeleteClick = () => {
     const selectedSeqValues = rowSelectionModel.map((rowId) => rowsToDisplay[rowId - 1].logId);
@@ -170,7 +174,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
       };
     }
 
-
     if (column.field === "plateImage") {
       return {
         ...column,
@@ -210,7 +213,6 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
     return column;
   });
 
-
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
 
@@ -237,7 +239,7 @@ export default function List({ rows, setRows, rowSelectionModel, setRowSelection
           loading={showSkeleton}
           pageSize={20}
           checkboxSelection={!isRecord}
-          className={isRecord ? 'hide-checkbox' : ''}
+          className={isRecord ? "hide-checkbox" : ""}
           onRowSelectionModelChange={(newRowSelectionModel) => {
             setRowSelectionModel(newRowSelectionModel);
           }}
