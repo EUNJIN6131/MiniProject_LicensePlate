@@ -62,9 +62,13 @@
 | :-------------------------------------------: | :------------: |
 | <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/4d26aa28-a936-4751-97aa-e15f5d81e9b9"/>   |  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/ae1061e6-67dc-4eb9-8afb-db93087a7077"/>|
 
-| 메인 페이지(관리자 권한 기능)  |  메인 페이지(수정/삭제 기록)   |
+| 메인 페이지(날짜 조회)  |  메인 페이지(관리자 권한 기능)   |
 | :-------------------------------------------: | :------------: |
-|  <img width="450" height="350"  src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/00512f7f-8f9c-411e-8cb2-49cd722987fb"/> |  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/adc6aa2d-302f-49c7-a2d4-b6a4ab2dc37c"/>|  
+|  <img width="450" height="350"  src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/72b93fac-755f-4010-81ba-db38432ae527"/> |  <img width="450" height="350"  src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/00512f7f-8f9c-411e-8cb2-49cd722987fb"/>|  
+
+| 메인 페이지(수정/삭제 기록)  |
+| :-------------------------------------------: |
+|  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/adc6aa2d-302f-49c7-a2d4-b6a4ab2dc37c"/> |
 
 | 시연 영상  |
 | :-------------------------------------------: | 
