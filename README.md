@@ -66,10 +66,6 @@
 | :-------------------------------------------: | :------------: |
 |  <img width="450" height="350"  src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/00512f7f-8f9c-411e-8cb2-49cd722987fb"/> |  <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/adc6aa2d-302f-49c7-a2d4-b6a4ab2dc37c"/>|  
 
-| 메인 페이지(차량 등록)  |     
-| :-------------------------------------------: | 
-| <img width="450" height="350" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/a00df5e6-0a2c-4508-9997-a336655397a9"/>   |  
-
 | 시연 영상  |
 | :-------------------------------------------: | 
 |   <img width="900" height="600" src="https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/129818813/63260f92-db31-4891-8512-ead532c36c1d"> |
