@@ -3,8 +3,7 @@
 ## 1. 프로젝트 소개 
 - 개요: AI 모델을 통해 출입하는 차량의 번호판을 판별하고, 그 기록을 관리하는 웹서비스
 - 활용 데이터 : 현장 CCTV 사진, 번호판 사진
-- 기간: 2023. 08.21 ~ 
-- [Go to see our service](https://jaemin1130.github.io/MiniProject_MealNote/)
+- 기간: 2023.08.21 ~ 2023.09.22
 
 ## 2. 팀원 
 |<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/129818813?v=4">|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/98063854?v=4">|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/70638717?v=4">|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/86204430?v=4">|
@@ -31,9 +30,17 @@
 </div>
 <div>
   <img src="https://img.shields.io/badge/java 17-007396?style=for-the-badge&logo=java&logoColor=white"> 
-  <img src="https://img.shields.io/badge/springboot 3.1.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> 
-  <img src="https://img.shields.io/badge/springsecurity 6.1.1-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> 
+  <img src="https://img.shields.io/badge/spring boot 3.1.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> 
+  <img src="https://img.shields.io/badge/spring security 6.1.1-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> 
+  <img src="https://img.shields.io/badge/spring data 3.1.4-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
   <img src="https://img.shields.io/badge/mysql 8.0.32-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
+</div>
+<div>
+  <img src="https://img.shields.io/badge/python 3.10.9-3776AB?style=for-the-badge&logo=python&logoColor=white"> 
+  <img src="https://img.shields.io/badge/anaconda3 -44A833?style=for-the-badge&logo=anaconda&logoColor=white"> 
+  <img src="https://img.shields.io/badge/flask 2.2.2-000000?style=for-the-badge&logo=flask&logoColor=white"> 
+  <img src="https://img.shields.io/badge/yolo v5 -00FFFF?style=for-the-badge&logo=yolo&logoColor=white"> 
+  <img src="https://img.shields.io/badge/tensor flow 2.13.0-FF6F00?style=for-the-badge&logo=TensorFlow&logoColor=white"> 
 </div>
 <h3>Communication</h3>
 <div>
@@ -51,7 +58,7 @@
 - [x] 출입 기록 수정/삭제 히스토리 기능 
 
 ## 5. 서비스 아키텍처
-![image](https://file.notion.so/f/s/b1f81bed-4a33-426d-8f3c-85a73c8aa7f9/Untitled.png?id=3b1e2af4-ea4b-4f7a-ba89-b32098c778d0&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693324800000&signature=XY71KiivZQHGlN8Muvvvrn_yvKrbZ7PYf68mO5zJyf8&downloadName=Untitled.png)
+![image](https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/98063854/a3aecb4f-44cc-4274-9fa0-788e230fe504)
 
 ## 6. 화면 구성
 | 로그인 페이지  |  회원가입 페이지   |
@@ -92,10 +99,13 @@
 | 3 | POST | /main/record | MultipartFile file | LogDto | 로그 기록 |
 
 ## 8. DB 설계(ERD)
-![image](https://file.notion.so/f/s/e0c2380c-75e7-4ea4-992b-2a10c85f7a23/ERD.drawio_(1).png?id=1e925039-42ae-4ebf-84d2-ae7d2b89299a&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693476000000&signature=krDG1mNjG4KE4REU5aq2D7jL7_qhOW5AnwyNNYMptqw&downloadName=ERD.drawio+%281%29.png)
+![image](https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/98063854/3ac64e86-1ea1-4fbf-a5da-becd6a1e6738)
 
-## 9. UML(Class Diagram)
-![image](https://file.notion.so/f/s/934a8130-bfba-4acd-ad45-926917d05faa/UML.drawio.png?id=35566836-d4b0-4919-9b7f-9d7b4d563dec&table=block&spaceId=305e395a-5955-44d6-bb5f-c488ffd0100f&expirationTimestamp=1693476000000&signature=UQR7ejYnlyCB4cK0ffNv6qmFwWGtFub5iwKJyteBOQo&downloadName=UML.drawio.png)
+## 9. 시퀀스 다이어그램
+![image](https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/98063854/06b3d3fe-42a4-4a96-92ff-7e23b56b9064)
 
-## 10. 개발 일지 
+## 10. UML(Class Diagram)
+![image](https://github.com/EUNJIN6131/MiniProject_LicensePlate/assets/98063854/7928338d-5949-4158-8b05-b5059c61c8cc)
+
+## 11. 개발 일지 
 <a href="https://shrub-snap-550.notion.site/CRUD-566be659b7bf4693a6515f408cf2f1d9?pvs=4">개발 일지 보러 가기  <img width="23" src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"> </a>****
