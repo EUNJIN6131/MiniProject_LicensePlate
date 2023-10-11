@@ -8,7 +8,7 @@
 ## 2. 팀원 
 |<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/129818813?v=4">|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/98063854?v=4">|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/70638717?v=4">|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/86204430?v=4">|
 | :---------------------------------: | :-----------------------------------:| :---------------------------------: | :-----------------------------------:|
-|                FrontEnd           |           Backend                       |              AI 모델 개발         |           AI 모델 개발                |       
+|                Front-End           |           Back-End                       |              AI 모델 개발         |           AI 모델 개발                |       
 |             김은진            |          김재민            |                          김민범                  |          최호진                      |      
 |[GitHub](https://github.com/EUNJIN6131)|[GitHub](https://github.com/JaeMin1130)|[GitHub](https://github.com/sou05091/)|[GitHub](https://github.com/Gansaw/)|
 
